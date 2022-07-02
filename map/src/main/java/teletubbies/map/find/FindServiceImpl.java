@@ -1,5 +1,6 @@
 package teletubbies.map.find;
 
+import lombok.Value;
 import org.springframework.stereotype.Service;
 
 @Service
