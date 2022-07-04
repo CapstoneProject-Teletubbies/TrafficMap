@@ -38,3 +38,4 @@ out/
 
 ### *.log ###
 application.properties
+application-api.properties
