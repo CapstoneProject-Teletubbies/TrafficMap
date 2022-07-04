@@ -37,4 +37,4 @@ out/
 .vscode/
 
 ### IntelliJ ###
-application-api.properties
+/src/main/resources/application-api.properties
