@@ -36,5 +36,7 @@ out/
 ### VS Code ###
 .vscode/
 
-### IntelliJ ###
+### *.log ###
+application-api.properties
+application.properties
 /src/main/resources/application-api.properties
