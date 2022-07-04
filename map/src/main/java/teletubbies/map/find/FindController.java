@@ -15,8 +15,6 @@ import java.net.URI;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 
-//TMAP APPKEY : l7xxafd79b2f4cce4ae6a4f6d1a1f4c31386
-
 @Slf4j
 @RestController
 @RequestMapping("/api")
