@@ -41,4 +41,6 @@ class MapApplicationTests {
 		Object response = restTemplate.exchange(uri.toUriString(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
 		System.out.println(response);
 	}
+
+
 }
