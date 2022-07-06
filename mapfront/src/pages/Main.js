@@ -1,10 +1,7 @@
 import React, { useEffect } from 'react';
-import Input from "../components/Input";
 import '../css/Main.css';
-import Search from "../components/Search";
+import SearchBar from "../components/SearchBar";
 import ReactDOM from "react-dom";
-import { BrowserView, MobilView } from 'react-device-detect';
-
 function Main() {
 
     function setScreenSize(){
@@ -40,12 +37,8 @@ function Main() {
             resultDiv.innerHTML = result;
         }
         
-        function add() {
-            map.setOptions({zoomControl:true}); // 지도 옵션 줌컨트롤 표출 활성화
-        }
         
         initTmap();
-        add();
    `;
     script.type = "text/javascript";
     script.async = "async";
@@ -64,8 +57,8 @@ function Main() {
     >
     </div>
 
-    <div class="search">
-        <Search />
+    <div className="search">
+        <SearchBar />
         <p id="result" />
         <p id="result_mouse" />
     </div>
