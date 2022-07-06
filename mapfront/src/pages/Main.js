@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Input from "../components/Input";
-import '../Main.css';
+import '../css/Main.css';
 import Search from "../components/Search";
 import ReactDOM from "react-dom";
 
