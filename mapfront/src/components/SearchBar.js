@@ -2,16 +2,19 @@ import { useState, KeyboardEvent } from "react";
 import Input from "./Input";
 import '../css/Main.css'
 import '../css/input.css'
+import Search from '../pages/Search'
+import { Link } from "react-router-dom";
 const SearchBar = () => {
     const [searchValue, setSearchValue] = useState('');
-    const handleValue = (e) => {
+    const handleValue = (e) => {        //검색어 입력받는 부분
         setSearchValue(e.target.value);
         console.log(e.target.value);
 
     }
-    const handleKeyPress = (e) => {
+    const handleKeyPress = (e) => { //enter키 추적용 -> 검색 결과창으로 이동시킴
         if(e.key === 'Enter'){
             console.log(searchValue);
+            document.location.href = '/search';
         }
     }
 
