@@ -2,13 +2,16 @@ main{
     width: 100%;
     height: 100%;
 }
-
 div{
     position: relative;
+    text-align: center;
 }
-div.search{
+.search{
     position: relative;
-    top: 50%;
-    left: 50%;
+    text-align: center;
+    top: 15px;
+}
 
+TMapApp{
+    top: 200px;
 }

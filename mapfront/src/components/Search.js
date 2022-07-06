@@ -1,5 +1,6 @@
 import { useState, KeyboardEvent } from "react";
 import Input from "./Input";
+import '../css/Main.css'
 import '../css/input.css'
 const Search = () => {
     const [searchValue, setSearchValue] = useState('');

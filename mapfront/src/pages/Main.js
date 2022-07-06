@@ -3,10 +3,17 @@ import Input from "../components/Input";
 import '../css/Main.css';
 import Search from "../components/Search";
 import ReactDOM from "react-dom";
+import { BrowserView, MobilView } from 'react-device-detect';
 
 function Main() {
 
+    function setScreenSize(){
+        let vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty("--vh", `${vh}px`);
+    }
+
   useEffect(() => {
+    setScreenSize();
     const script = document.createElement("script");
     script.innerHTML = `         
         function initTmap() {
@@ -33,8 +40,12 @@ function Main() {
             resultDiv.innerHTML = result;
         }
         
+        function add() {
+            map.setOptions({zoomControl:true}); // 지도 옵션 줌컨트롤 표출 활성화
+        }
         
         initTmap();
+        add();
    `;
     script.type = "text/javascript";
     script.async = "async";
@@ -51,9 +62,9 @@ function Main() {
         position: "fixed",
       }}
     >
-
     </div>
-    <div id="search">
+
+    <div class="search">
         <Search />
         <p id="result" />
         <p id="result_mouse" />
