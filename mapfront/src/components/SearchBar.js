@@ -1,10 +1,9 @@
 import { useState, KeyboardEvent } from "react";
-import Input from "./Input";
 import '../css/Main.css'
 import '../css/input.css'
 import Search from '../pages/Search'
 import { Link } from "react-router-dom";
-const SearchBar = () => {
+const SearchBar = (props) => {
     const [searchValue, setSearchValue] = useState('');
     const handleValue = (e) => {        //검색어 입력받는 부분
         setSearchValue(e.target.value);
