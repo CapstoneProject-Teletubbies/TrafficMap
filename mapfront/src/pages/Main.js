@@ -1,20 +1,52 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import '../css/Main.css';
 import SearchBar from "../components/SearchBar";
 import Button from "../components/Button";
 import ReactDOM from "react-dom";
-function Main() {
+import getLocation from '../getLocation';
 
+function Main() {
     function setScreenSize(){
         let vh = window.innerHeight * 0.01;
         document.documentElement.style.setProperty("--vh", `${vh}px`);
     }
 
+    //test
+    const [location, setLocation] = useState();
+    const [error, setError] = useState();
+
+    const handleSuccess = (pos) => {
+      const {latitude, longitude } = pos.coords;
+
+      setLocation({
+        latitude, longitude
+      })
+      
+      console.log(latitude, longitude);
+    };
+     
+    useEffect(() => {
+        if(location){
+          let lat = location.latitude;
+          let lng = location.longitude;
+          console.log(location.latitude);
+        }
+
+    
+    
+    }, [handleSuccess])
+
+
+    // const handleError= (error) -> {
+    //   setError(error.message);
+    // };
+
+
   useEffect(() => {
+    navigator.geolocation.getCurrentPosition(handleSuccess);
     setScreenSize();
     const script = document.createElement("script");
-    script.innerHTML = `
-        var map;         
+    script.innerHTML = ` 
         function initTmap() {
             var map = new Tmapv2.Map("TMapApp", {
                 center: new Tmapv2.LatLng(37.566481622437934,126.98502302169841),
@@ -25,15 +57,18 @@ function Main() {
             map.addListener("click", onClick); //웹에서 지도 클릭
             map.addListener("touchstart", onTouchstart); // 모바일에서 지도 터치
 
-            return map;
-            //tesy
 
-            var tmapGroundOverlay = new Tmapv2.GroundOverlay();
-            tmapGroundOverlay.url = "/";
+
+            return map;
+            //test
+
             // map.zoomIn();
             // map["zoomIn"]();  //둘다 줌인 됨
+            return map;
         }
-        map = initTmap();
+ 
+        initTmap();
+
 
         function zoomin(){
             let zoomin = document.createElement("div");
@@ -44,6 +79,7 @@ function Main() {
             var result_mouse = e.latLng
             var resultDiv = document.getElementById("result_mouse");
             resultDiv.innerHTML = result_mouse;
+            console.log(result_mouse._lat);
         }
 
         function onTouchstart(e) {
@@ -52,6 +88,7 @@ function Main() {
             resultDiv.innerHTML = result;
         }
 
+      
 
    `;
     script.type = "text/javascript";
