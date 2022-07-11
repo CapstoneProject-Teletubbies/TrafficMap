@@ -5,6 +5,9 @@ import Button from "../components/Button";
 import ReactDOM from "react-dom";
 import getLocation from '../getLocation';
 
+var gps_lat = null;
+var gps_lng = null;
+
 function Main() {
     function setScreenSize(){
         let vh = window.innerHeight * 0.01;
@@ -22,17 +25,14 @@ function Main() {
         latitude, longitude
       })
       
-      console.log(latitude, longitude);
     };
      
     useEffect(() => {
         if(location){
-          let lat = location.latitude;
-          let lng = location.longitude;
-          console.log(location.latitude);
+          let gps_lat = location.latitude;
+          let gps_lng = location.longitude;
         }
 
-    
     
     }, [handleSuccess])
 
@@ -43,13 +43,19 @@ function Main() {
 
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(handleSuccess);
+    var test = 12;
     setScreenSize();
+    navigator.geolocation.watchPosition(handleSuccess);
+    if(location){
+      var lat = location.latitude;
+      var lng = location.longitude;
+    }
     const script = document.createElement("script");
     script.innerHTML = ` 
-        function initTmap() {
+        function initTmap(pos) {
+          console.log(pos.lat);
             var map = new Tmapv2.Map("TMapApp", {
-                center: new Tmapv2.LatLng(37.566481622437934,126.98502302169841),
+                center: new Tmapv2.LatLng(pos.lat, pos.lng),
                 width: "100%",
                 height: "100%",
                 zoom:15
@@ -66,8 +72,12 @@ function Main() {
             // map["zoomIn"]();  //둘다 줌인 됨
             return map;
         }
+
+        if(${lat}){
+          var test = {lat: ${lat}, lng: ${lng}};
+          initTmap(test);
+        }
  
-        initTmap();
 
 
         function zoomin(){
@@ -94,7 +104,7 @@ function Main() {
     script.type = "text/javascript";
     script.async = "async";
     document.head.appendChild(script);
-  }, []);
+  }, [handleSuccess]);
 
   return (
     <main>
