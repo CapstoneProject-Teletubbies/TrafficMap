@@ -11,10 +11,10 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Service
 public class BusServiceImpl implements BusService {
     @Value("${BUS_APPKEY}")
-    private String bus_apikey; //엘리베이터 API 키 설정
+    private String bus_apikey; //버스 API 키 설정
 
     @Value("${BUS_URL}")
-    private String bus_url; //엘리베이터 API 키 설정
+    private String bus_url; //버스 URL 설정
 
     // SERVICE ERROR SERVICE_KEY_IS_NOT_REGISTERED_ERROR 30 (해결 X)
     @SneakyThrows
