@@ -7,6 +7,7 @@ import ReactDOM from "react-dom";
 import getLocation from '../getLocation';
 import plus from "../images/plus.png";
 import minus from "../images/minus.png"
+import target from "../images/location.png"
 
 import mylocation from "../images/mylocation.png"
 
@@ -14,23 +15,20 @@ function Main() {
     const [keyword, setKeyword] = useState();  //검색 받은 키워드
     const [plusbutton, setPlusButton] = useState();
     const [minusbutton, setMinusButton] = useState();
-    const [init, setInit] = useState(true);
+    const [locationbutton, setLocationButton] = useState();
  
     const [location, setLocation] = useState();
     const [error, setError] = useState();
 
-    const handleInit = (isinit) => {
-      setInit(isinit);
-    };
-
     const handlePlusButton = () => {
-      console.log("버튼 클릭");
       setPlusButton(true);
     };
     const handleMinusButton = () => {
-      console.log("버튼 클릭");
       setMinusButton(true);
     };
+    const handleLocationButton = () => {
+      setLocationButton(true);
+    }
 
     const handleSuccess = (pos) => {
       const {latitude, longitude } = pos.coords;
@@ -66,6 +64,7 @@ function Main() {
   useEffect(() => {
     var zoomin;
     var zoomout;
+    var movelocation;
     setScreenSize();
     navigator.geolocation.watchPosition(handleSuccess);
     if(location){
@@ -74,12 +73,10 @@ function Main() {
     }
 
     if(plusbutton === true){
-      console.log("true임!~");
       zoomin = true;
       setPlusButton(false);
     }
     else{
-      console.log("false인데?");
       zoomin = false;
     }
     if(minusbutton === true){
@@ -88,6 +85,13 @@ function Main() {
     }
     else{
       zoomout = false;
+    }
+    if(locationbutton === true){
+      movelocation = true;
+      setLocationButton(false);
+    }
+    else{
+      movelocation = false;
     }
 
     const script = document.createElement("script");
@@ -105,9 +109,6 @@ function Main() {
             });
             map.addListener("click", onClick); //웹에서 지도 클릭
             map.addListener("touchstart", onTouchstart); // 모바일에서 지도 터치
-
-
-            console.log("init 실행");
     
             //map.zoomIn();
             //map["zoomIn"]();
@@ -151,6 +152,10 @@ function Main() {
         if(testmap && ${zoomout}){
           testmap.zoomOut();
         }
+        if(testmap && ${movelocation}){
+          var setmylocation = new Tmapv2.LatLng(${lat}, ${lng});
+          testmap.setCenter(setmylocation);
+        }
    `;
     script.type = "text/javascript";
     script.async = "async";
@@ -173,6 +178,13 @@ function Main() {
         <SearchBar onChange={handleKeyword}/>
         <p id="result" />
         <p id="result_mouse" />
+    </div>
+
+    <div className="left">
+      <div className="mylocation">
+        <Button onClick={handleLocationButton} src={target}/>
+      </div>
+
     </div>
 
     <div className="test">

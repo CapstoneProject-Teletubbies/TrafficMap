@@ -1,5 +1,3 @@
-import plus from "../images/plus.png";
-import minus from "../images/minus.png"
 import '../css/Button.css'
 
 const Button = (props)=>{

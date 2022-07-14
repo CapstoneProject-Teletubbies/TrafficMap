@@ -12,6 +12,17 @@ div{
     text-align: center;
     top: 15px;
 }
+.left{
+    position: absolute;
+    width: 55px;
+    height: 90%;
+    left: 1px;
+    text-align: left;
+}
+.mylocation{
+    position: relative;
+    top: 80%;
+}
 .test{
     position: absolute;
     width: 55px;
