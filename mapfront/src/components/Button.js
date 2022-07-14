@@ -2,11 +2,10 @@ import plus from "../images/plus.png";
 import minus from "../images/minus.png"
 import '../css/Button.css'
 
-const Button = ()=>{
+const Button = (props)=>{
     return(
         <>
-        <button style={{background: "none"}}><img src={plus}></img></button>
-        <button style={{background: "none"}}><img src={minus}></img></button>
+        <button onClick={props.onClick} style={{background: "none"}}><img src={props.src}></img></button>
         </>
     );
 }
