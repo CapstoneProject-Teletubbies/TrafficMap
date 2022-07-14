@@ -4,11 +4,9 @@ import ReactDOM from "react-dom";
 import SearchBar from "../components/SearchBar";
 import {useLocation} from 'react-router';
 
- function Search(props) {
+ function Search() {
     const [text, setText] = useState(' ');
-    const state = useLocation();
 
-    console.log(state.state.state);
 
     const onChange = (e) => {
         setText(e.target.value);
@@ -21,7 +19,7 @@ import {useLocation} from 'react-router';
     return (
     <div className="main"> 
         <div className="searchbar">
-            <input onChange = {onChange} value ={text} placeholder={state.state.state} />
+            <input onChange = {onChange} value ={text}  />
             <button onClick ={onReset}>검색</button>
         </div>
         <div className="search">

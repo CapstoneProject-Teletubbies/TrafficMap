@@ -17,28 +17,27 @@ const SearchBar = (props) => {
     }
     const handleKeyPress = (e) => { //enter키 추적용 -> 검색 결과창으로 이동시킴
         if(e.key === 'Enter'){
-            handleSearch();
-            // document.location.href = '/search';
+            document.location.href = '/search';
         }
     }
     //test
-    const handleSearch = () => {  //Axios
-        const search = axios.create({
-          baseURL: 'http://localhost:8080/',
+    // const handleSearch = () => {  //Axios
+    //     const search = axios.create({
+    //       baseURL: 'http://localhost:8080/',
 
 
-        })
-        search.post('/api/find/address', null, {params:{keyword: searchValue}})
-        .then(function (res){
-          console.log(res.data.name);
-          test("/search", {state: {state: res.data.name, searchValue: searchValue}});
-          setName(res.data.name);
-          setIsEnter(true);
-        }).catch(function (err){
-          alert(`에러,, ,  .  . . `);
-        })
+    //     })
+    //     search.post('/api/find/address', null, {params:{keyword: searchValue}})
+    //     .then(function (res){
+    //       console.log(res.data.name);
+    //       test("/search", {state: {state: res.data.name, searchValue: searchValue}});
+    //       setName(res.data.name);
+    //       setIsEnter(true);
+    //     }).catch(function (err){
+    //       alert(`에러,, ,  .  . . `);
+    //     })
         
-      }
+    //   }
 
     return(
         <>       
@@ -46,7 +45,6 @@ const SearchBar = (props) => {
             onChange={handleValue}
             onKeyDown={handleKeyPress}
             />
-            <Link to='/search' ></Link>
         </>
     );
 };
