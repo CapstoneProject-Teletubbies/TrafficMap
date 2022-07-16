@@ -6,6 +6,7 @@ import lombok.SneakyThrows;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -32,8 +33,9 @@ public class FindServiceImpl implements FindService {
 
     FindDto findDto = new FindDto();
 
+//    @SneakyThrows
     @SneakyThrows
-    public FindDto findAddressByTmapAPI(String FindName)  { // 통합 검색해서
+    public FindDto findAddressByTmapAPI(String FindName) { // 통합 검색해서
         //RestTemplate : REST API 호출이후 응답을 받을 때까지 기다리는 동기방식
         RestTemplate restTemplate = new RestTemplate();
 
@@ -79,7 +81,7 @@ public class FindServiceImpl implements FindService {
         JSONArray newAddress = (JSONArray) newAddressList.get("newAddress");
         JSONObject object1 = (JSONObject)newAddress.get(0);
 
-        //이제 필요한 애들 받아올 수 있겠지?
+        //이제 필요한 애들 받아오기
         String fullAddressRoad = (String)object1.get("fullAddressRoad"); //도로명 주소
         String centerLat = (String)object1.get("centerLat"); //위도
         String centerLon = (String)object1.get("centerLon"); //경도
@@ -96,7 +98,6 @@ public class FindServiceImpl implements FindService {
         findDto.setBizName(bizName);
         findDto.setUpperBizName(upperBizName);
 
-//        System.out.println("findDto = " + findDto);
         return findDto;
     }
 
@@ -111,7 +112,7 @@ public class FindServiceImpl implements FindService {
                 .queryParam("buld_address", address) //주소
                 .queryParam("numOfRows", 1) // 개수
                 .queryParam("pageNo", 3)
-                .build(false);
+                .build();
 
         ResponseEntity<String> result = restTemplate.exchange(uri.toUriString(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
 
