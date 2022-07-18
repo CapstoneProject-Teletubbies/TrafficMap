@@ -8,8 +8,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Mono;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -43,6 +46,79 @@ class MapApplicationTests {
 		Object response = restTemplate.exchange(uri.toUriString(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
 		System.out.println(response);
 	}
+
+	@Value("${ELEVATOR_APPKEY}")
+	private String elevator_apikey; //버스 API 키 설정
+
+	@Test
+	void apiTestWebClient() throws UnsupportedEncodingException {
+
+
+		DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory("http://openapi.elevator.go.kr/openapi/service/ElevatorOperationService");
+		factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
+
+		WebClient wc = WebClient.builder().uriBuilderFactory(factory).baseUrl("http://openapi.elevator.go.kr/openapi/service/ElevatorOperationService").build();
+
+		String encodedName = URLEncoder.encode("인천광역시 부평구 부평문화로 35","UTF-8");
+
+		String response = wc.get()
+				.uri(uriBuilder -> uriBuilder.path("/getOperationInfoList")
+						.queryParam("serviceKey",elevator_apikey)
+						.queryParam("buld_address",encodedName) //모다 부평점
+						.queryParam("numOfRows",1) // 1개만 출력
+						.queryParam("pageNo",1).build())
+				.retrieve().bodyToMono(String.class).block();
+
+		System.out.println(response);
+
+		/*
+		Mono<String> mono = (Mono<String>) WebClient.builder().baseUrl("http://openapi.elevator.go.kr/openapi/service/ElevatorOperationService")
+				.build().get()
+				.uri(builder -> builder.path("/getOperationInfoList")
+						.queryParam("serviceKey",elevator_apikey)
+						.queryParam("buld_address","인천광역시 부평구 부평문화로 35") //모다 부평점
+						.queryParam("numOfRows",1) // 1개만 출력
+						.queryParam("pageNo",1)
+						.build()
+				);
+
+		System.out.println(mono);*/
+
+
+
+	}
+
+
+
+	@Test
+	void apiTestWebClient2() throws UnsupportedEncodingException {
+
+
+		DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory("http://openapi.elevator.go.kr/openapi/service/ElevatorOperationService");
+		factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
+
+		WebClient wc = WebClient.builder().uriBuilderFactory(factory).baseUrl("http://openapi.elevator.go.kr/openapi/service/ElevatorOperationService").build();
+
+		String encodedName = URLEncoder.encode("인천광역시 부평구 부평문화로 35", "UTF-8");
+
+		Mono<String> response = wc.get()
+				.uri(uriBuilder -> uriBuilder.path("/getOperationInfoList")
+						.queryParam("serviceKey", elevator_apikey)
+						.queryParam("buld_address", encodedName) //모다 부평점
+						.queryParam("numOfRows", 1) // 1개만 출력
+						.queryParam("pageNo", 1).build())
+				.retrieve().bodyToMono(String.class);
+
+		//System.out.println(response);
+		response.subscribe(
+				value -> System.out.println(value),
+				error -> error.printStackTrace(),
+				() -> System.out.println("completed without a value")
+		);
+
+
+	}
+
 
 	/*
         @Test
