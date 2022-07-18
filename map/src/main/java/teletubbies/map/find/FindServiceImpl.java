@@ -4,7 +4,6 @@ import lombok.SneakyThrows;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -30,14 +29,13 @@ public class FindServiceImpl implements FindService {
     @Value("${ELEVATOR_URL}")
     private String elevator_url;
 
-    FindDto findDto = new FindDto();
+    List<FindDto> dtos = new ArrayList<>(); //리스트에 담을 dtos 선언
 
-//    @SneakyThrows
     @SneakyThrows
     public List<FindDto> findAddressByTmapAPI(String FindName) { // 통합 검색해서
         //RestTemplate : REST API 호출이후 응답을 받을 때까지 기다리는 동기방식
         RestTemplate restTemplate = new RestTemplate();
-
+        HttpHeaders headers = new HttpHeaders(); //헤더
         //URI 생성
         URI uri = UriComponentsBuilder
                 .fromUriString(tmap_url)
@@ -57,11 +55,6 @@ public class FindServiceImpl implements FindService {
         //response
         ResponseEntity<String> result = restTemplate.exchange(req, String.class);
 
-        /**
-         * 수정해야할 부분!!!!!!!!!!!!!
-         * JSON 가공 부분
-         * findDto의 set 부분
-         */
         //받아온 JSON 데이터 가공
         //json parser
         JSONParser parser = new JSONParser();
@@ -75,11 +68,10 @@ public class FindServiceImpl implements FindService {
 
         List<FindDto> dtos = new ArrayList<>(); //리스트에 담을 dtos 선언
 
-        //다시 poi의 value를 받아온 배열을 10개 담기 (검색했을 때 출력하는 리스트 10개)
-        for (int i=0; i<10; i++) {
+        //다시 poi의 value를 받아온 배열을 개수만큼 담기 (검색했을 때 출력하는 리스트 최대 10개)
+        for (int i=0; i<poiArr.size(); i++) {
             FindDto findDto = new FindDto();
             object = (JSONObject) poiArr.get(i);
-
 
             //이제 newAddress 안의 경도, 위도, 도로명 주소 쓰기 위해 또 파싱
             JSONObject newAddressList = (JSONObject) object.get("newAddressList");
@@ -93,9 +85,9 @@ public class FindServiceImpl implements FindService {
             String name = (String) object.get("name"); // 이름
             String bizName = (String) object.get("bizName"); // 업종명
             String upperBizName = (String) object.get("upperBizName"); //업종명 대분류
-//            String middleAddrName = (String) object.get("middleAddrName"); // 도로명주소 ㅇㅇ로
-//            String roadName = (String) object.get("roadName"); // 도로명주소 ㅇㅇ로
-//            String firstBuildNo = (String) object.get("firstBuildNo"); //건물번호1
+            String middleAddrName = (String) object.get("middleAddrName"); // 도로명주소 ㅇㅇ로
+            String roadName = (String) object.get("roadName"); // 도로명주소 ㅇㅇ로
+            String firstBuildNo = (String) object.get("firstBuildNo"); //건물번호1
 
             //일단 테스트로 이제 가공한 데이터를 findDto에 저장
             findDto.setName(name);
@@ -104,22 +96,26 @@ public class FindServiceImpl implements FindService {
             findDto.setLongitude(Double.parseDouble(centerLon));
             findDto.setBizName(bizName);
             findDto.setUpperBizName(upperBizName);
-//            findDto.setMiddleAddrName(middleAddrName);
-//            findDto.setRoadName(roadName);
-//            findDto.setFirstBuildNo(firstBuildNo);
-//            String addr = middleAddrName + " " + roadName + " " + firstBuildNo;
-//            String elev = findElevatorByAPI(addr).toString();
-//            findDto.setElevatorState(elev);
+            findDto.setMiddleAddrName(middleAddrName);
+            findDto.setRoadName(roadName);
+            findDto.setFirstBuildNo(firstBuildNo);
+
+            String addr = middleAddrName + " " + roadName + " " + firstBuildNo;
+            /**
+             *
+             * 엘리베이터 받는 부분 너무 느려서 주석처리
+             */
+//            findElevatorByAPI(addr);
+//            findDto.setElevatorState(findElevatorByAPI(addr));
 
             dtos.add(i, findDto);
-            System.out.println("dtos = " + dtos);
         }
         System.out.println("dtos = " + dtos);
         return dtos;
     }
 
     @SneakyThrows
-    public Object findElevatorByAPI(String address)  {
+    public String findElevatorByAPI(String address) {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders(); //헤더
 
@@ -128,39 +124,30 @@ public class FindServiceImpl implements FindService {
                 .queryParam("serviceKey", elevator_apikey) //서비스키
                 .queryParam("buld_address", address) //주소
                 .queryParam("numOfRows", 1) // 개수
-                .queryParam("pageNo", 3)
+                .queryParam("pageNo", 1)
                 .build();
 
         ResponseEntity<String> result = restTemplate.exchange(uri.toUriString(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
 
-        /**
-         * 수정해야할 부분!!!!!!!!!!!!!
-         * JSON 가공 부분
-         * findDto의 set 부분
-         */
         //데이터 가공
         JSONParser parser = new JSONParser();
-        JSONObject object = (JSONObject)parser.parse(result.getBody());
-        System.out.println("object = " + object);
-        //response의 value들
-        JSONObject response = (JSONObject)object.get("response");
-        System.out.println("response = " + response);
-        //body의 value들
-        JSONObject body = (JSONObject)response.get("body");
-        System.out.println("body = " + body);
-        //items value들
-        JSONObject items = (JSONObject)body.get("items");
-        System.out.println("items = " + items);
-        //item value들
-        JSONObject item = (JSONObject)items.get("item");
-        System.out.println("item = " + item);
-        //필요한 엘리베이터 정보 받아오기
-        String elvtrSttsNm = (String) item.get("elvtrSttsNm");
-        System.out.println("elvtrSttsNm = " + elvtrSttsNm);
+        JSONObject object = (JSONObject) parser.parse(result.getBody());
+        JSONObject response = (JSONObject) object.get("response");
+        JSONObject body = (JSONObject) response.get("body");
 
-//        //일단 테스트용 findDto에 저장
-//        findDto.setElevatorState(elvtrSttsNm);
-        return elvtrSttsNm;
+        if(body.get("items").equals("")) { // 엘리베이터가 없으면 body":{"items":"","numOfRows":,"pageNo":,"totalCount":} 이런식으로 반환
+            String elvtrSttsNm = "x";
+            return elvtrSttsNm;
+        }
+        else {
+            JSONObject items = (JSONObject) body.get("items");
+            //item value들
+            JSONObject item = (JSONObject) items.get("item");
+            //필요한 엘리베이터 정보 받아오기
+            String elvtrSttsNm = (String) item.get("elvtrSttsNm");
+            return elvtrSttsNm;
+        }
     }
+
 
 }
