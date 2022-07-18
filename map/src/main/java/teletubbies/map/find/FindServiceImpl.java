@@ -1,12 +1,9 @@
 package teletubbies.map.find;
 
 import lombok.SneakyThrows;
-
-
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -16,6 +13,8 @@ import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class FindServiceImpl implements FindService {
@@ -35,7 +34,7 @@ public class FindServiceImpl implements FindService {
 
 //    @SneakyThrows
     @SneakyThrows
-    public FindDto findAddressByTmapAPI(String FindName) { // 통합 검색해서
+    public List<FindDto> findAddressByTmapAPI(String FindName) { // 통합 검색해서
         //RestTemplate : REST API 호출이후 응답을 받을 때까지 기다리는 동기방식
         RestTemplate restTemplate = new RestTemplate();
 
@@ -44,7 +43,7 @@ public class FindServiceImpl implements FindService {
                 .fromUriString(tmap_url)
                 .queryParam("version", 1) //version은 1
                 .queryParam("searchKeyword",FindName) //일단 스타벅스 부평점으로 검색
-                .queryParam("count",1) // 1개만 출력
+                .queryParam("count",10) // 10개만 출력
                 .encode()
                 .build()
                 .toUri();
@@ -73,36 +72,54 @@ public class FindServiceImpl implements FindService {
         JSONObject pois = (JSONObject)searchPoiInfo.get("pois");
         //poi의 value는 배열이라 JSONArray 사용
         JSONArray poiArr = (JSONArray) pois.get("poi");
-        //다시 poi의 value를 받아온 배열을 담기
-        object = (JSONObject)poiArr.get(0);
 
-        //이제 newAddress 안의 경도, 위도, 도로명 주소 쓰기 위해 또 파싱
-        JSONObject newAddressList = (JSONObject)object.get("newAddressList");
-        JSONArray newAddress = (JSONArray) newAddressList.get("newAddress");
-        JSONObject object1 = (JSONObject)newAddress.get(0);
+        List<FindDto> dtos = new ArrayList<>(); //리스트에 담을 dtos 선언
 
-        //이제 필요한 애들 받아오기
-        String fullAddressRoad = (String)object1.get("fullAddressRoad"); //도로명 주소
-        String centerLat = (String)object1.get("centerLat"); //위도
-        String centerLon = (String)object1.get("centerLon"); //경도
+        //다시 poi의 value를 받아온 배열을 10개 담기 (검색했을 때 출력하는 리스트 10개)
+        for (int i=0; i<10; i++) {
+            FindDto findDto = new FindDto();
+            object = (JSONObject) poiArr.get(i);
 
-        String name = (String)object.get("name"); // 이름
-        String bizName = (String)object.get("bizName"); // 업종명
-        String upperBizName = (String) object.get("upperBizName"); //업종명 대분류
 
-        //일단 테스트로 이제 가공한 데이터를 findDto에 저장
-        findDto.setName(name);
-        findDto.setFullAddressRoad(fullAddressRoad);
-        findDto.setLatitude(Double.parseDouble(centerLat));
-        findDto.setLongitude(Double.parseDouble(centerLon));
-        findDto.setBizName(bizName);
-        findDto.setUpperBizName(upperBizName);
+            //이제 newAddress 안의 경도, 위도, 도로명 주소 쓰기 위해 또 파싱
+            JSONObject newAddressList = (JSONObject) object.get("newAddressList");
+            JSONArray newAddress = (JSONArray) newAddressList.get("newAddress");
+            JSONObject object1 = (JSONObject) newAddress.get(0);
 
-        return findDto;
+            //이제 필요한 애들 받아오기
+            String fullAddressRoad = (String) object1.get("fullAddressRoad"); //도로명 주소
+            String centerLat = (String) object1.get("centerLat"); //위도
+            String centerLon = (String) object1.get("centerLon"); //경도
+            String name = (String) object.get("name"); // 이름
+            String bizName = (String) object.get("bizName"); // 업종명
+            String upperBizName = (String) object.get("upperBizName"); //업종명 대분류
+//            String middleAddrName = (String) object.get("middleAddrName"); // 도로명주소 ㅇㅇ로
+//            String roadName = (String) object.get("roadName"); // 도로명주소 ㅇㅇ로
+//            String firstBuildNo = (String) object.get("firstBuildNo"); //건물번호1
+
+            //일단 테스트로 이제 가공한 데이터를 findDto에 저장
+            findDto.setName(name);
+            findDto.setFullAddressRoad(fullAddressRoad);
+            findDto.setLatitude(Double.parseDouble(centerLat));
+            findDto.setLongitude(Double.parseDouble(centerLon));
+            findDto.setBizName(bizName);
+            findDto.setUpperBizName(upperBizName);
+//            findDto.setMiddleAddrName(middleAddrName);
+//            findDto.setRoadName(roadName);
+//            findDto.setFirstBuildNo(firstBuildNo);
+//            String addr = middleAddrName + " " + roadName + " " + firstBuildNo;
+//            String elev = findElevatorByAPI(addr).toString();
+//            findDto.setElevatorState(elev);
+
+            dtos.add(i, findDto);
+            System.out.println("dtos = " + dtos);
+        }
+        System.out.println("dtos = " + dtos);
+        return dtos;
     }
 
     @SneakyThrows
-    public FindDto findElevatorByAPI(String address)  {
+    public Object findElevatorByAPI(String address)  {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders(); //헤더
 
@@ -122,28 +139,28 @@ public class FindServiceImpl implements FindService {
          * findDto의 set 부분
          */
         //데이터 가공
-        //json parser
         JSONParser parser = new JSONParser();
         JSONObject object = (JSONObject)parser.parse(result.getBody());
-
+        System.out.println("object = " + object);
         //response의 value들
         JSONObject response = (JSONObject)object.get("response");
+        System.out.println("response = " + response);
         //body의 value들
         JSONObject body = (JSONObject)response.get("body");
+        System.out.println("body = " + body);
         //items value들
         JSONObject items = (JSONObject)body.get("items");
+        System.out.println("items = " + items);
         //item value들
         JSONObject item = (JSONObject)items.get("item");
+        System.out.println("item = " + item);
         //필요한 엘리베이터 정보 받아오기
         String elvtrSttsNm = (String) item.get("elvtrSttsNm");
+        System.out.println("elvtrSttsNm = " + elvtrSttsNm);
 
-        //일단 테스트용 findDto에 저장
-        findDto.setElevatorState(elvtrSttsNm);
-        return findDto;
-    }
-
-    public FindDto resultDto() {
-        return findDto; //티맵과 엘리베이터 정보 한번에 가져오기 위한 것
+//        //일단 테스트용 findDto에 저장
+//        findDto.setElevatorState(elvtrSttsNm);
+        return elvtrSttsNm;
     }
 
 }

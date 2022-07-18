@@ -17,6 +17,10 @@ public class FindDto {
 
     //주소
     private String fullAddressRoad; // 도로명 주소(이걸 엘리베이터 찾을 때 써야할듯)
+    //도로명주소 자르기 ex) 부평구 부평문화로 35
+    private String middleAddrName; // ㅇㅇ구
+    private String roadName; //도로명 주소 (ex 부평문화로)
+    private String firstBuildNo;  //건물번호? (ex 35)
 
     //업종명
     private String bizName; // 업종명
