@@ -1,0 +1,13 @@
+.buildingInfo{
+    background-color: white;
+    top: 4px;
+    height: 80px;
+    margin: 0;
+    text-align: center;
+}
+.Info{
+    text-align: left;
+    margin: -13px;
+    top: 12px;
+    left: 25px;
+}
