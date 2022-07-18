@@ -12,42 +12,30 @@ import axios from "axios";
  function Search() {
     const [text, setText] = useState(' ');
     const [buildingList, setBuildingList] = useState([]);
+    const location = useLocation();
+    const keyword = location.state.keyword;
     const onChange = (e) => {
         setText(e.target.value);
     }
 
-    const searchBuilding = () => {
-        const building = axios.create({
-            baseURL: 'http://localhost:8080/'
-        })
-        building.post('/api/find/address', null, {params: {keyword: "스타벅스"}})
-        .then(function(res){
-            console.log(res.data);
-            setBuildingList(res.data);
-        }).catch(function(error){
-            console.log(`에러`);
-        })
-    }
+    useEffect(()=>{
+        setBuildingList(location.state.building);
+    })
+
 
     return (
     <div className="main"> 
         <div className="searchbar">
             <div className="line">
-                <SearchBar onChange = {onChange} placeholder={'test'}/>
-                <Button onClick ={searchBuilding} src={map}>지도</Button>
+                <SearchBar onChange = {onChange} placeholder={keyword}/>
+                {/* <Button src={map}>지도</Button> */}
             </div>
         </div>
         <div className="buildingList">
             {}
-            {/* {buildingList && buildingList.map((obj)=>(
-                <BuildingInfo name={buildingList.name} address={buildingList.fullAddressRoad}></BuildingInfo>
-            ))} */}
-            <BuildingInfo name={buildingList.name} address={buildingList.fullAddressRoad}></BuildingInfo>
-            <BuildingInfo name={buildingList.name} address={buildingList.fullAddressRoad}></BuildingInfo>
-            <BuildingInfo name={buildingList.name} address={buildingList.fullAddressRoad}></BuildingInfo>
-            <BuildingInfo name={buildingList.name} address={buildingList.fullAddressRoad}></BuildingInfo>
-            <BuildingInfo name={buildingList.name} address={buildingList.fullAddressRoad}></BuildingInfo>
-            <BuildingInfo name="test" address="인천.."></BuildingInfo>
+            {buildingList && buildingList.map((obj)=>(
+                <BuildingInfo name={obj.name} address={obj.fullAddressRoad}></BuildingInfo>
+            ))} 
         </div>
     </div>
     );

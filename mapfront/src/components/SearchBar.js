@@ -6,10 +6,11 @@ import Search from '../pages/Search'
 import { Link, useNavigate } from "react-router-dom";
 
 const SearchBar = (props) => {
-    const test = useNavigate();
+    const navigate = useNavigate();
     const [name, setName] = useState('');
     const [isEnter, setIsEnter] = useState();
     const [searchValue, setSearchValue] = useState('');
+    const [buildingList, setBuildingList] = useState([]);
     const handleValue = (e) => {        //검색어 입력받는 부분
         setSearchValue(e.target.value);
         console.log(e.target.value);
@@ -17,27 +18,27 @@ const SearchBar = (props) => {
     }
     const handleKeyPress = (e) => { //enter키 추적용 -> 검색 결과창으로 이동시킴
         if(e.key === 'Enter'){
-            document.location.href = '/search';
+            searchBuilding();
         }
     }
-    //test
-    // const handleSearch = () => {  //Axios
-    //     const search = axios.create({
-    //       baseURL: 'http://localhost:8080/',
-
-
-    //     })
-    //     search.post('/api/find/address', null, {params:{keyword: searchValue}})
-    //     .then(function (res){
-    //       console.log(res.data.name);
-    //       test("/search", {state: {state: res.data.name, searchValue: searchValue}});
-    //       setName(res.data.name);
-    //       setIsEnter(true);
-    //     }).catch(function (err){
-    //       alert(`에러,, ,  .  . . `);
-    //     })
-        
-    //   }
+    const searchBuilding = () => {
+        const building = axios.create({
+            baseURL: 'http://localhost:8080/'
+        })
+        building.post('/api/find/address', null, {params: {keyword: searchValue}})
+        .then(function(res){
+            console.log(res.data);
+            setBuildingList(res.data);
+            navigate('/search', {
+                state: {
+                    keyword: searchValue,
+                    building: res.data,
+                }
+            })
+        }).catch(function(error){
+            console.log(`에러`);
+        })
+    }
 
     return(
         <>       
