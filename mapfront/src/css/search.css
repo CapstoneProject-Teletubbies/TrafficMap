@@ -1,6 +1,6 @@
 .main{
     position: fixed;
-    background-color: gray;
+    background-color: rgb(95, 95, 95);
     width: 100%;
     height: 100%;
 }
@@ -9,15 +9,24 @@
     background-color:white;
     width: 100%;
     height: 80px;
+    
+}
+.line{
+    top: 24%;
+    width: 100%;
+    height: 50px;
 }
 input{
     position: relative;
-    top: 10px;
-    width: 80%;
-    height: 35px;
     font-size: 15px;
     border: 0;
     border-radius: 25px;
     outline: black;
     padding-left: 10px;
+}
+.buildingList{
+    position: relative;
+    background-color: rgb(188, 188, 188);
+    top: 78px;
+    margin: 1px; /*리스트 양옆 살짝 검은끼*/
 }

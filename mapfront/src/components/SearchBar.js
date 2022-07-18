@@ -41,7 +41,7 @@ const SearchBar = (props) => {
 
     return(
         <>       
-            <input className="gg" type="text" placeholder={'장소, 버스, 지하철, 주소 검색'} 
+            <input className="gg" type="text" placeholder={props.placeholder} 
             onChange={handleValue}
             onKeyDown={handleKeyPress}
             />
