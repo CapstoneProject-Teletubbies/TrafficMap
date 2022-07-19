@@ -88,11 +88,8 @@ class MapApplicationTests {
 
 	}
 
-
-
 	@Test
 	void apiTestWebClient2() throws UnsupportedEncodingException {
-
 
 		DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory("http://openapi.elevator.go.kr/openapi/service/ElevatorOperationService");
 		factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
