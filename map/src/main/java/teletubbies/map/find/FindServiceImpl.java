@@ -65,13 +65,10 @@ public class FindServiceImpl implements FindService {
             JSONObject object = (JSONObject) parser.parse(result.getBody());
             //searchPoiInfo의 value들
             JSONObject searchPoiInfo = (JSONObject) object.get("searchPoiInfo");
-            System.out.println("searchPoiInfo = " + searchPoiInfo);
             //pois의 value들
             JSONObject pois = (JSONObject) searchPoiInfo.get("pois");
-            System.out.println("pois = " + pois);
             //poi의 value는 배열이라 JSONArray 사용
             JSONArray poiArr = (JSONArray) pois.get("poi");
-            System.out.println("poiArr = " + poiArr);
 
             List<FindDto> dtos = new ArrayList<>(); //리스트에 담을 dtos 선언
 
