@@ -214,7 +214,6 @@ public class BusServiceImpl implements BusService {
             String BSTOPNM = (String)array.get("BSTOPNM"); // 정류장 이름
             System.out.println("BSTOPNM = " + BSTOPNM);
             System.out.println();
-
         }
 
         return result.getBody();
