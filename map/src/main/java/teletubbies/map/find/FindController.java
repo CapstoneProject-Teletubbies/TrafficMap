@@ -17,7 +17,6 @@ public class FindController {
 
     @Autowired
     private FindServiceImpl findService;
-
     //(티맵) 명칭(POI) 통합 검색, 엘리베이터 검색을 위한 API 컨트롤러
 //    @RequestMapping(value="/find/address", method = {RequestMethod.POST})
     @GetMapping("/find/address")
