@@ -1,0 +1,23 @@
+li {
+    padding: 5px;
+    list-style-type: none;
+}
+
+.menuBtn {
+    position: fixed;
+    left: -9999px;
+}
+
+.left-side-bar{ 
+    text-align:center;
+    background-color: #fff;
+    height: 150px;
+    width: 180px;
+    position: fixed;
+    right: -180px;
+    bottom: 280px;
+}
+
+#menuBtn:checked ~ .left-side-bar {
+    right: 0;
+}

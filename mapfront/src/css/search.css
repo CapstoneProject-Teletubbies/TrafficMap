@@ -11,10 +11,23 @@
     height: 80px;
     
 }
-.line{
-    top: 24%;
-    width: 100%;
+.button{
+    top: 23%;
+    width: 5%;
     height: 50px;
+    float: left;
+}
+.searchtest{
+    top: 27%;
+    width: 87%;
+    height: 50px;
+    float: left;
+}
+.mapbutton{
+    top: 22%;
+    width:8%;
+    right: 15px;
+    float:right;
 }
 input{
     position: relative;
