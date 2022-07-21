@@ -2,6 +2,7 @@ package teletubbies.map.find;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -16,7 +17,6 @@ public class FindController {
 
     @Autowired
     private FindServiceImpl findService;
-
     //(티맵) 명칭(POI) 통합 검색, 엘리베이터 검색을 위한 API 컨트롤러
     @RequestMapping(value="/find/address", method = {RequestMethod.POST})
 //    @GetMapping("/find/address")

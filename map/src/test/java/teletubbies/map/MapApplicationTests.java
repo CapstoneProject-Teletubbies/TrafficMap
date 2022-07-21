@@ -1,21 +1,31 @@
 package teletubbies.map;
 
+import io.netty.channel.ChannelOption;
+import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.handler.timeout.WriteTimeoutHandler;
 import org.junit.jupiter.api.Test;
+import org.junit.rules.Timeout;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+import reactor.netty.http.client.HttpClient;
+import reactor.netty.resources.ConnectionProvider;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.time.Duration;
+import java.util.function.Consumer;
 
 @SpringBootTest
 class MapApplicationTests {
@@ -93,8 +103,22 @@ class MapApplicationTests {
 
 		DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory("http://openapi.elevator.go.kr/openapi/service/ElevatorOperationService");
 		factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
+		String connectionProviderName = "customConnectionProvider";
+		int maxConnections = 1000;
+		int acquireTimeout = 45;
+		ConnectionProvider connectionProvider = ConnectionProvider.builder(connectionProviderName)
+				.maxConnections(maxConnections)
+				.pendingAcquireTimeout(Duration.ofSeconds(acquireTimeout))
+				.build();
+		HttpClient httpClient = HttpClient.create(connectionProvider)
+				.tcpConfiguration(tcpClient -> tcpClient.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 60000)
+						.doOnConnected(connection -> {
+							connection.addHandlerLast(new ReadTimeoutHandler(300));
+							connection.addHandlerLast(new WriteTimeoutHandler(300));
+						}));
 
-		WebClient wc = WebClient.builder().uriBuilderFactory(factory).baseUrl("http://openapi.elevator.go.kr/openapi/service/ElevatorOperationService").build();
+		WebClient wc = WebClient.builder().clientConnector(new ReactorClientHttpConnector(httpClient)).uriBuilderFactory(factory).baseUrl("http://openapi.elevator.go.kr/openapi/service/ElevatorOperationService").build();
+
 
 		String encodedName = URLEncoder.encode("인천광역시 부평구 부평문화로 35", "UTF-8");
 
@@ -106,12 +130,18 @@ class MapApplicationTests {
 						.queryParam("pageNo", 1).build())
 				.retrieve().bodyToMono(String.class);
 
-		//System.out.println(response);
+		//System.out.println(response.block());
+		//response.doOnNext(Thread.sleep(1000)).doOnSuccess(value -> System.out.println("success1"+value));
+
+		//Timeout.millis(1000);
+
 		response.subscribe(
-				value -> System.out.println(value),
-				error -> error.printStackTrace(),
-				() -> System.out.println("completed without a value")
+				value -> System.out.println("결과: "+value)//,
+				//error -> error.printStackTrace(),
+				//() -> System.out.println("completed without a value")
 		);
+
+
 
 
 	}
