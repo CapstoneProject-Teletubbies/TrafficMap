@@ -206,7 +206,7 @@ public class BusServiceImpl implements BusService {
     }
 
     @SneakyThrows
-    public Object findBusRouteListByRouteId(int routeId) { // 노선 ID로 버스 정류소 목록 검색
+    public List<BusRouteListDto> findBusRouteListByRouteId(int routeId) { // 노선 ID로 버스 정류소 목록 검색
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders(); //헤더
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 한글깨짐 방지
@@ -272,7 +272,7 @@ public class BusServiceImpl implements BusService {
      *  JsonArray 아니고 JsonObject일 경우도 get 해야하는데 너무 반복이라 일단 코드 안넣어서 그거도 해야함
      */
     @SneakyThrows
-    public Object findBusInfoByBusNum(Object busNum) { // 버스 번호로 버스 정보 조회
+    public List<BusInfoDto> findBusInfoByBusNum(Object busNum) { // 버스 번호로 버스 정보 조회
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders(); //헤더
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 한글깨짐 방지
