@@ -5,6 +5,7 @@ import lombok.Data;
 @Data
 public class BusInfoDto {
     //버스 번호로 버스 정보
+    public Object ROUTENO; //노선번호;
     public Integer ROUTEID; // 노선 ID
     public Integer ROUTETPCD; // 노선 유형코드
     public Object FBUS_DEPHMS; // 첫차 시간

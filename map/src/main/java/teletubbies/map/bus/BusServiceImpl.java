@@ -8,7 +8,6 @@ import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.jdbc.datasource.JdbcTransactionObjectSupport;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
@@ -123,15 +122,6 @@ public class BusServiceImpl implements BusService {
             String LATEST_STOP_NAME = (String)array.get("LATEST_STOP_NAME"); //버스의 최근 정류소 명
             String BUS_NUM_PLATE = (String)array.get("BUS_NUM_PLATE"); // 차량 번호판
 
-
-            System.out.println("BUSID = " + BUSID);
-            System.out.println("ARRIVALESTIMATETIME = " + ARRIVALESTIMATETIME);
-            System.out.println("LOW_TP_CD = " + LOW_TP_CD);
-            System.out.println("ROUTEID = " + ROUTEID);
-            System.out.println("REST_STOP_COUNT = " + REST_STOP_COUNT);
-            System.out.println("LATEST_STOP_NAME = " + LATEST_STOP_NAME);
-            System.out.println("BUS_NUM_PLATE = " + BUS_NUM_PLATE);
-            System.out.println();
         }
 
         return result.getBody();
@@ -279,7 +269,8 @@ public class BusServiceImpl implements BusService {
 
         //서비스 키 인코딩
         String encodedKey = URLEncoder.encode(bus_apikey, "UTF-8");
-        if(busNum.getClass().getName() == "java.lang.String") {
+
+        if(busNum.getClass().getName() == "java.lang.String") { //버스 번호가 String이면 인코딩
             busNum = URLEncoder.encode(busNum.toString(), "UTF-8");
         }
 
@@ -287,7 +278,7 @@ public class BusServiceImpl implements BusService {
                 .fromHttpUrl(busNum_url)
                 .queryParam("serviceKey", encodedKey) //서비스키
                 .queryParam("routeNo", busNum) // 버스 번호
-                .queryParam("numOfRows", 1000) // 개수
+                .queryParam("numOfRows", 10) // 개수
                 .queryParam("pageNo", 1)
                 .build(true);
 
@@ -301,52 +292,57 @@ public class BusServiceImpl implements BusService {
         JSONObject msgBody = (JSONObject)ServiceResult.get("msgBody"); //msgBody의 value들
         JSONObject msgHeader = (JSONObject)ServiceResult.get("msgHeader"); //msgBody의 value들
         Integer totalCount = (Integer)msgHeader.get("totalCount"); //msgBody의 value들
+        System.out.println("totalCount = " + totalCount);
 
         // 만약 배열로 제공된다면
         if(msgBody.get("itemList").getClass().getName() == "org.json.JSONArray") {
             JSONArray itemList = (JSONArray) msgBody.get("itemList"); //itemList의 value들
+            System.out.println("itemList = " + itemList);
 
             List<BusInfoDto> dtos = new ArrayList<>();
             System.out.println(" 버스번호로 버스정보 조회");
-            for(int i=0; i< totalCount; i++) { // 아이템리스트 반환개수만큼
+            /**
+             *
+             * 버스 개수 여러개 출력되도록 수정해야함!!!
+             */
+            for (int i = 0; i < totalCount; i++) { // 아이템리스트 반환개수만큼
                 JSONObject array = (JSONObject) itemList.get(i);
                 BusInfoDto busInfoDto = new BusInfoDto();
+                System.out.println("(" + i + ")");
 
                 Object ROUTENO = array.get("ROUTENO"); // 노선 번호
+//                if (ROUTENO.equals(busNum)) { //해당하는 버스 번호의 버스 정보만 출력
+                Integer ROUTEID = (Integer) array.get("ROUTEID"); // 노선 ID
+                Integer ROUTETPCD = (Integer) array.get("ROUTETPCD"); // 노선 유형코드
+                Object FBUS_DEPHMS = array.get("FBUS_DEPHMS"); // 첫차 시간
+                Object LBUS_DEPHMS = array.get("LBUS_DEPHMS"); // 막차 시간
+                Integer MIN_ALLOCGAP = (Integer) array.get("MIN_ALLOCGAP"); //최소 배차간격
+                Integer MAX_ALLOCGAP = (Integer) array.get("MAX_ALLOCGAP"); //최대 배차간격
+                Integer TURN_BSTOPID = (Integer) array.get("TURN_BSTOPID"); //회차지 정류소 ID
+                String TURN_BSTOPNM = (String) array.get("TURN_BSTOPNM"); // 회차지 정류소명
+                Integer ORIGIN_BSTOPID = (Integer) array.get("ORIGIN_BSTOPID"); // 기점 정류소 ID
+                String ORIGIN_BSTOPNM = (String) array.get("ORIGIN_BSTOPNM"); // 기점 정류소 명
+                Integer DEST_BSTOPID = (Integer) array.get("DEST_BSTOPID"); //종점 정류소 ID
+                String DEST_BSTOPNM = (String) array.get("DEST_BSTOPNM"); // 종점 정류소명
 
-                if (ROUTENO.equals(busNum)) { //해당하는 버스 번호의 버스 정보만 출력
-                    Integer ROUTEID = (Integer) array.get("ROUTEID"); // 노선 ID
-                    Integer ROUTETPCD = (Integer) array.get("ROUTETPCD"); // 노선 유형코드
-                    Object FBUS_DEPHMS = array.get("FBUS_DEPHMS"); // 첫차 시간
-                    Object LBUS_DEPHMS = array.get("LBUS_DEPHMS"); // 막차 시간
-                    Integer MIN_ALLOCGAP = (Integer) array.get("MIN_ALLOCGAP"); //최소 배차간격
-                    Integer MAX_ALLOCGAP = (Integer) array.get("MAX_ALLOCGAP"); //최대 배차간격
-                    Integer TURN_BSTOPID = (Integer) array.get("TURN_BSTOPID"); //회차지 정류소 ID
-                    String TURN_BSTOPNM = (String) array.get("TURN_BSTOPNM"); // 회차지 정류소명
-                    Integer ORIGIN_BSTOPID = (Integer) array.get("ORIGIN_BSTOPID"); // 기점 정류소 ID
-                    String ORIGIN_BSTOPNM = (String) array.get("ORIGIN_BSTOPNM"); // 기점 정류소 명
-                    Integer DEST_BSTOPID = (Integer) array.get("DEST_BSTOPID"); //종점 정류소 ID
-                    String DEST_BSTOPNM = (String) array.get("DEST_BSTOPNM"); // 종점 정류소명
+                busInfoDto.setROUTENO(ROUTENO);
+                busInfoDto.setROUTEID(ROUTEID);
+                busInfoDto.setROUTETPCD(ROUTETPCD);
+                busInfoDto.setFBUS_DEPHMS(FBUS_DEPHMS);
+                busInfoDto.setLBUS_DEPHMS(LBUS_DEPHMS);
+                busInfoDto.setMIN_ALLOCGAP(MIN_ALLOCGAP);
+                busInfoDto.setMAX_ALLOCGAP(MAX_ALLOCGAP);
+                busInfoDto.setTURN_BSTOPID(TURN_BSTOPID);
+                busInfoDto.setTURN_BSTOPNM(TURN_BSTOPNM);
+                busInfoDto.setORIGIN_BSTOPID(ORIGIN_BSTOPID);
+                busInfoDto.setORIGIN_BSTOPNM(ORIGIN_BSTOPNM);
+                busInfoDto.setDEST_BSTOPID(DEST_BSTOPID);
+                busInfoDto.setDEST_BSTOPNM(DEST_BSTOPNM);
 
-                    busInfoDto.setROUTEID(ROUTEID);
-                    busInfoDto.setROUTETPCD(ROUTETPCD);
-                    busInfoDto.setFBUS_DEPHMS(FBUS_DEPHMS);
-                    busInfoDto.setLBUS_DEPHMS(LBUS_DEPHMS);
-                    busInfoDto.setMIN_ALLOCGAP(MIN_ALLOCGAP);
-                    busInfoDto.setMAX_ALLOCGAP(MAX_ALLOCGAP);
-                    busInfoDto.setTURN_BSTOPID(TURN_BSTOPID);
-                    busInfoDto.setTURN_BSTOPNM(TURN_BSTOPNM);
-                    busInfoDto.setORIGIN_BSTOPID(ORIGIN_BSTOPID);
-                    busInfoDto.setORIGIN_BSTOPNM(ORIGIN_BSTOPNM);
-                    busInfoDto.setDEST_BSTOPID(DEST_BSTOPID);
-                    busInfoDto.setDEST_BSTOPNM(DEST_BSTOPNM);
+                dtos.add(i, busInfoDto);
+                System.out.println("array = " + array);
 
-                    dtos.add(i, busInfoDto);
-                    System.out.println("array = " + array);
-
-                    return dtos;
-                }
-
+                return dtos;
             }
         }
         else { // 만약 배열이 아닌 1개의 객체만 제공된다면

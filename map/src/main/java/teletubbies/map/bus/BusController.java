@@ -19,7 +19,7 @@ public class BusController { // 버스노선, 버스 위치 2개
 //    @GetMapping(value = "/bus/busInfo",produces="text/plain;charset=UTF-8")
     @RequestMapping(value="/bus/busInfo", method = {RequestMethod.POST})
     public Object GetBusInfo(Object name) { //버스 번호로 버스 정보
-//        Object name = 28; // 버스 번호 테스트
+//        Object name = 1; // 버스 번호 테스트
         return busService.findBusInfoByBusNum(name);
     }
 
