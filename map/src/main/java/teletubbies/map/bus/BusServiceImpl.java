@@ -8,15 +8,13 @@ import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.jdbc.datasource.JdbcTransactionObjectSupport;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Array;
 import java.math.BigDecimal;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -125,6 +123,7 @@ public class BusServiceImpl implements BusService {
             String LATEST_STOP_NAME = (String)array.get("LATEST_STOP_NAME"); //버스의 최근 정류소 명
             String BUS_NUM_PLATE = (String)array.get("BUS_NUM_PLATE"); // 차량 번호판
 
+
             System.out.println("BUSID = " + BUSID);
             System.out.println("ARRIVALESTIMATETIME = " + ARRIVALESTIMATETIME);
             System.out.println("LOW_TP_CD = " + LOW_TP_CD);
@@ -139,7 +138,7 @@ public class BusServiceImpl implements BusService {
     }
 
     @SneakyThrows
-    public Object findBusLocationtByRouteId(int routeId) { // 노선 ID로 버스 위치 조회
+    public List<BusLocationDto> findBusLocationtByRouteId(int routeId) { // 노선 ID로 버스 위치 조회
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders(); //헤더
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 한글깨짐 방지
@@ -167,9 +166,11 @@ public class BusServiceImpl implements BusService {
         JSONObject msgBody = (JSONObject)ServiceResult.get("msgBody"); //msgBody의 value들
         JSONArray itemList = (JSONArray) msgBody.get("itemList"); //itemList의 value들
 
+        List<BusLocationDto> dtos = new ArrayList<>();
         System.out.println("routeID로 버스 위치 조회");
         for(int i=0; i<totalCount; i++) { // 정류장 개수만큼 반복
             JSONObject array = (JSONObject) itemList.get(i);
+            BusLocationDto busLocationDto = new BusLocationDto();
 
             System.out.println("(" + i + ")");
             Integer BUSID = (Integer)array.get("BUSID"); // 버스 ID
@@ -184,18 +185,26 @@ public class BusServiceImpl implements BusService {
             Integer CONGESTION = (Integer)array.get("CONGESTION"); // 혼잡도(1:여유, 2:보통, 3:혼잡, 255:사용안함)
             Integer LASTBUSYN = (Integer)array.get("LASTBUSYN"); // 막차 코드(0:일반, 1:막차)
 
+            busLocationDto.setBUSID(BUSID);
+            busLocationDto.setBUS_NUM_PLATE(BUS_NUM_PLATE);
+            busLocationDto.setLOW_TP_CD(LOW_TP_CD);
+            busLocationDto.setDIRCD(DIRCD);
+            busLocationDto.setPATHSEQ(PATHSEQ);
+            busLocationDto.setLATEST_STOPSEQ(LATEST_STOPSEQ);
+            busLocationDto.setLATEST_STOP_ID(LATEST_STOP_ID);
+            busLocationDto.setLATEST_STOP_NAME(LATEST_STOP_NAME);
+            busLocationDto.setREMAIND_SEAT(REMAIND_SEAT);
+            busLocationDto.setCONGESTION(CONGESTION);
+            busLocationDto.setLASTBUSYN(LASTBUSYN);
+
+            dtos.add(i, busLocationDto);
             System.out.println("array = " + array);
             System.out.println();
         }
 
-        return result.getBody();
+        return dtos;
     }
 
-
-    /**
-     * 
-     * 여러개니까 list로 받아야하나? 암튼 그거해야함
-     */
     @SneakyThrows
     public Object findBusRouteListByRouteId(int routeId) { // 노선 ID로 버스 정류소 목록 검색
         RestTemplate restTemplate = new RestTemplate();
@@ -225,9 +234,11 @@ public class BusServiceImpl implements BusService {
         JSONObject msgBody = (JSONObject)ServiceResult.get("msgBody"); //msgBody의 value들
         JSONArray itemList = (JSONArray) msgBody.get("itemList"); //itemList의 value들
 
+        List<BusRouteListDto> dtos = new ArrayList<>();
         System.out.println("routeID로 노선 검색");
         for(int i=0; i<totalCount; i++) { // 정류장 개수만큼 반복
             JSONObject array = (JSONObject) itemList.get(i);
+            BusRouteListDto busRouteListDto = new BusRouteListDto();
 
             System.out.println("(" + i + ")");
             String BSTOPNM = (String)array.get("BSTOPNM"); // 정류장 이름
@@ -239,11 +250,21 @@ public class BusServiceImpl implements BusService {
             BigDecimal POSX = (BigDecimal)array.get("POSX"); // X 좌표
             BigDecimal POSY = (BigDecimal)array.get("POSY"); // Y 좌표
 
+            busRouteListDto.setBSTOPNM(BSTOPNM);
+            busRouteListDto.setBSTOPID(BSTOPID);
+            busRouteListDto.setSHORT_BSTOPID(SHORT_BSTOPID);
+            busRouteListDto.setPATHSEQ(PATHSEQ);
+            busRouteListDto.setBSTOPSEQ(BSTOPSEQ);
+            busRouteListDto.setDIRCD(DIRCD);
+            busRouteListDto.setPOSX(POSX);
+            busRouteListDto.setPOSY(POSY);
+
+            dtos.add(i, busRouteListDto);
             System.out.println("array = " + array);
             System.out.println();
         }
 
-        return response;
+        return dtos;
     }
 
     /**
@@ -285,9 +306,11 @@ public class BusServiceImpl implements BusService {
         if(msgBody.get("itemList").getClass().getName() == "org.json.JSONArray") {
             JSONArray itemList = (JSONArray) msgBody.get("itemList"); //itemList의 value들
 
+            List<BusInfoDto> dtos = new ArrayList<>();
             System.out.println(" 버스번호로 버스정보 조회");
             for(int i=0; i< totalCount; i++) { // 아이템리스트 반환개수만큼
                 JSONObject array = (JSONObject) itemList.get(i);
+                BusInfoDto busInfoDto = new BusInfoDto();
 
                 Object ROUTENO = array.get("ROUTENO"); // 노선 번호
 
@@ -304,7 +327,24 @@ public class BusServiceImpl implements BusService {
                     String ORIGIN_BSTOPNM = (String) array.get("ORIGIN_BSTOPNM"); // 기점 정류소 명
                     Integer DEST_BSTOPID = (Integer) array.get("DEST_BSTOPID"); //종점 정류소 ID
                     String DEST_BSTOPNM = (String) array.get("DEST_BSTOPNM"); // 종점 정류소명
+
+                    busInfoDto.setROUTEID(ROUTEID);
+                    busInfoDto.setROUTETPCD(ROUTETPCD);
+                    busInfoDto.setFBUS_DEPHMS(FBUS_DEPHMS);
+                    busInfoDto.setLBUS_DEPHMS(LBUS_DEPHMS);
+                    busInfoDto.setMIN_ALLOCGAP(MIN_ALLOCGAP);
+                    busInfoDto.setMAX_ALLOCGAP(MAX_ALLOCGAP);
+                    busInfoDto.setTURN_BSTOPID(TURN_BSTOPID);
+                    busInfoDto.setTURN_BSTOPNM(TURN_BSTOPNM);
+                    busInfoDto.setORIGIN_BSTOPID(ORIGIN_BSTOPID);
+                    busInfoDto.setORIGIN_BSTOPNM(ORIGIN_BSTOPNM);
+                    busInfoDto.setDEST_BSTOPID(DEST_BSTOPID);
+                    busInfoDto.setDEST_BSTOPNM(DEST_BSTOPNM);
+
+                    dtos.add(i, busInfoDto);
                     System.out.println("array = " + array);
+
+                    return dtos;
                 }
 
             }
@@ -313,7 +353,6 @@ public class BusServiceImpl implements BusService {
             JSONObject itemList = (JSONObject) msgBody.get("itemList");
             System.out.println("itemList = " + itemList);
         }
-
-        return result.getBody();
+        return null;
     }
 }
