@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 @ComponentScan
@@ -23,14 +25,14 @@ public class BusController { // 버스노선, 버스 위치 2개
 
 //    @GetMapping(value="/bus/route")
     @RequestMapping(value="/bus/route", method = {RequestMethod.POST})
-    public Object GetBusRoute(Integer routeId) { // RouteID로 버스 노선
+    public List<BusRouteListDto> GetBusRoute(Integer routeId) { // RouteID로 버스 노선
 //        Integer routeId = 165000110; //노선 ID(564번 버스) 테스트
         return busService.findBusRouteListByRouteId(routeId);
     }
 
 //    @GetMapping(value="/bus/location")
     @RequestMapping(value="/bus/location", method = {RequestMethod.POST})
-    public Object GetBusLocation(Integer routeId) { // RouteID로 버스 위치
+    public List<BusLocationDto> GetBusLocation(Integer routeId) { // RouteID로 버스 위치
 //        Integer routeId = 165000110; //노선 ID(564번 버스) 테스트
         return busService.findBusLocationtByRouteId(routeId);
 
