@@ -15,6 +15,7 @@ import axios from "axios";
  function Search() {
     const [text, setText] = useState(' ');
     const [buildingList, setBuildingList] = useState([]);
+    const [busList, setBusList] = useState([]);
     const navigate = useNavigate();
     const location = useLocation();
     const keyword = location.state.keyword;
@@ -24,6 +25,7 @@ import axios from "axios";
 
     useEffect(()=>{
         setBuildingList(location.state.building);
+        setBusList(location.state.bus);
     })
 
     const handlebackButton = () => {
@@ -32,6 +34,10 @@ import axios from "axios";
     const handlemapButton = () => {
         navigate('/resultsearch', { state: {
             building: buildingList}});
+    }
+
+    const handleClick = () => {
+        console.log('이게왜');
     }
 
     const searchBusRoute = () => {
@@ -66,8 +72,8 @@ import axios from "axios";
         </div>
         <div className="buildingList">
             {}
-            {buildingList && buildingList.map((obj)=>(
-                <BuildingInfo name={obj.name} address={obj.fullAddressRoad}></BuildingInfo>
+            {buildingList && buildingList.map((obj, index)=>(
+                <BuildingInfo  obj={obj} name={obj.name} address={obj.fullAddressRoad}></BuildingInfo>
             ))} 
         </div>
         <button onClick={searchBusRoute}>Test</button>

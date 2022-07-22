@@ -18,7 +18,7 @@ const SearchBar = (props) => {
     }
     const handleKeyPress = (e) => { //enter키 추적용 -> 검색 결과창으로 이동시킴
         if(e.key === 'Enter'){
-            searchBuilding();
+            searchBus();
         }
     }
     const searchBuilding = (props) => {
@@ -29,13 +29,14 @@ const SearchBar = (props) => {
         .then(function(res){
             console.log(res.data);
             setBuildingList(res.data);
+            console.log(res.data);
             navigate('/search', {
                 state: {
                     keyword: searchValue,
                     building: res.data,
                     bus: props,
                 }
-            })
+            });
         }).catch(function(error){
             console.log(`에러`);
         })
