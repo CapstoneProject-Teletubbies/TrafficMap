@@ -1,11 +1,5 @@
 package teletubbies.map.bus;
 
-import org.springframework.http.HttpHeaders;
-import org.springframework.web.client.RestTemplate;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 public interface BusService {
