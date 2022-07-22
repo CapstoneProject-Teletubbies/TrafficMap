@@ -202,6 +202,87 @@ public class BusServiceImpl implements BusService {
     }
 
     @SneakyThrows
+    public List<BusRouteDetailDto> findBusRouteDetailByRouteId(int routeId) { // 노선 ID로 상세 정보 조회
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders(); //헤더
+        restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 한글깨짐 방지
+
+        //서비스 키 인코딩
+        String encodedKey = URLEncoder.encode(bus_apikey, "UTF-8");
+
+        UriComponents uri = UriComponentsBuilder
+                .fromHttpUrl(busId_url)
+                .queryParam("serviceKey", encodedKey) //서비스키
+                .queryParam("routeId", routeId) // 정류소ID
+                .queryParam("numOfRows", 20) // 개수
+                .queryParam("pageNo", 1)
+                .build(true);
+
+        ResponseEntity<String> result = restTemplate.exchange(uri.toUri(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
+
+        //xml 형식을 json 형식으로 변환
+        JSONObject response = XML.toJSONObject(result.getBody());
+
+        JSONObject ServiceResult = (JSONObject) response.get("ServiceResult"); //ServiceResult의 value들
+        System.out.println("ServiceResult = " + ServiceResult);
+        JSONObject msgHeader = (JSONObject) ServiceResult.get("msgHeader"); //msgHeader의 value들
+        System.out.println("msgHeader = " + msgHeader);
+        Integer totalCount = (Integer) msgHeader.get("totalCount"); // 총 개수
+        System.out.println("totalCount = " + totalCount);
+
+        if(msgHeader.get("resultCode").equals(0)) {
+            JSONObject msgBody = (JSONObject) ServiceResult.get("msgBody"); //msgBody의 value들
+            System.out.println("msgBody = " + msgBody);
+            JSONObject itemList = (JSONObject) msgBody.get("itemList"); //itemList의 value들
+            System.out.println("itemList = " + itemList);
+
+            List<BusRouteDetailDto> dtos = new ArrayList<>();
+            System.out.println("routeID로 상세 정보 조회");
+
+//            for (int i = 0; i < totalCount; i++) { // 정류장 개수만큼 반복
+//                JSONObject array = (JSONObject) itemList.get(i);
+            BusRouteDetailDto busRouteDetailDto = new BusRouteDetailDto();
+
+//            System.out.println("(" + i + ")");
+            Integer ROUTEID = (Integer) itemList.get("ROUTEID"); // 버스 노선 고유번호
+            Object ROUTENO = itemList.get("ROUTENO"); // 노선 명
+            Integer ROUTETPCD = (Integer) itemList.get("ROUTETPCD"); // 노선유형코드 [1:지선형, 2:간선형, 3:좌석형, 4:광역형, 5:리무진, 6:마을버스, 7:순환형, 8:급행간선, 9:지선(순환)]
+            String FBUS_DEPHMS = (String) itemList.get("FBUS_DEPHMS"); // 첫차 시간 hhmm
+            String LBUS_DEPHMS = (String) itemList.get("LBUS_DEPHMS"); // 막차 시간 hhmm
+            Integer MIN_ALLOCGAP = (Integer) itemList.get("MIN_ALLOCGAP"); // 	최소 배차간격
+            Integer MAX_ALLOCGAP = (Integer) itemList.get("MAX_ALLOCGAP"); // 최대 배차간격
+            Integer TURN_BSTOPID = (Integer) itemList.get("TURN_BSTOPID"); // 회차지 정류소ID
+            String TURN_BSTOPNM = (String) itemList.get("TURN_BSTOPNM"); // 회차지 정류소명
+            Integer ORIGIN_BSTOPID = (Integer) itemList.get("ORIGIN_BSTOPID"); // 기점 정류소ID
+            String ORIGIN_BSTOPNM = (String) itemList.get("ORIGIN_BSTOPNM"); // 기점 정류소명
+            Integer DEST_BSTOPID = (Integer) itemList.get("DEST_BSTOPID"); // 종점 정류소ID
+            String DEST_BSTOPNM = (String) itemList.get("DEST_BSTOPNM"); // 종점 정류소명
+
+            busRouteDetailDto.setROUTEID(ROUTEID);
+            busRouteDetailDto.setROUTENO(ROUTENO);
+            busRouteDetailDto.setROUTETPCD(ROUTETPCD);
+            busRouteDetailDto.setFBUS_DEPHMS(FBUS_DEPHMS);
+            busRouteDetailDto.setLBUS_DEPHMS(LBUS_DEPHMS);
+            busRouteDetailDto.setMIN_ALLOCGAP(MIN_ALLOCGAP);
+            busRouteDetailDto.setMAX_ALLOCGAP(MAX_ALLOCGAP);
+            busRouteDetailDto.setTURN_BSTOPID(TURN_BSTOPID);
+            busRouteDetailDto.setTURN_BSTOPNM(TURN_BSTOPNM);
+            busRouteDetailDto.setORIGIN_BSTOPID(ORIGIN_BSTOPID);
+            busRouteDetailDto.setORIGIN_BSTOPNM(ORIGIN_BSTOPNM);
+            busRouteDetailDto.setDEST_BSTOPID(DEST_BSTOPID);
+            busRouteDetailDto.setDEST_BSTOPNM(DEST_BSTOPNM);
+
+            dtos.add(busRouteDetailDto);
+            System.out.println();
+//            }
+            return dtos;
+        }
+        else {
+            return null;
+        }
+    }
+
+    @SneakyThrows
     public List<BusRouteListDto> findBusRouteListByRouteId(int routeId) { // 노선 ID로 버스 정류소 목록 검색
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders(); //헤더
