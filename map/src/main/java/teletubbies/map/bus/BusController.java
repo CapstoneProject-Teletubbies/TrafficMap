@@ -18,7 +18,7 @@ public class BusController { // 버스노선, 버스 위치 2개
 
 //    @GetMapping(value = "/bus/busInfo",produces="text/plain;charset=UTF-8")
     @RequestMapping(value="/bus/busInfo", method = {RequestMethod.POST})
-    public Object GetBusInfo(Object name) { //버스 번호로 버스 정보
+    public Object GetBusInfo(String name) { //버스 번호로 버스 정보
 //        Object name = 1; // 버스 번호 테스트
         return busService.findBusInfoByBusNum(name);
     }
@@ -27,6 +27,7 @@ public class BusController { // 버스노선, 버스 위치 2개
     @RequestMapping(value="/bus/route", method = {RequestMethod.POST})
     public List<BusRouteListDto> GetBusRoute(Integer routeId) { // RouteID로 버스 노선
 //        Integer routeId = 165000110; //노선 ID(564번 버스) 테스트
+//        Integer routeId = 167465;
         return busService.findBusRouteListByRouteId(routeId);
     }
 
@@ -34,6 +35,7 @@ public class BusController { // 버스노선, 버스 위치 2개
     @RequestMapping(value="/bus/location", method = {RequestMethod.POST})
     public List<BusLocationDto> GetBusLocation(Integer routeId) { // RouteID로 버스 위치
 //        Integer routeId = 165000110; //노선 ID(564번 버스) 테스트
+//        Integer routeId = 38492;
         return busService.findBusLocationtByRouteId(routeId);
 
     }

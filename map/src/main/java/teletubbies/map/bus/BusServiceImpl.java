@@ -65,16 +65,16 @@ public class BusServiceImpl implements BusService {
         //xml 형식을 json 형식으로 변환
         JSONObject response = XML.toJSONObject(result.getBody());
 
-        JSONObject ServiceResult = (JSONObject)response.get("ServiceResult"); //ServiceResult의 value들
-        JSONObject msgBody = (JSONObject)ServiceResult.get("msgBody"); //msgBody의 value들
+        JSONObject ServiceResult = (JSONObject) response.get("ServiceResult"); //ServiceResult의 value들
+        JSONObject msgBody = (JSONObject) ServiceResult.get("msgBody"); //msgBody의 value들
         JSONArray itemList = (JSONArray) msgBody.get("itemList"); //itemList의 value들
 
         System.out.println("정류소명으로 정류소(ID) 검색");
-        for(int i=0; i<itemList.length(); i++) { // 받아올 데이터 개수만큼 반복
+        for (int i = 0; i < itemList.length(); i++) { // 받아올 데이터 개수만큼 반복
             JSONObject array = (JSONObject) itemList.get(i);
             System.out.println("(" + i + ")");
-            Integer BSTOPID = (Integer)array.get("BSTOPID"); //정류소 ID
-            String ADMINNM = (String)array.get("ADMINNM"); // 정류소 관할관청명(BusZone)
+            Integer BSTOPID = (Integer) array.get("BSTOPID"); //정류소 ID
+            String ADMINNM = (String) array.get("ADMINNM"); // 정류소 관할관청명(BusZone)
 
             System.out.println("BSTOPID = " + BSTOPID);
             System.out.println("ADMINNM = " + ADMINNM);
@@ -106,21 +106,21 @@ public class BusServiceImpl implements BusService {
         //xml 형식을 json 형식으로 변환
         JSONObject response = XML.toJSONObject(result.getBody());
 
-        JSONObject ServiceResult = (JSONObject)response.get("ServiceResult"); //ServiceResult의 value들
-        JSONObject msgBody = (JSONObject)ServiceResult.get("msgBody"); //msgBody의 value들
+        JSONObject ServiceResult = (JSONObject) response.get("ServiceResult"); //ServiceResult의 value들
+        JSONObject msgBody = (JSONObject) ServiceResult.get("msgBody"); //msgBody의 value들
         JSONArray itemList = (JSONArray) msgBody.get("itemList"); //itemList의 value들
 
         System.out.println("정류소 ID로 버스 도착정보목록 조회");
-        for(int i=0; i<itemList.length(); i++) { // 받아올 데이터 개수만큼 반복
+        for (int i = 0; i < itemList.length(); i++) { // 받아올 데이터 개수만큼 반복
             JSONObject array = (JSONObject) itemList.get(i);
             System.out.println("(" + i + ")");
-            Integer BUSID = (Integer)array.get("BUSID"); // 버스 ID(차량 고유 식별자)
-            Integer ARRIVALESTIMATETIME = (Integer)array.get("ARRIVALESTIMATETIME"); // 도착예정시간(몇 초 전)
-            Integer LOW_TP_CD = (Integer)array.get("LOW_TP_CD"); // 저상버스 여부
-            Integer ROUTEID = (Integer)array.get("ROUTEID"); //버스 노선 ID
-            Integer REST_STOP_COUNT = (Integer)array.get("REST_STOP_COUNT"); // 몇 정거장 전
-            String LATEST_STOP_NAME = (String)array.get("LATEST_STOP_NAME"); //버스의 최근 정류소 명
-            String BUS_NUM_PLATE = (String)array.get("BUS_NUM_PLATE"); // 차량 번호판
+            Integer BUSID = (Integer) array.get("BUSID"); // 버스 ID(차량 고유 식별자)
+            Integer ARRIVALESTIMATETIME = (Integer) array.get("ARRIVALESTIMATETIME"); // 도착예정시간(몇 초 전)
+            Integer LOW_TP_CD = (Integer) array.get("LOW_TP_CD"); // 저상버스 여부
+            Integer ROUTEID = (Integer) array.get("ROUTEID"); //버스 노선 ID
+            Integer REST_STOP_COUNT = (Integer) array.get("REST_STOP_COUNT"); // 몇 정거장 전
+            String LATEST_STOP_NAME = (String) array.get("LATEST_STOP_NAME"); //버스의 최근 정류소 명
+            String BUS_NUM_PLATE = (String) array.get("BUS_NUM_PLATE"); // 차량 번호판
 
         }
 
@@ -149,50 +149,56 @@ public class BusServiceImpl implements BusService {
         //xml 형식을 json 형식으로 변환
         JSONObject response = XML.toJSONObject(result.getBody());
 
-        JSONObject ServiceResult = (JSONObject)response.get("ServiceResult"); //ServiceResult의 value들
-        JSONObject msgHeader = (JSONObject)ServiceResult.get("msgHeader"); //msgHeader의 value들
+        JSONObject ServiceResult = (JSONObject) response.get("ServiceResult"); //ServiceResult의 value들
+        JSONObject msgHeader = (JSONObject) ServiceResult.get("msgHeader"); //msgHeader의 value들
         Integer totalCount = (Integer) msgHeader.get("totalCount"); // 총 개수
 
-        JSONObject msgBody = (JSONObject)ServiceResult.get("msgBody"); //msgBody의 value들
-        JSONArray itemList = (JSONArray) msgBody.get("itemList"); //itemList의 value들
+        if(msgHeader.get("resultCode").equals(0)) {
+            JSONObject msgBody = (JSONObject) ServiceResult.get("msgBody"); //msgBody의 value들
+            JSONArray itemList = (JSONArray) msgBody.get("itemList"); //itemList의 value들
 
-        List<BusLocationDto> dtos = new ArrayList<>();
-        System.out.println("routeID로 버스 위치 조회");
-        for(int i=0; i<totalCount; i++) { // 정류장 개수만큼 반복
-            JSONObject array = (JSONObject) itemList.get(i);
-            BusLocationDto busLocationDto = new BusLocationDto();
+            List<BusLocationDto> dtos = new ArrayList<>();
+            System.out.println("routeID로 버스 위치 조회");
 
-            System.out.println("(" + i + ")");
-            Integer BUSID = (Integer)array.get("BUSID"); // 버스 ID
-            String BUS_NUM_PLATE = (String)array.get("BUS_NUM_PLATE"); // 차량 번호
-            Integer LOW_TP_CD = (Integer)array.get("LOW_TP_CD"); // 저상버스 여부 (0:일반, 1:저상)
-            Integer DIRCD = (Integer)array.get("DIRCD"); // 진행방향코드(0:상행, 1:하행, 2:순환)
-            Integer PATHSEQ = (Integer)array.get("PATHSEQ"); // 노드 순번
-            Integer LATEST_STOPSEQ = (Integer)array.get("LATEST_STOPSEQ"); // 최근 정류소순번
-            Integer LATEST_STOP_ID = (Integer)array.get("LATEST_STOP_ID"); // 최근 정류소ID
-            String LATEST_STOP_NAME = (String)array.get("LATEST_STOP_NAME"); // 최근 정류소 명
-            Integer REMAIND_SEAT = (Integer)array.get("REMAIND_SEAT"); // 차량 빈자리 수(255:사용안함)
-            Integer CONGESTION = (Integer)array.get("CONGESTION"); // 혼잡도(1:여유, 2:보통, 3:혼잡, 255:사용안함)
-            Integer LASTBUSYN = (Integer)array.get("LASTBUSYN"); // 막차 코드(0:일반, 1:막차)
+            for (int i = 0; i < totalCount; i++) { // 정류장 개수만큼 반복
+                JSONObject array = (JSONObject) itemList.get(i);
+                BusLocationDto busLocationDto = new BusLocationDto();
 
-            busLocationDto.setBUSID(BUSID);
-            busLocationDto.setBUS_NUM_PLATE(BUS_NUM_PLATE);
-            busLocationDto.setLOW_TP_CD(LOW_TP_CD);
-            busLocationDto.setDIRCD(DIRCD);
-            busLocationDto.setPATHSEQ(PATHSEQ);
-            busLocationDto.setLATEST_STOPSEQ(LATEST_STOPSEQ);
-            busLocationDto.setLATEST_STOP_ID(LATEST_STOP_ID);
-            busLocationDto.setLATEST_STOP_NAME(LATEST_STOP_NAME);
-            busLocationDto.setREMAIND_SEAT(REMAIND_SEAT);
-            busLocationDto.setCONGESTION(CONGESTION);
-            busLocationDto.setLASTBUSYN(LASTBUSYN);
+                System.out.println("(" + i + ")");
+                Integer BUSID = (Integer) array.get("BUSID"); // 버스 ID
+                String BUS_NUM_PLATE = (String) array.get("BUS_NUM_PLATE"); // 차량 번호
+                Integer LOW_TP_CD = (Integer) array.get("LOW_TP_CD"); // 저상버스 여부 (0:일반, 1:저상)
+                Integer DIRCD = (Integer) array.get("DIRCD"); // 진행방향코드(0:상행, 1:하행, 2:순환)
+                Integer PATHSEQ = (Integer) array.get("PATHSEQ"); // 노드 순번
+                Integer LATEST_STOPSEQ = (Integer) array.get("LATEST_STOPSEQ"); // 최근 정류소순번
+                Integer LATEST_STOP_ID = (Integer) array.get("LATEST_STOP_ID"); // 최근 정류소ID
+                String LATEST_STOP_NAME = (String) array.get("LATEST_STOP_NAME"); // 최근 정류소 명
+                Integer REMAIND_SEAT = (Integer) array.get("REMAIND_SEAT"); // 차량 빈자리 수(255:사용안함)
+                Integer CONGESTION = (Integer) array.get("CONGESTION"); // 혼잡도(1:여유, 2:보통, 3:혼잡, 255:사용안함)
+                Integer LASTBUSYN = (Integer) array.get("LASTBUSYN"); // 막차 코드(0:일반, 1:막차)
 
-            dtos.add(i, busLocationDto);
-            System.out.println("array = " + array);
-            System.out.println();
+                busLocationDto.setBUSID(BUSID);
+                busLocationDto.setBUS_NUM_PLATE(BUS_NUM_PLATE);
+                busLocationDto.setLOW_TP_CD(LOW_TP_CD);
+                busLocationDto.setDIRCD(DIRCD);
+                busLocationDto.setPATHSEQ(PATHSEQ);
+                busLocationDto.setLATEST_STOPSEQ(LATEST_STOPSEQ);
+                busLocationDto.setLATEST_STOP_ID(LATEST_STOP_ID);
+                busLocationDto.setLATEST_STOP_NAME(LATEST_STOP_NAME);
+                busLocationDto.setREMAIND_SEAT(REMAIND_SEAT);
+                busLocationDto.setCONGESTION(CONGESTION);
+                busLocationDto.setLASTBUSYN(LASTBUSYN);
+
+                dtos.add(i, busLocationDto);
+                System.out.println("array = " + array);
+                System.out.println();
+            }
+
+            return dtos;
         }
-
-        return dtos;
+        else {
+            return null;
+        }
     }
 
     @SneakyThrows
@@ -217,45 +223,49 @@ public class BusServiceImpl implements BusService {
         //xml 형식을 json 형식으로 변환
         JSONObject response = XML.toJSONObject(result.getBody());
 
-        JSONObject ServiceResult = (JSONObject)response.get("ServiceResult"); //ServiceResult의 value들
-        JSONObject msgHeader = (JSONObject)ServiceResult.get("msgHeader"); //msgHeader의 value들
+        JSONObject ServiceResult = (JSONObject) response.get("ServiceResult"); //ServiceResult의 value들
+        JSONObject msgHeader = (JSONObject) ServiceResult.get("msgHeader"); //msgHeader의 value들
         Integer totalCount = (Integer) msgHeader.get("totalCount"); // 정류장 총 개수
+        if(msgHeader.get("resultCode").equals(0)) {
+            JSONObject msgBody = (JSONObject) ServiceResult.get("msgBody"); //msgBody의 value들
+            JSONArray itemList = (JSONArray) msgBody.get("itemList"); //itemList의 value들
 
-        JSONObject msgBody = (JSONObject)ServiceResult.get("msgBody"); //msgBody의 value들
-        JSONArray itemList = (JSONArray) msgBody.get("itemList"); //itemList의 value들
+            List<BusRouteListDto> dtos = new ArrayList<>();
+            System.out.println("routeID로 노선 검색");
+            for (int i = 0; i < totalCount; i++) { // 정류장 개수만큼 반복
+                JSONObject array = (JSONObject) itemList.get(i);
+                BusRouteListDto busRouteListDto = new BusRouteListDto();
 
-        List<BusRouteListDto> dtos = new ArrayList<>();
-        System.out.println("routeID로 노선 검색");
-        for(int i=0; i<totalCount; i++) { // 정류장 개수만큼 반복
-            JSONObject array = (JSONObject) itemList.get(i);
-            BusRouteListDto busRouteListDto = new BusRouteListDto();
+                System.out.println("(" + i + ")");
+                String BSTOPNM = (String) array.get("BSTOPNM"); // 정류장 이름
+                Integer BSTOPID = (Integer) array.get("BSTOPID"); // 정류소 ID
+                Integer SHORT_BSTOPID = (Integer) array.get("SHORT_BSTOPID"); // 단축 정류소ID
+                Integer PATHSEQ = (Integer) array.get("PATHSEQ"); // 노드 순번
+                Integer BSTOPSEQ = (Integer) array.get("BSTOPSEQ"); // 정류소 순번
+                Integer DIRCD = (Integer) array.get("DIRCD"); // 방향코드(0:상행, 1:하행, 2:순환)
+                BigDecimal POSX = (BigDecimal) array.get("POSX"); // X 좌표
+                BigDecimal POSY = (BigDecimal) array.get("POSY"); // Y 좌표
 
-            System.out.println("(" + i + ")");
-            String BSTOPNM = (String)array.get("BSTOPNM"); // 정류장 이름
-            Integer BSTOPID = (Integer)array.get("BSTOPID"); // 정류소 ID
-            Integer SHORT_BSTOPID = (Integer)array.get("SHORT_BSTOPID"); // 단축 정류소ID
-            Integer PATHSEQ = (Integer)array.get("PATHSEQ"); // 노드 순번
-            Integer BSTOPSEQ = (Integer)array.get("BSTOPSEQ"); // 정류소 순번
-            Integer DIRCD = (Integer)array.get("DIRCD"); // 방향코드(0:상행, 1:하행, 2:순환)
-            BigDecimal POSX = (BigDecimal)array.get("POSX"); // X 좌표
-            BigDecimal POSY = (BigDecimal)array.get("POSY"); // Y 좌표
+                busRouteListDto.setBSTOPNM(BSTOPNM);
+                busRouteListDto.setBSTOPID(BSTOPID);
+                busRouteListDto.setSHORT_BSTOPID(SHORT_BSTOPID);
+                busRouteListDto.setPATHSEQ(PATHSEQ);
+                busRouteListDto.setBSTOPSEQ(BSTOPSEQ);
+                busRouteListDto.setDIRCD(DIRCD);
+                busRouteListDto.setPOSX(POSX);
+                busRouteListDto.setPOSY(POSY);
 
-            busRouteListDto.setBSTOPNM(BSTOPNM);
-            busRouteListDto.setBSTOPID(BSTOPID);
-            busRouteListDto.setSHORT_BSTOPID(SHORT_BSTOPID);
-            busRouteListDto.setPATHSEQ(PATHSEQ);
-            busRouteListDto.setBSTOPSEQ(BSTOPSEQ);
-            busRouteListDto.setDIRCD(DIRCD);
-            busRouteListDto.setPOSX(POSX);
-            busRouteListDto.setPOSY(POSY);
-
-            dtos.add(i, busRouteListDto);
-            System.out.println("array = " + array);
-            System.out.println();
+                dtos.add(i, busRouteListDto);
+                System.out.println("array = " + array);
+                System.out.println();
+            }
+            return dtos;
         }
-
-        return dtos;
+        else{
+            return null;
+        }
     }
+
 
     /**
      * 
