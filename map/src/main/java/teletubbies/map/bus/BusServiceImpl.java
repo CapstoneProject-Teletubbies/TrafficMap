@@ -299,8 +299,11 @@ public class BusServiceImpl implements BusService {
 
         //json파싱
         JSONObject ServiceResult = (JSONObject)response.get("ServiceResult"); //ServiceResult의 value들
+        System.out.println("ServiceResult = " + ServiceResult);
         JSONObject msgBody = (JSONObject)ServiceResult.get("msgBody"); //msgBody의 value들
+        System.out.println("msgBody = " + msgBody);
         JSONObject msgHeader = (JSONObject)ServiceResult.get("msgHeader"); //msgBody의 value들
+        System.out.println("msgHeader = " + msgHeader);
         Integer totalCount = (Integer)msgHeader.get("totalCount"); //msgBody의 value들
         System.out.println("totalCount = " + totalCount);
 
@@ -317,6 +320,7 @@ public class BusServiceImpl implements BusService {
              */
             for (int i = 0; i < totalCount; i++) { // 아이템리스트 반환개수만큼
                 JSONObject array = (JSONObject) itemList.get(i);
+                System.out.println("array = " + array);
                 BusInfoDto busInfoDto = new BusInfoDto();
                 System.out.println("(" + i + ")");
 
@@ -350,7 +354,7 @@ public class BusServiceImpl implements BusService {
                 busInfoDto.setDEST_BSTOPNM(DEST_BSTOPNM);
 
                 dtos.add(i, busInfoDto);
-                System.out.println("array = " + array);
+//                System.out.println("array = " + array);
 
                 return dtos;
             }

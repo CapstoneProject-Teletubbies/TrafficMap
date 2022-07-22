@@ -16,10 +16,10 @@ public class BusController { // 버스노선, 버스 위치 2개
     @Autowired
     private BusServiceImpl busService;
 
-//    @GetMapping(value = "/bus/busInfo",produces="text/plain;charset=UTF-8")
-    @RequestMapping(value="/bus/busInfo", method = {RequestMethod.POST})
-    public Object GetBusInfo(String name) { //버스 번호로 버스 정보
-//        Object name = 1; // 버스 번호 테스트
+    @GetMapping(value = "/bus/busInfo",produces="text/plain;charset=UTF-8")
+//    @RequestMapping(value="/bus/busInfo", method = {RequestMethod.POST})
+    public Object GetBusInfo() {//(String name) { //버스 번호로 버스 정보
+        String name = "564"; // 버스 번호 테스트
         return busService.findBusInfoByBusNum(name);
     }
 
