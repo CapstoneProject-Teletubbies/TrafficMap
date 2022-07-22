@@ -1,8 +1,6 @@
-import { useNavigate } from "react-router-dom"
 import '../css/BuildingInfo.css'
 
 const BuildingInfo = (props) => {
-    const navigate = useNavigate();
 
     const moveAbout = () => {}
 

@@ -21,7 +21,7 @@ const SearchBar = (props) => {
             searchBuilding();
         }
     }
-    const searchBuilding = () => {
+    const searchBuilding = (props) => {
         const building = axios.create({
             baseURL: 'http://localhost:8080/'
         })
@@ -33,10 +33,24 @@ const SearchBar = (props) => {
                 state: {
                     keyword: searchValue,
                     building: res.data,
+                    bus: props,
                 }
             })
         }).catch(function(error){
             console.log(`에러`);
+        })
+    }
+
+    const searchBus = () => {
+        const bus = axios.create({
+            baseURL: 'http://localhost:8080/'
+        })
+        bus.post('api/bus/busInfo', null, {params: {name: searchValue}})
+        .then(function(res){
+            searchBuilding(res.data);
+            console.log(res.data);
+        }).catch(function(error){
+            console.log('에러');
         })
     }
 

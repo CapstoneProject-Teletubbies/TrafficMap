@@ -50,6 +50,7 @@ function ResultSearch() {
     //   setError(error.message);
     // };
 
+
     const handleKeyword = (e) => setKeyword(e.target.value);
     
     function setScreenSize(){
@@ -216,6 +217,9 @@ function ResultSearch() {
         <Button onClick={handlePlusButton} src={plus}/>
         <Button onClick={handleMinusButton} src={minus}/>
       </div>
+    </div>
+    <div>
+
     </div>
 
     </main>

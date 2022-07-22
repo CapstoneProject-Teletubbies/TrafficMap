@@ -181,7 +181,7 @@ function Main() {
       <div className="zoom">
         <Button onClick={handlePlusButton} src={plus}/>
         <Button onClick={handleMinusButton} src={minus}/>
-        <SideBar />
+        {/* <SideBar /> */}
       </div>
     </div>
 

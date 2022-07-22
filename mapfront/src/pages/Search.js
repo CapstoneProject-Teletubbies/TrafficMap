@@ -34,6 +34,22 @@ import axios from "axios";
             building: buildingList}});
     }
 
+    const searchBusRoute = () => {
+        const busroute = axios.create({
+         baseURL: 'http://localhost:8080/'
+        })
+        busroute.post('/api/bus/route', null, {params: {routeId: 165000110}})
+        .then(function(res){
+         console.log(res.data);
+         navigate('/bus-route', {
+            state:{
+                busroute: res.data,
+            }
+         })
+        }).catch(function(err){
+         console.log('버스 노선 못받아옴');
+        })
+     }
 
     return (
     <div className="main"> 
@@ -54,6 +70,7 @@ import axios from "axios";
                 <BuildingInfo name={obj.name} address={obj.fullAddressRoad}></BuildingInfo>
             ))} 
         </div>
+        <button onClick={searchBusRoute}>Test</button>
         
     </div>
     );
