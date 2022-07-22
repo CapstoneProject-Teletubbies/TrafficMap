@@ -18,23 +18,25 @@ const SearchBar = (props) => {
     }
     const handleKeyPress = (e) => { //enter키 추적용 -> 검색 결과창으로 이동시킴
         if(e.key === 'Enter'){
-            searchBus();
+            searchBusStop();
         }
     }
-    const searchBuilding = (props) => {
+    const searchBuilding = (props1, props2) => {
         const building = axios.create({
             baseURL: 'http://localhost:8080/'
         })
         building.post('/api/find/address', null, {params: {keyword: searchValue}})
         .then(function(res){
-            console.log(res.data);
             setBuildingList(res.data);
             console.log(res.data);
+            console.log(props1);
+            console.log(props2);
             navigate('/search', {
                 state: {
                     keyword: searchValue,
                     building: res.data,
-                    bus: props,
+                    bus: props1,
+                    busstop: props2,
                 }
             });
         }).catch(function(error){
@@ -42,14 +44,25 @@ const SearchBar = (props) => {
         })
     }
 
-    const searchBus = () => {
+    const searchBus = (props) => {
         const bus = axios.create({
             baseURL: 'http://localhost:8080/'
         })
         bus.post('api/bus/busInfo', null, {params: {name: searchValue}})
         .then(function(res){
-            searchBuilding(res.data);
-            console.log(res.data);
+            searchBuilding(res.data, props);
+        }).catch(function(error){
+            console.log('에러');
+        })
+    }
+
+    const searchBusStop = () => {
+        const busstop = axios.create({
+            baseURL: 'http://localhost:8080/'
+        })
+        busstop.post('api/bus/busStop', null, {params: {busStopName: searchValue}})
+        .then(function(res){
+            searchBus(res.data);
         }).catch(function(error){
             console.log('에러');
         })
