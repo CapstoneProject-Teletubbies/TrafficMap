@@ -1,27 +1,32 @@
 import React, { useState, useEffect } from 'react';
+import {useLocation} from 'react-router';
 import axios from 'axios';
 import '../css/Main.css';
 import SearchBar from "../components/SearchBar";
 import Button from "../components/Button";
-import SideBar from "../components/SideBar"
-import Building from '../components/Building';
 import ReactDOM from "react-dom";
 import getLocation from '../getLocation';
 import plus from "../images/plus.png";
 import minus from "../images/minus.png"
 import target from "../images/location.png"
-import BuildingInfo from "../components/BuildingInfo"
 
 import mylocation from "../images/mylocation.png"
 
-function Main() {
+function ResultSearch() {
     const [keyword, setKeyword] = useState();  //검색 받은 키워드
     const [plusbutton, setPlusButton] = useState();
     const [minusbutton, setMinusButton] = useState();
     const [locationbutton, setLocationButton] = useState();
+    const [plength, setPlength] = useState();
+    const [markerlat, setMarkerLat] = useState([]);
+    const [markerlng, setMarkerLng] = useState([]);
+
+    const [buildingList, setBuildingList] = useState([]);
+    const marker = useLocation();
  
     const [location, setLocation] = useState();
     const [error, setError] = useState();
+    
 
     const handlePlusButton = () => {
       setPlusButton(true);
@@ -45,6 +50,7 @@ function Main() {
     //   setError(error.message);
     // };
 
+
     const handleKeyword = (e) => setKeyword(e.target.value);
     
     function setScreenSize(){
@@ -56,6 +62,17 @@ function Main() {
     var zoomin;
     var zoomout;
     var movelocation;
+
+    if(buildingList[0] && !plength){
+      for(var i = 0; i < buildingList.length; i++){
+        markerlat.push(buildingList[i].latitude);
+        markerlng.push(buildingList[i].longitude);     
+        setMarkerLat(markerlat => [...markerlat]);
+        setMarkerLng(markerlng => [...markerlng]);
+      }
+      setPlength(buildingList.length);
+    }
+
     setScreenSize();
     navigator.geolocation.watchPosition(handleSuccess);
     if(location){
@@ -100,14 +117,25 @@ function Main() {
             });
             map.addListener("click", onClick); //웹에서 지도 클릭
             map.addListener("touchstart", onTouchstart); // 모바일에서 지도 터치
-    
+
             //map.zoomIn();
             //map["zoomIn"]();
         
             return map;
         }
 
-        function createmarker(){
+        function searchmarker(){  //검색 결과 지도 마커 생성 함수
+          var arrlat = new Array(${markerlat});
+          var arrlng = new Array(${markerlng});
+          for(var i = 0; i < ${plength}; i++){
+            var marker = new Tmapv2.Marker({
+              position: new Tmapv2.LatLng(arrlat[i], arrlng[i]),
+              map: testmap
+            })
+          }
+        }
+
+        function createmarker(){  // 현재 위치 표시 마커 생성
           var marker = new Tmapv2.Marker({
             position: new Tmapv2.LatLng(${lat}, ${lng}),
             icon: "${mylocation}",
@@ -128,10 +156,11 @@ function Main() {
             resultDiv.innerHTML = result;
         }
         
-        if(!testmap && ${lat}){
+        if(!testmap && ${lat} && ${plength}){
           var mylocation = {lat: ${lat}, lng: ${lng}};
           testmap = initTmap(mylocation);
           createmarker();  
+          searchmarker();
         }
         else{
           console.log("Init false");
@@ -152,6 +181,11 @@ function Main() {
     script.async = "async";
     document.head.appendChild(script);
   }, [handleSuccess]);
+
+  useEffect(()=>{
+    console.log('setBuildingList');
+     setBuildingList(marker.state.building);
+   }, []);
 
   return (
     <main>
@@ -182,15 +216,14 @@ function Main() {
       <div className="zoom">
         <Button onClick={handlePlusButton} src={plus}/>
         <Button onClick={handleMinusButton} src={minus}/>
-        {/* <SideBar /> */}
       </div>
     </div>
-    <div className="Infobar">
-      
+    <div>
+
     </div>
 
     </main>
   );
 }
 
-export default Main;
+export default ResultSearch;

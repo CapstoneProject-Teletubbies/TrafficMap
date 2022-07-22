@@ -14,7 +14,7 @@ import BuildingInfo from "../components/BuildingInfo"
 
 import mylocation from "../images/mylocation.png"
 
-function Main() {
+function LocationMap() {
     const [keyword, setKeyword] = useState();  //검색 받은 키워드
     const [plusbutton, setPlusButton] = useState();
     const [minusbutton, setMinusButton] = useState();
@@ -193,4 +193,4 @@ function Main() {
   );
 }
 
-export default Main;
+export default LocationMap;

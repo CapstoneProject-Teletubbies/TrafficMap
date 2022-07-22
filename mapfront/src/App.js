@@ -1,7 +1,9 @@
 import {BrowserRouter as Router, Routes, Route} from 'react-router-dom';
 import Main from './pages/Main';
 import Search from './pages/Search';
-import Test from './pages/Test';
+import ResultSearch from './pages/ResultSearch';
+import BusRoute from './pages/BusRoute';
+import LocationMap from './pages/LocationMap';
 
 function App() {
   return (
@@ -9,7 +11,9 @@ function App() {
       <Routes>
         <Route path='/' element={<Main />} />
         <Route path='/search' element={<Search />} />
-        <Route path='/test' element={<Test />} />
+        <Route path='/resultsearch' element={<ResultSearch />} />
+        <Route path='/bus-route' element={<BusRoute />} />
+        <Route path='/location-map' element={<LocationMap />} />
       </Routes>
     </Router>
   );

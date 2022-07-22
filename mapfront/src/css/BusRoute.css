@@ -1,0 +1,31 @@
+main{
+    position: fixed;
+    background-color: gray;
+}
+.busname{
+    background-color: white;
+    width: 100%;
+    height: 9%;
+}
+.busdirection{
+    background-color: white;
+    width: 100%;
+    height: 6%;
+    top: 1px;
+}
+.body{
+    background-color: rgb(196, 196, 196);
+    height: 85%;
+}
+.rightbar{
+    background-color: rgb(196, 196, 196);
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    float: right;
+}
+::-webkit-scrollbar{
+    display: none;
+}

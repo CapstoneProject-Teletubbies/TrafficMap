@@ -1,0 +1,21 @@
+.BusRoute{
+    background-color: white;
+    top: 0px;
+    height: 80px;
+    margin: 0;
+    text-align: center;
+}
+.busreallocation{
+    position: relative;
+    text-align: center;
+    justify-content: center;
+    float: left;
+    width: 20%;
+    height: 100%;
+}
+.RouteInfo{
+    text-align: left;
+    width: 85%;
+    margin: -13px;
+    top: 12px;
+}
