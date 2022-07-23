@@ -393,7 +393,7 @@ public class BusServiceImpl implements BusService {
                 .fromHttpUrl(busNum_url)
                 .queryParam("serviceKey", encodedKey) //서비스키
                 .queryParam("routeNo", busNum) // 버스 번호
-                .queryParam("numOfRows", 3) // 개수
+                .queryParam("numOfRows", 318) // 개수
                 .queryParam("pageNo", 1)
                 .build(true);
 
@@ -404,24 +404,29 @@ public class BusServiceImpl implements BusService {
 
         //json파싱
         JSONObject ServiceResult = (JSONObject) response.get("ServiceResult"); //ServiceResult의 value들
+        System.out.println("ServiceResult = " + ServiceResult);
         JSONObject msgHeader = (JSONObject) ServiceResult.get("msgHeader"); //msgBody의 value들
+        System.out.println("msgHeader = " + msgHeader);
         Integer totalCount = (Integer) msgHeader.get("totalCount"); //msgBody의 value들
+        System.out.println("totalCount = " + totalCount);
 
         // null이 아니라면
         if (msgHeader.get("resultCode").equals(0)) {
             JSONObject msgBody = (JSONObject) ServiceResult.get("msgBody"); //msgBody의 value들
+            System.out.println("msgBody = " + msgBody);
             if(msgBody.get("itemList").getClass().getName() == "org.json.JSONArray") {
                 JSONArray itemList = (JSONArray) msgBody.get("itemList"); //itemList의 value들
+                System.out.println("itemList = " + itemList);
 //            System.out.println("itemList = " + itemList);
 
                 List<BusInfoDto> dtos = new ArrayList<>();
                 System.out.println(" 버스번호로 버스정보 조회");
 
                 for (int i = 0; i < totalCount; i++) { // 아이템리스트 반환개수만큼
-
                     JSONObject array = (JSONObject) itemList.get(i);
                     BusInfoDto busInfoDto = new BusInfoDto();
                     System.out.println("(" + i + ")");
+                    System.out.println("array = " + array);
 
                     Object ROUTENO = array.get("ROUTENO"); // 노선 번호
 //                if (ROUTENO.equals(busNum)) { //해당하는 버스 번호의 버스 정보만 출력
@@ -453,7 +458,6 @@ public class BusServiceImpl implements BusService {
                     busInfoDto.setDEST_BSTOPNM(DEST_BSTOPNM);
 
                     dtos.add(i, busInfoDto);
-//                System.out.println("array = " + array);
                 }
                 System.out.println("dtos = " + dtos);
                 return dtos;
