@@ -48,4 +48,38 @@ public class BusTest {
         Object response = restTemplate.exchange(uri.toUriString(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
         System.out.println("response = " + response);
     }
+
+    @Test
+    void regularExpression (){
+
+
+        String a= "11";
+        String str_a = "\\W+"+a;
+        String a_str = a+"\\W+";
+        String a_str_s=a+"(\\W+)";
+        String a_h_d = a+"-\\d+";
+
+
+
+        System.out.println(a_str);
+
+        String test = "급행11";
+
+        boolean result = "11-1".matches(a_h_d);
+
+        System.out.println(result);
+
+        Boolean Flag = false;
+
+        if(test.matches(a) | test.matches(str_a) | test.matches(a_str) | test.matches(a_str_s) | test.matches(a_h_d)){
+            Flag = true;
+        }
+
+        System.out.println(Flag);
+
+
+
+
+    }
+
 }
