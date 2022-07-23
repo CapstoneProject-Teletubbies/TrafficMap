@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api")
 public class SubwayController {
@@ -12,10 +14,10 @@ public class SubwayController {
     SubwayServiceImpl subwayService;
 
     @GetMapping("/subway")
-    public Object Subway() {
+    public List<SubwayDto> GetSubwayInfo() { //(int start, int end, String name) {
         int start = 0;
         int end = 5;
-        String name = "송내";
+        String name = "서울";
         return subwayService.findSubwayByStopName(start, end, name);
     }
 

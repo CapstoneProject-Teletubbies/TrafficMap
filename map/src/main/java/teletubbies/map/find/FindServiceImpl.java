@@ -115,8 +115,8 @@ public class FindServiceImpl implements FindService {
                  *
                  * 엘리베이터 받는 부분 너무 느린데 해결 방법 찾아야함
                  */
-            findElevatorByAPI(addr);
-            findDto.setElevatorState(findElevatorByAPI(addr));
+//            findElevatorByAPI(addr);
+//            findDto.setElevatorState(findElevatorByAPI(addr));
 
                 dtos.add(i, findDto);
             }

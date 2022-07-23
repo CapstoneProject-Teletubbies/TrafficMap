@@ -393,7 +393,7 @@ public class BusServiceImpl implements BusService {
                 .fromHttpUrl(busNum_url)
                 .queryParam("serviceKey", encodedKey) //서비스키
                 .queryParam("routeNo", busNum) // 버스 번호
-                .queryParam("numOfRows", 10) // 개수
+                .queryParam("numOfRows", 3) // 개수
                 .queryParam("pageNo", 1)
                 .build(true);
 

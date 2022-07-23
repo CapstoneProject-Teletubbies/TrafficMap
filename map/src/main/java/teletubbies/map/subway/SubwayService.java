@@ -1,5 +1,7 @@
 package teletubbies.map.subway;
 
+import java.util.List;
+
 public interface SubwayService {
-    Object findSubwayByStopName(int start, int end, String name);
+    List<SubwayDto> findSubwayByStopName(int start, int end, String name);
 }
