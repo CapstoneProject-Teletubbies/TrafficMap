@@ -18,6 +18,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 반복되는 코드 많아서 이 부분 나중에 수정할 것!!!!
@@ -378,6 +380,30 @@ public class BusServiceImpl implements BusService {
      */
     @SneakyThrows
     public List<BusInfoDto> findBusInfoByBusNum(Object busNum) { // 버스 번호로 버스 정보 조회
+
+        String str_busNum = String.valueOf(busNum);
+        int result_count = 3;
+
+        Pattern regex1 = Pattern.compile("버스");
+        Matcher regexMatcher1 = regex1.matcher(str_busNum);
+        if(regexMatcher1.find()){
+            result_count = 10;
+            Pattern regex = Pattern.compile("\\d+");
+            Matcher regexMatcher = regex.matcher(str_busNum);
+            if (regexMatcher.find()) {
+                str_busNum = regexMatcher.group();
+                busNum = (Object) str_busNum;
+            }
+        }
+
+        System.out.println(str_busNum);
+
+        String a= str_busNum;
+        String str_a = "\\W+"+a;
+        String a_str = a+"\\W+";
+        String a_str_s=a+"(\\W+)";
+        String a_h_d = a+"-\\d+";
+
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders(); //헤더
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 한글깨짐 방지
@@ -402,12 +428,14 @@ public class BusServiceImpl implements BusService {
         //xml 형식을 json 형식으로 변환
         JSONObject response = XML.toJSONObject(result.getBody());
 
+        System.out.println("JSON결과 : "+response);
+
         //json파싱
         JSONObject ServiceResult = (JSONObject) response.get("ServiceResult"); //ServiceResult의 value들
         System.out.println("ServiceResult = " + ServiceResult);
         JSONObject msgHeader = (JSONObject) ServiceResult.get("msgHeader"); //msgBody의 value들
         System.out.println("msgHeader = " + msgHeader);
-        Integer totalCount = (Integer) msgHeader.get("totalCount"); //msgBody의 value들
+        Integer totalCount = (Integer) msgHeader.get("totalCount");; //msgBody의 value들
         System.out.println("totalCount = " + totalCount);
 
         // null이 아니라면
@@ -421,15 +449,17 @@ public class BusServiceImpl implements BusService {
 
                 List<BusInfoDto> dtos = new ArrayList<>();
                 System.out.println(" 버스번호로 버스정보 조회");
-
-                for (int i = 0; i < totalCount; i++) { // 아이템리스트 반환개수만큼
-                    JSONObject array = (JSONObject) itemList.get(i);
+                int i = 0;
+                int j = 0;
+                while (i<result_count && j<totalCount) { // 아이템리스트 반환개수만큼
+                    JSONObject array = (JSONObject) itemList.get(j);
                     BusInfoDto busInfoDto = new BusInfoDto();
-                    System.out.println("(" + i + ")");
+                    System.out.println("(" + j + ")");
                     System.out.println("array = " + array);
 
                     Object ROUTENO = array.get("ROUTENO"); // 노선 번호
-//                if (ROUTENO.equals(busNum)) { //해당하는 버스 번호의 버스 정보만 출력
+                    String str_routeno = ROUTENO.toString();
+                if (str_routeno.matches(a) | str_routeno.matches(str_a) | str_routeno.matches(a_str) | str_routeno.matches(a_str_s) | str_routeno.matches(a_h_d)) { //해당하는 버스 번호의 버스 정보만 출력
                     Integer ROUTEID = (Integer) array.get("ROUTEID"); // 노선 ID
                     Integer ROUTETPCD = (Integer) array.get("ROUTETPCD"); // 노선 유형코드
                     Object FBUS_DEPHMS = array.get("FBUS_DEPHMS"); // 첫차 시간
@@ -458,6 +488,9 @@ public class BusServiceImpl implements BusService {
                     busInfoDto.setDEST_BSTOPNM(DEST_BSTOPNM);
 
                     dtos.add(i, busInfoDto);
+                    i+=1;
+                }
+                j+=1;
                 }
                 System.out.println("dtos = " + dtos);
                 return dtos;

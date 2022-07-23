@@ -1,6 +1,7 @@
 package teletubbies.map.BusTest;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +14,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import teletubbies.map.bus.BusServiceImpl;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -21,6 +23,8 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class BusTest {
     @Value("${BUS_APPKEY}")
@@ -82,4 +86,38 @@ public class BusTest {
 
     }
 
+    @Test
+    void find(){
+
+        Object busNum = "11번버스";
+
+        String str_busNum = String.valueOf(busNum);
+        int result_count = 3;
+
+        Pattern regex1 = Pattern.compile("버스");
+        Matcher regexMatcher1 = regex1.matcher(str_busNum);
+        if(regexMatcher1.find()){
+            result_count = 10;
+            Pattern regex = Pattern.compile("\\d+");
+            Matcher regexMatcher = regex.matcher(str_busNum);
+            if (regexMatcher.find()) {
+                str_busNum = regexMatcher.group();
+                busNum = (Object) str_busNum;
+            }
+        }
+
+        System.out.println(str_busNum);
+    }
+
+/*
+    @Autowired
+    private BusServiceImpl busService;
+
+    @Test
+    void ApiTest(){
+        busService.findBusInfoByBusNum(11);
+    }
+
+ */
 }
+
