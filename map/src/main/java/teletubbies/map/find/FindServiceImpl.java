@@ -129,9 +129,7 @@ public class FindServiceImpl implements FindService {
 //    }
 
     /**
-     *
      * 방법2
-     *
      */
     @SneakyThrows
     public List<FindDto> findAddressByTmapAPI(String FindName) {
@@ -146,8 +144,8 @@ public class FindServiceImpl implements FindService {
         ResponseEntity<String> result = wc.get()
                 .uri(uriBuilder -> uriBuilder.path("/tmap/pois")
                         .queryParam("version", 1)
-                        .queryParam("searchKeyword", encodedName) //모다 부평점
-                        .queryParam("count", 10) // 1개만 출력
+                        .queryParam("searchKeyword", encodedName) // 검색 키워드
+                        .queryParam("count", 10) // 개수
                         .queryParam("appKey", tmap_apiKey).build())
                 .retrieve() //response 불러옴
                 .toEntity(String.class)
@@ -204,9 +202,8 @@ public class FindServiceImpl implements FindService {
                 String addr = middleAddrName + " " + roadName + " " + firstBuildNo;
                 /**
                  *
-                 * 엘리베이터 받는 부분 너무 느려서 주석처리
+                 * 엘리베이터 받는 부분
                  */
-                //findElevatorByAPI(addr);
                 findDto.setElevatorState(findElevatorByAPI(addr));
 
                 dtos.add(i, findDto);

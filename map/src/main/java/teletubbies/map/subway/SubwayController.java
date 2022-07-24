@@ -17,7 +17,7 @@ public class SubwayController {
     public List<SubwayDto> GetSubwayInfo() { //(int start, int end, String name) {
         int start = 0;
         int end = 5;
-        String name = "서울";
+        String name = "테스트";
         return subwayService.findSubwayByStopName(start, end, name);
     }
 
