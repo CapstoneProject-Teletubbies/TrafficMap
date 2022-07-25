@@ -43,6 +43,11 @@ public class BusServiceImpl implements BusService {
 
     @SneakyThrows
     public List<BusStopDto> findBusStopByBusStopName(String name) { //정류소명으로 정류소(ID) 검색
+
+        if(name.matches("\\d+")){
+            return null;
+        }
+
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders(); //헤더
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 한글깨짐 방지

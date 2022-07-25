@@ -46,9 +46,9 @@ public class BusController { // 버스노선, 버스 위치 2개
 
     }
 
-//    @GetMapping(value="/bus/busStop")
-    @RequestMapping(value="/bus/busStop", method = {RequestMethod.POST})
-    public List<BusStopDto> GetBusStop(String busStopName) {//() { // 버스정류장
+    @GetMapping(value="/bus/busStop/{busStopName}")
+//    @RequestMapping(value="/bus/busStop", method = {RequestMethod.POST})
+    public List<BusStopDto> GetBusStop(@PathVariable("busStopName") String busStopName) {//() { // 버스정류장
 //        String busStopName = "신한일전기";
         return busService.findBusStopByBusStopName(busStopName);
 
