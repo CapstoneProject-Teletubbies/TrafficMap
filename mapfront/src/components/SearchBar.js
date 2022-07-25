@@ -18,7 +18,12 @@ const SearchBar = (props) => {
     }
     const handleKeyPress = (e) => { //enter키 추적용 -> 검색 결과창으로 이동시킴
         if(e.key === 'Enter'){
-            searchBusStop();
+            if(searchValue.includes('번 버스') || searchValue.includes('번버스')){
+                searchOnlyBus();
+            }
+            else{
+                searchBusStop();
+            }
         }
     }
     const searchBuilding = (props1, props2) => {
@@ -48,9 +53,26 @@ const SearchBar = (props) => {
         const bus = axios.create({
             baseURL: 'http://localhost:8080/'
         })
-        bus.post('api/bus/busInfo', null, {params: {name: searchValue}})
+        bus.post('api/bus/busInfo/', null, {params: {busName: searchValue}})
         .then(function(res){
             searchBuilding(res.data, props);
+        }).catch(function(error){
+            console.log('에러');
+        })
+    }
+
+    const searchOnlyBus = () => {
+        const bus = axios.create({
+            baseURL: 'http://localhost:8080/'
+        })
+        bus.post('api/bus/busInfo/', null, {params: {busName: searchValue}})
+        .then(function(res){
+            navigate('/search', {
+                state: {
+                    keyword: searchValue,
+                    bus: res.data,
+                }
+            });
         }).catch(function(error){
             console.log('에러');
         })

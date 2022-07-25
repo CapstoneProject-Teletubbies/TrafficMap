@@ -5,6 +5,7 @@ import '../css/input.css'
 import ReactDOM from "react-dom";
 import SearchBar from "../components/SearchBar";
 import BuildingInfo from '../components/BuildingInfo';
+import BusInfo from '../components/BusInfo';
 import {useLocation} from 'react-router';
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
@@ -72,6 +73,9 @@ import axios from "axios";
         </div>
         <div className="buildingList">
             {}
+            {busList && busList.map((obj, index)=>(
+                <BusInfo obj={obj}></ BusInfo>
+            ))}
             {buildingList && buildingList.map((obj, index)=>(
                 <BuildingInfo  obj={obj} name={obj.name} address={obj.fullAddressRoad}></BuildingInfo>
             ))} 
