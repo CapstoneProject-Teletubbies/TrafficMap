@@ -2,10 +2,7 @@ package teletubbies.map.bus;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,10 +13,11 @@ public class BusController { // 버스노선, 버스 위치 2개
     @Autowired
     private BusServiceImpl busService;
 
-//    @GetMapping(value = "/bus/busInfo")
-    @RequestMapping(value="/bus/busInfo", method = {RequestMethod.POST})
-    public List<BusInfoDto> GetBusInfo(String name) { //버스 번호로 버스 정보
-//        Object name = 564; // 버스 번호 테스트
+    @GetMapping(value = "/bus/busInfo/{busName}")
+//    @RequestMapping(value="/bus/busInfo", method = {RequestMethod.POST})
+    public List<BusInfoDto> GetBusInfo(@PathVariable("busName")String busName) {//(String name) { //버스 번호로 버스 정보
+        //Object name ="564"; // 버스 번호 테스트
+        Object name = (Object)busName;
         return busService.findBusInfoByBusNum(name);
     }
 
@@ -48,10 +46,6 @@ public class BusController { // 버스노선, 버스 위치 2개
 
     }
 
-    /**
-     *
-     * 나중에 추가
-     */
 //    @GetMapping(value="/bus/busStop")
     @RequestMapping(value="/bus/busStop", method = {RequestMethod.POST})
     public List<BusStopDto> GetBusStop(String busStopName) {//() { // 버스정류장
