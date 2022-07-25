@@ -288,8 +288,8 @@ public class BusServiceImpl implements BusService {
             Integer ROUTEID = (Integer) itemList.get("ROUTEID"); // 버스 노선 고유번호
             Object ROUTENO = itemList.get("ROUTENO"); // 노선 명
             Integer ROUTETPCD = (Integer) itemList.get("ROUTETPCD"); // 노선유형코드 [1:지선형, 2:간선형, 3:좌석형, 4:광역형, 5:리무진, 6:마을버스, 7:순환형, 8:급행간선, 9:지선(순환)]
-            String FBUS_DEPHMS = (String) itemList.get("FBUS_DEPHMS"); // 첫차 시간 hhmm
-            String LBUS_DEPHMS = (String) itemList.get("LBUS_DEPHMS"); // 막차 시간 hhmm
+            Integer FBUS_DEPHMS = (Integer) itemList.get("FBUS_DEPHMS"); // 첫차 시간 hhm169000015m
+            Integer LBUS_DEPHMS = (Integer) itemList.get("LBUS_DEPHMS"); // 막차 시간 hhmm
             Integer MIN_ALLOCGAP = (Integer) itemList.get("MIN_ALLOCGAP"); // 	최소 배차간격
             Integer MAX_ALLOCGAP = (Integer) itemList.get("MAX_ALLOCGAP"); // 최대 배차간격
             Integer TURN_BSTOPID = (Integer) itemList.get("TURN_BSTOPID"); // 회차지 정류소ID

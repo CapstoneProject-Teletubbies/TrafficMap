@@ -13,12 +13,12 @@ public class BusController { // 버스노선, 버스 위치 2개
     @Autowired
     private BusServiceImpl busService;
 
-    @GetMapping(value = "/bus/busInfo/{busName}")
-//    @RequestMapping(value="/bus/busInfo", method = {RequestMethod.POST})
-    public List<BusInfoDto> GetBusInfo(@PathVariable("busName")String busName) {//(String name) { //버스 번호로 버스 정보
+ //   @GetMapping(value = "/bus/busInfo/{busName}")
+   @RequestMapping(value="/bus/busInfo", method = {RequestMethod.POST})
+    public List<BusInfoDto> GetBusInfo(String busName) { //@PathVariable("busName")String busName) {//(String name) { //버스 번호로 버스 정보
         //Object name ="564"; // 버스 번호 테스트
-        Object name = (Object)busName;
-        return busService.findBusInfoByBusNum(name);
+//        Object name = (Object)busName;
+        return busService.findBusInfoByBusNum(busName);
     }
 
 //    @GetMapping(value="/bus/route")
@@ -40,7 +40,7 @@ public class BusController { // 버스노선, 버스 위치 2개
 //    @GetMapping(value="/bus/route/detail")
     @RequestMapping(value="/bus/route/detail", method = {RequestMethod.POST})
     public List<BusRouteDetailDto> GetBusRouteDetail(Integer routeId) { // RouteID로 상세 정보
-//        Integer routeId = 165000110; //노선 ID(564번 버스) 테스트
+ //       Integer routeId = 169000015; //노선 ID(564번 버스) 테스트
 //        Integer routeId = 38492;
         return busService.findBusRouteDetailByRouteId(routeId);
 
