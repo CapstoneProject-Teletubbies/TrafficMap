@@ -6,16 +6,7 @@ import axios from "axios";
 const BuildingInfo = (props) => {
     const navigate = useNavigate();
 
-    // const handleClick = () => {
-    //     console.log(props.obj);
-    //     navigate('/location-map', {
-    //         state: {
-    //             props: props,
-    //         }
-    //     });
-    // }
-
-    const searchBusRoute = () => {
+    const searchBusRoute = (detail) => {
         const busroute = axios.create({
          baseURL: 'http://localhost:8080/'
         })
@@ -25,6 +16,7 @@ const BuildingInfo = (props) => {
          navigate('/bus-route', {
             state:{
                 busroute: res.data,
+                busrouteinfo: detail,
                 props: props.obj,
             }
          })
@@ -33,8 +25,21 @@ const BuildingInfo = (props) => {
         })
      }
 
+     const searchBusRouteInfo = () => {
+        const busrouteinfo = axios.create({
+            baseURL: 'http://localhost:8080/'
+        })
+        busrouteinfo.post('/api/bus/route/detail', null, {params: {routeId: props.obj.ROUTEID}})
+        .then(function(res){
+            searchBusRoute(res.data);
+            console.log(res.data);
+        }).catch(function(err){
+            console.log("버스 노선 정보 못받아옴");
+        })
+     }
+
     return(
-        <div className="buildingInfo" onClick={searchBusRoute} >
+        <div className="buildingInfo" onClick={searchBusRouteInfo} >
             <div className="Info">
                 <p>{props.obj.routeno}</p>
                 <p>{props.obj.origin_BSTOPNM} {props.obj.turn_BSTOPNM}</p>

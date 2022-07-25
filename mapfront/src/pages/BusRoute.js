@@ -14,6 +14,7 @@ function BusRoute(){
     const [busRoute, setBusRoute] = useState(); 
     const [busInfo, setBusInfo] = useState();
     const [reallocation, setRealLocation] = useState();
+    const [isitbus, setIsItBus] = useState();
 
     useEffect(() => {
         setBusRoute(location.state.busroute);
@@ -32,7 +33,14 @@ function BusRoute(){
         })
         buslocation.post('/api/bus/location', null, {params: {routeId: busInfo.ROUTEID}})
             .then(function(res){
-            setRealLocation(res.data);
+            if(res){
+                setRealLocation(res.data);
+                setIsItBus(true);
+            }
+            else{
+                setIsItBus(false);
+            }
+
         }).catch(function(err){
             console.log('error');
         })
@@ -48,7 +56,7 @@ function BusRoute(){
             </div>
             <div className="body">
                 <div className="rightbar">
-                    {reallocation && busInfo && busRoute && busRoute.map((obj, index)=>{
+                    {isitbus && busInfo && busRoute && busRoute.map((obj, index)=>{
                         var isit;
                         var bus = undefined;
                         for(var i = 0; i < reallocation.length; i++){

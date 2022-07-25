@@ -45,6 +45,8 @@ function LocationMap() {
     //   setError(error.message);
     // };
 
+  
+
     const handleKeyword = (e) => setKeyword(e.target.value);
     
     function setScreenSize(){

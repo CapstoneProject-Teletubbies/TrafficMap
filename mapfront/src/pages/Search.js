@@ -41,7 +41,7 @@ import axios from "axios";
         console.log('이게왜');
     }
 
-    const searchBusRoute = () => {
+    const searchBusRoute = () => {              {/*버스 노선 받아오는 거*/}
         const busroute = axios.create({
          baseURL: 'http://localhost:8080/'
         })
@@ -68,7 +68,7 @@ import axios from "axios";
                 <SearchBar onChange = {onChange} placeholder={keyword}/>
             </div>
             <div className="mapbutton">
-                <Button onClick={handlemapButton} src={map} />   
+                <Button onClick={handlemapButton} src={map} />   {/*버스만 받아올때는 안뜨게 해야함 */}
             </div>
         </div>
         <div className="buildingList">
@@ -79,9 +79,7 @@ import axios from "axios";
             {buildingList && buildingList.map((obj, index)=>(
                 <BuildingInfo  obj={obj} name={obj.name} address={obj.fullAddressRoad}></BuildingInfo>
             ))} 
-        </div>
-        <button onClick={searchBusRoute}>Test</button>
-        
+        </div> 
     </div>
     );
  }
