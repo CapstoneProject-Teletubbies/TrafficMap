@@ -32,7 +32,7 @@ public class BusController { // 버스노선, 버스 위치 2개
 //    @GetMapping(value="/bus/location")
     @RequestMapping(value="/bus/location", method = {RequestMethod.POST})
     public List<BusLocationDto> GetBusLocation(Integer routeId) { // RouteID로 버스 위치
-//        Integer routeId = 165000110; //노선 ID(564번 버스) 테스트
+//        Integer routeId = 165000511; //165000055; //165000110; //노선 ID(564번 버스) 테스트
 //        Integer routeId = 38492;
         return busService.findBusLocationtByRouteId(routeId);
     }
