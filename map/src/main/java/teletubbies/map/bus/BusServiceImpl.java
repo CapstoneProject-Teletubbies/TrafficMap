@@ -103,51 +103,10 @@ public class BusServiceImpl implements BusService {
         }
     }
 
-//    @SneakyThrows
-//    public Object findBusArrivalByBusStopId(int bStopId) { //정류소 ID로 버스 도착정보목록 조회
-//        RestTemplate restTemplate = new RestTemplate();
-//        HttpHeaders headers = new HttpHeaders(); //헤더
-//        restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 한글깨짐 방지
-//
-//        //서비스 키 인코딩
-//        String encodedKey = URLEncoder.encode(bus_apikey, "UTF-8");
-//
-//        UriComponents uri = UriComponentsBuilder
-//                .fromHttpUrl(busStopId_url)
-//                .queryParam("serviceKey", encodedKey) //서비스키
-//                .queryParam("bstopId", bStopId) // 정류소ID
-//                .queryParam("numOfRows", 2) // 개수
-//                .queryParam("pageNo", 1)
-//                .build(true);
-//
-//        ResponseEntity<String> result = restTemplate.exchange(uri.toUri(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
-//
-//
-//        //xml 형식을 json 형식으로 변환
-//        JSONObject response = XML.toJSONObject(result.getBody());
-//
-//        JSONObject ServiceResult = (JSONObject) response.get("ServiceResult"); //ServiceResult의 value들
-//        JSONObject msgBody = (JSONObject) ServiceResult.get("msgBody"); //msgBody의 value들
-//        JSONArray itemList = (JSONArray) msgBody.get("itemList"); //itemList의 value들
-//
-//        System.out.println("정류소 ID로 버스 도착정보목록 조회");
-//        List<BusRouteDetailDto> dtos = new ArrayList<>();
-//        for (int i = 0; i < itemList.length(); i++) { // 받아올 데이터 개수만큼 반복
-//            JSONObject array = (JSONObject) itemList.get(i);
-//            System.out.println("(" + i + ")");
-//            Integer BUSID = (Integer) array.get("BUSID"); // 버스 ID(차량 고유 식별자)
-//            Integer ARRIVALESTIMATETIME = (Integer) array.get("ARRIVALESTIMATETIME"); // 도착예정시간(몇 초 전)
-//            Integer LOW_TP_CD = (Integer) array.get("LOW_TP_CD"); // 저상버스 여부
-//            Integer ROUTEID = (Integer) array.get("ROUTEID"); //버스 노선 ID
-//            Integer REST_STOP_COUNT = (Integer) array.get("REST_STOP_COUNT"); // 몇 정거장 전
-//            String LATEST_STOP_NAME = (String) array.get("LATEST_STOP_NAME"); //버스의 최근 정류소 명
-//            String BUS_NUM_PLATE = (String) array.get("BUS_NUM_PLATE"); // 차량 번호판
-//
-//        }
-//
-//        return result.getBody();
-//    }
-
+    /**
+     *
+     * 여기 반복되는 코드 나중에 수정해야함
+     */
     @SneakyThrows
     public List<BusLocationDto> findBusLocationtByRouteId(int routeId) { // 노선 ID로 버스 위치 조회
         RestTemplate restTemplate = new RestTemplate();

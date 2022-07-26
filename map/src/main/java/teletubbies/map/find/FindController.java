@@ -2,13 +2,11 @@ package teletubbies.map.find;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -29,4 +27,17 @@ public class FindController {
 //        return findService.findElevatorByAPI(address); //엘리베이터 api
         return findService.findAddressByTmapAPI(keyword); //티맵 api
     }
+
+
+    /**
+     * 엘리베이터만 있는 컨트롤러 추가
+     */
+    //    @GetMapping("/find/elevator")
+    @RequestMapping(value="/find/address", method = {RequestMethod.POST})
+    public Object ElevatorByAPI(String address) {
+//        String address = "부평구 부평문화로 35";
+//        String address = "부평구 경원대로 1397";
+        return findService.findElevatorByAPI(address); //엘리베이터 api
+    }
+
 }

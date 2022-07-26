@@ -3,7 +3,6 @@ package teletubbies.map.bus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
 
 @RestController
@@ -47,9 +46,9 @@ public class BusController { // 버스노선, 버스 위치 2개
 
     }
 
-    @GetMapping(value="/bus/busStop/{busStopName}")
+    @GetMapping(value="/bus/busStop")
 //    @RequestMapping(value="/bus/busStop", method = {RequestMethod.POST})
-    public List<BusStopDto> GetBusStop(@PathVariable("busStopName") String busStopName) {//() { // 버스정류장
+    public List<BusStopDto> GetBusStop( String busStopName) {//() { // 버스정류장
 //        String busStopName = "신한일전기";
         return busService.findBusStopByBusStopName(busStopName);
 
