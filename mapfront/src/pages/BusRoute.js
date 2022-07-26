@@ -50,6 +50,7 @@ function BusRoute(){
         <main>
             <div className="busname">
                 <button onClick={realtimeBus}>새로고침</button>
+                
             </div>
             <div className="busdirection">
 

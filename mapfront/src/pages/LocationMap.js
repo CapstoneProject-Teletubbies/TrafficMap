@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {useNavigate, useLocation} from 'react-router';
 import axios from 'axios';
 import '../css/Main.css';
 import SearchBar from "../components/SearchBar";
@@ -12,15 +13,20 @@ import minus from "../images/minus.png"
 import target from "../images/location.png"
 import BuildingInfo from "../components/BuildingInfo"
 
-import mylocation from "../images/mylocation.png"
+import mylocation from "../images/placeholderred.png"
 
 function LocationMap() {
     const [keyword, setKeyword] = useState();  //검색 받은 키워드
     const [plusbutton, setPlusButton] = useState();
     const [minusbutton, setMinusButton] = useState();
     const [locationbutton, setLocationButton] = useState();
+    const [newwindow, setNewWindow] = useState();
+
+    const building = useLocation();
+    const navigate = useNavigate();
  
     const [location, setLocation] = useState();
+    const [buildinglocation, setBuildingLocation] = useState();
     const [error, setError] = useState();
 
     const handlePlusButton = () => {
@@ -33,11 +39,19 @@ function LocationMap() {
       setLocationButton(true);
     }
 
-    const handleSuccess = (pos) => {
-      const {latitude, longitude } = pos.coords;
+    const reload = () =>{
+      navigate.push(building.pathname);
+    }
 
+    const handleSuccess = (pos) => {
+      var buildinglatitude = building.state.props.obj.latitude;
+      var buildinglongitude = building.state.props.obj.longitude;
+      const {latitude, longitude } = pos.coords;
       setLocation({
         latitude, longitude
+      })
+      setBuildingLocation({
+        buildinglatitude, buildinglongitude
       })
     };
 
@@ -59,10 +73,16 @@ function LocationMap() {
     var zoomout;
     var movelocation;
     setScreenSize();
-    navigator.geolocation.watchPosition(handleSuccess);
+    if(building){
+      navigator.geolocation.watchPosition(handleSuccess);
+    }
     if(location){
       var lat = location.latitude;
       var lng = location.longitude;
+    }
+    if(buildinglocation){
+      var blat = buildinglocation.buildinglatitude;
+      var blng = buildinglocation.buildinglongitude;
     }
 
     if(plusbutton === true){
@@ -89,7 +109,7 @@ function LocationMap() {
 
     const script = document.createElement("script");
     script.innerHTML = ` 
-        var testmap;
+        var locationmap;
         var zoomIn;
         function initTmap(pos) {
             var map = new Tmapv2.Map("TMapApp", {
@@ -98,7 +118,7 @@ function LocationMap() {
                 height: "100%",
                 httpsMode: true,
                 zoomControl: false,
-                zoom:15
+                zoom:18
             });
             map.addListener("click", onClick); //웹에서 지도 클릭
             map.addListener("touchstart", onTouchstart); // 모바일에서 지도 터치
@@ -109,11 +129,11 @@ function LocationMap() {
             return map;
         }
 
-        function createmarker(){
+        function createmarker(lat, lng){
           var marker = new Tmapv2.Marker({
-            position: new Tmapv2.LatLng(${lat}, ${lng}),
+            position: new Tmapv2.LatLng(lat, lng),
             icon: "${mylocation}",
-            map: testmap
+            map: locationmap
           })
         }
 
@@ -130,24 +150,25 @@ function LocationMap() {
             resultDiv.innerHTML = result;
         }
         
-        if(!testmap && ${lat}){
-          var mylocation = {lat: ${lat}, lng: ${lng}};
-          testmap = initTmap(mylocation);
-          createmarker();  
+        if(!locationmap && ${lat} && ${blat}){
+          var mylocation = {lat: ${blat}, lng: ${blng}};
+          locationmap = initTmap(mylocation);
+          createmarker(${blat}, ${blng});  
         }
         else{
+          console.log(locationmap);
           console.log("Init false");
         }
 
-        if(testmap && ${zoomin}){
-          testmap.zoomIn();
+        if(locationmap && ${zoomin}){
+          locationmap.zoomIn();
         }
-        if(testmap && ${zoomout}){
-          testmap.zoomOut();
+        if(locationmap && ${zoomout}){
+          locationmap.zoomOut();
         }
-        if(testmap && ${movelocation}){
+        if(locationmap && ${movelocation}){
           var setmylocation = new Tmapv2.LatLng(${lat}, ${lng});
-          testmap.setCenter(setmylocation);
+          locationmap.setCenter(setmylocation);
         }
    `;
     script.type = "text/javascript";

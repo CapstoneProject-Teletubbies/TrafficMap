@@ -9,6 +9,7 @@ import getLocation from '../getLocation';
 import plus from "../images/plus.png";
 import minus from "../images/minus.png"
 import target from "../images/location.png"
+import ph from "../images/placeholder.png"
 
 import mylocation from "../images/mylocation.png"
 
@@ -26,7 +27,6 @@ function ResultSearch() {
  
     const [location, setLocation] = useState();
     const [error, setError] = useState();
-    
 
     const handlePlusButton = () => {
       setPlusButton(true);
@@ -50,8 +50,6 @@ function ResultSearch() {
     //   setError(error.message);
     // };
 
-  
-
     const handleKeyword = (e) => setKeyword(e.target.value);
     
     function setScreenSize(){
@@ -72,6 +70,7 @@ function ResultSearch() {
         setMarkerLng(markerlng => [...markerlng]);
       }
       setPlength(buildingList.length);
+      console.log(buildingList);
     }
 
     setScreenSize();
@@ -105,8 +104,9 @@ function ResultSearch() {
 
     const script = document.createElement("script");
     script.innerHTML = ` 
-        var testmap;
+        var locationmap;
         var zoomIn;
+        var markers = [];
         function initTmap(pos) {
             var map = new Tmapv2.Map("TMapApp", {
                 center: new Tmapv2.LatLng(pos.lat, pos.lng),
@@ -125,22 +125,32 @@ function ResultSearch() {
             return map;
         }
 
+        function onClickMarker(evt){ 
+          console.log(markers);
+      
+        }
+
+
         function searchmarker(){  //검색 결과 지도 마커 생성 함수
+          var marker;
           var arrlat = new Array(${markerlat});
           var arrlng = new Array(${markerlng});
           for(var i = 0; i < ${plength}; i++){
-            var marker = new Tmapv2.Marker({
+            marker = new Tmapv2.Marker({
               position: new Tmapv2.LatLng(arrlat[i], arrlng[i]),
-              map: testmap
+              map: locationmap,
             })
+            markers.push(marker);    //마커 배열에 저장
+            markers[i].addListener("click", onClickMarker);
           }
+
         }
 
         function createmarker(){  // 현재 위치 표시 마커 생성
           var marker = new Tmapv2.Marker({
             position: new Tmapv2.LatLng(${lat}, ${lng}),
             icon: "${mylocation}",
-            map: testmap
+            map: locationmap
           })
         }
 
@@ -157,25 +167,26 @@ function ResultSearch() {
             resultDiv.innerHTML = result;
         }
         
-        if(!testmap && ${lat} && ${plength}){
+        if(!locationmap && ${lat} && ${plength}){     //지도생성, 마커생성
           var mylocation = {lat: ${lat}, lng: ${lng}};
-          testmap = initTmap(mylocation);
+          locationmap = initTmap(mylocation);
           createmarker();  
           searchmarker();
         }
         else{
+          searchmarker();
           console.log("Init false");
         }
 
-        if(testmap && ${zoomin}){
-          testmap.zoomIn();
+        if(locationmap && ${zoomin}){
+          locationmap.zoomIn();
         }
-        if(testmap && ${zoomout}){
-          testmap.zoomOut();
+        if(locationmap && ${zoomout}){
+          locationmap.zoomOut();
         }
-        if(testmap && ${movelocation}){
+        if(locationmap && ${movelocation}){
           var setmylocation = new Tmapv2.LatLng(${lat}, ${lng});
-          testmap.setCenter(setmylocation);
+          locationmap.setCenter(setmylocation);
         }
    `;
     script.type = "text/javascript";
@@ -185,7 +196,7 @@ function ResultSearch() {
 
   useEffect(()=>{
     console.log('setBuildingList');
-     setBuildingList(marker.state.building);
+    setBuildingList(marker.state.building);
    }, []);
 
   return (

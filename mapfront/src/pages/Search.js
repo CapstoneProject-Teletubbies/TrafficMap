@@ -37,10 +37,6 @@ import axios from "axios";
             building: buildingList}});
     }
 
-    const handleClick = () => {
-        console.log('이게왜');
-    }
-
     const searchBusRoute = () => {              {/*버스 노선 받아오는 거*/}
         const busroute = axios.create({
          baseURL: 'http://localhost:8080/'
