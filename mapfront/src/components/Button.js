@@ -3,7 +3,7 @@ import '../css/Button.css'
 const Button = (props)=>{
     return(
         <>
-        <button onClick={props.onClick} style={{background: "none"}}><img src={props.src}></img></button>
+        <button className="btn1 hover1" onClick={props.onClick} style={{background: "none"}}><img src={props.src}></img></button>
         </>
     );
 }
