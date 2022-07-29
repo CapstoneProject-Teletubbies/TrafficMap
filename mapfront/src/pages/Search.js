@@ -35,7 +35,7 @@ import axios from "axios";
     const handlemapButton = () => {
         navigate('/resultsearch', { state: {
             building: buildingList}});
-        window.location.href = "/resultsearch";    
+            window.location.href = "/resultsearch";  
     }
 
     return (
