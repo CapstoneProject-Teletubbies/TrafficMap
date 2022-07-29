@@ -25,8 +25,8 @@ import axios from "axios";
     }
 
     useEffect(()=>{
+        console.log(location.state.building);
         setBuildingList(location.state.building);
-        setBusList(location.state.bus);
     })
 
     const handlebackButton = () => {
@@ -48,7 +48,7 @@ import axios from "axios";
                 <SearchBar onChange = {onChange} placeholder={keyword}/>
             </div>
             <div className="mapbutton">
-                <Button onClick={handlemapButton} src={map} />   {/*버스만 받아올때는 안뜨게 해야함 */}
+                {buildingList  && <Button onClick={handlemapButton} src={map} />}   {/*버스만 받아올때는 안뜸 */}
             </div>
         </div>
         <div className="buildingList">

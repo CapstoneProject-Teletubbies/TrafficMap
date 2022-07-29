@@ -19,7 +19,7 @@ function BusRoute(){
     useEffect(() => {                               //받아온 버스 정보 버스 노선 정보, 버스 실시간 위치 정보
         setBusRoute(location.state.busroute);
         setBusInfo(location.state.props);
-        console.log(busRoute);
+        console.log(busInfo);
     })
 
     useEffect(()=>{             
@@ -37,7 +37,6 @@ function BusRoute(){
             if(res){
                 setRealLocation(res.data);
                 setIsItBus(true);
-                console.log(reallocation);
             }
             else{
                 setIsItBus(false);
@@ -48,14 +47,16 @@ function BusRoute(){
         })
     }
 
+    if(busInfo && busRoute){
+
     return(
         <main>
             <div className="busname">
                 <button onClick={realtimeBus}>새로고침</button>
-                
+                <h2>{busInfo.routeno}</h2>
             </div>
             <div className="busdirection">
-
+                <h5>{busInfo.origin_BSTOPNM}</h5>
             </div>
             <div className="body">
                 <div className="rightbar">
@@ -83,6 +84,7 @@ function BusRoute(){
         </main>
 
     );
+                }
 
 }
 
