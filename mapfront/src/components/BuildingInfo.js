@@ -11,6 +11,7 @@ const BuildingInfo = (props) => {
                 props: props,
             }
         });
+        window.location.href = "/location-map"; 
     }
 
     return(

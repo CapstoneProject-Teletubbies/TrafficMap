@@ -21,6 +21,8 @@ function ResultSearch() {
     const [plength, setPlength] = useState();
     const [markerlat, setMarkerLat] = useState([]);
     const [markerlng, setMarkerLng] = useState([]);
+    const [markerlist, setMarkerList] = useState([]);
+    const [choosemarker, setChooseMarker] = useState();
 
     const [buildingList, setBuildingList] = useState([]);
     const marker = useLocation();
@@ -61,6 +63,8 @@ function ResultSearch() {
     var zoomin;
     var zoomout;
     var movelocation;
+    var test;
+
 
     if(buildingList[0] && !plength){
       for(var i = 0; i < buildingList.length; i++){
@@ -102,11 +106,17 @@ function ResultSearch() {
       movelocation = false;
     }
 
+    console.log('choosemarker: '+choosemarker);
+    console.log('test out: ' + test);
+
     const script = document.createElement("script");
-    script.innerHTML = ` 
+    script.innerHTML = `
+        // var test1 = 4; 
+        // ${test = 'test1'};
+        // console.log(${test});
         var locationmap;
         var zoomIn;
-        var markers = [];
+        
         function initTmap(pos) {
             var map = new Tmapv2.Map("TMapApp", {
                 center: new Tmapv2.LatLng(pos.lat, pos.lng),
@@ -125,25 +135,37 @@ function ResultSearch() {
             return map;
         }
 
-        function onClickMarker(evt){ 
-          console.log(markers);
-      
-        }
-
-
+        
         function searchmarker(){  //검색 결과 지도 마커 생성 함수
           var marker;
+          var markers = [];
           var arrlat = new Array(${markerlat});
           var arrlng = new Array(${markerlng});
           for(var i = 0; i < ${plength}; i++){
             marker = new Tmapv2.Marker({
-              position: new Tmapv2.LatLng(arrlat[i], arrlng[i]),
+              position: new Tmapv2.LatLng(arrlat[i], arrlng[i]),       
               map: locationmap,
             })
             markers.push(marker);    //마커 배열에 저장
-            markers[i].addListener("click", onClickMarker);
+            markers[i].addListener("dragend", function(evt){
+              var latlng = evt.latLng;
+              console.log(marker.getPosition());
+              console.log(latlng);
+              for(var i = 0; i < markers.length; i++){
+                console.log(i);
+                var t = i;
+                if(latlng === markers[i].getPosition()){
+                  
+                  ${test = `i`};
+                  console.log('test: '+${test});
+                  
+                }
+              }
+            })
+            marker.addListener("touchstart", function(evt){
+              console.log('test');
+            })
           }
-
         }
 
         function createmarker(){  // 현재 위치 표시 마커 생성
@@ -174,7 +196,7 @@ function ResultSearch() {
           searchmarker();
         }
         else{
-          searchmarker();
+          //searchmarker();
           console.log("Init false");
         }
 

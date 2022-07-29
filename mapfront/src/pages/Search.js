@@ -35,24 +35,8 @@ import axios from "axios";
     const handlemapButton = () => {
         navigate('/resultsearch', { state: {
             building: buildingList}});
+        window.location.href = "/resultsearch";    
     }
-
-    const searchBusRoute = () => {              {/*버스 노선 받아오는 거*/}
-        const busroute = axios.create({
-         baseURL: 'http://localhost:8080/'
-        })
-        busroute.post('/api/bus/route', null, {params: {routeId: 165000110}})
-        .then(function(res){
-         console.log(res.data);
-         navigate('/bus-route', {
-            state:{
-                busroute: res.data,
-            }
-         })
-        }).catch(function(err){
-         console.log('버스 노선 못받아옴');
-        })
-     }
 
     return (
     <div className="main"> 
