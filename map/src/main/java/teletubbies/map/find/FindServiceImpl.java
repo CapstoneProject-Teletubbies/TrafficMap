@@ -208,7 +208,7 @@ public class FindServiceImpl implements FindService {
                  *
                  * 엘리베이터 받는 부분
                  */
-                findDto.setElevatorState(findElevatorByAPI(addr));
+//                findDto.setElevatorState(findElevatorByAPI(addr));
 
                 dtos.add(i, findDto);
                 long end1 = System.currentTimeMillis();
