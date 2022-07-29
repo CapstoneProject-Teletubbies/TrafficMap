@@ -7,14 +7,18 @@ import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
+import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +36,8 @@ public class FindServiceImpl implements FindService {
     @Value("${ELEVATOR_URL}")
     private String elevator_url;
 
+    @Value("${STAIR_URL}")
+    private String stair_url;
 
     /**
      *
@@ -218,7 +224,6 @@ public class FindServiceImpl implements FindService {
 
     @SneakyThrows
     public String findElevatorByAPI(String address) {
-
         DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(elevator_url);
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
 
@@ -259,11 +264,86 @@ public class FindServiceImpl implements FindService {
             return elvtrSttsNm;
         }
     }
+
+
+
+    //계단 api
+    @SneakyThrows
+    public List<StairDto> findStairs() {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders(); //헤더
+        restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 한글깨짐 방지
+
+        String encodedPath = URLEncoder.encode("인천시_이동약자연결시설_18종1", "UTF-8");
+        //URI 생성
+        UriComponents uri = UriComponentsBuilder
+                .fromUriString(stair_url)
+                .path("/" + encodedPath +  "/FeatureServer/12/query")
+                .queryParam("where", "1%3D1")
+                .queryParam("outFields", "objectid,ctprvnnm,signgunm,signgucode,rdnmadr,lnmadr,startlatitude,startlongitude,endlatitude,endlongitude")
+                .queryParam("outSR", 4326)
+                .queryParam("f", "json")
+                .build(true);
+
+        //response
+        ResponseEntity<String> result = restTemplate.exchange(uri.toUri(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
+
+        if(result.getBody() != null) {
+            //json parser
+            JSONParser parser = new JSONParser();
+            JSONObject object = (JSONObject) parser.parse(result.getBody());
+
+            JSONArray features = (JSONArray) object.get("features");
+
+            List<StairDto> dtos = new ArrayList<>(); //리스트에 담을 dtos 선언
+
+            //배열 크기만큼 반복
+            for (int i = 0; i < features.size(); i++) {
+                StairDto stairDto = new StairDto();
+                object = (JSONObject) features.get(i);
+
+                JSONObject attributes = (JSONObject) object.get("attributes");
+
+                //이제 필요한 애들 받아오기
+                Long objectid = (Long) attributes.get("objectid"); //id
+                String ctprvnnm = (String) attributes.get("ctprvnnm"); //인천광역시
+                String signgunm = (String) attributes.get("signgunm"); //ㅇㅇ구
+                String signgucode = (String) attributes.get("signgucode"); //  우편번호
+                String rdnmadr = (String) attributes.get("rdnmadr"); // 도로명주소
+                String lnmadr = (String) attributes.get("lnmadr"); // 지명주소
+                Double startlatitude = (Double) attributes.get("startlatitude"); // 시작위도
+                Double startlongitude = (Double) attributes.get("startlongitude"); // 시작경도
+                Double endlatitude = (Double) attributes.get("endlatitude"); //끝위도
+                Double endlongitude = (Double) attributes.get("endlongitude"); //끝경도
+
+                //일단 테스트로 이제 가공한 데이터를 stairDto에 저장
+                stairDto.setObjectid(objectid);
+                stairDto.setCtprvnnm(ctprvnnm);
+                stairDto.setSigngucode(signgucode);
+                stairDto.setSigngunm(signgunm);
+                stairDto.setRdnmadr(rdnmadr);
+                stairDto.setLnmadr(lnmadr);
+                stairDto.setStartlatitude(startlatitude);
+                stairDto.setStartlongitude(startlongitude);
+                stairDto.setEndlatitude(endlatitude);
+                stairDto.setEndlongitude(endlongitude);
+
+                dtos.add(i, stairDto);
+            }
+            return dtos;
+        }
+        else {
+            return null;
+        }
+    }
 }
+
+
+
 
 /**
  *
- * 방법2(너무 느림)
+ * 엘리베이터 RestTemplate 쓰는 방법(너무 느려서 다른 방법 씀)
  */
 //        RestTemplate restTemplate = new RestTemplate();
 //        HttpHeaders headers = new HttpHeaders(); //헤더
@@ -298,3 +378,5 @@ public class FindServiceImpl implements FindService {
 //        }
 //    }
 //}
+
+
