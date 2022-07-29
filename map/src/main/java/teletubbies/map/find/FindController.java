@@ -33,7 +33,7 @@ public class FindController {
      * 엘리베이터만 있는 컨트롤러 추가
      */
     //    @GetMapping("/find/elevator")
-    @RequestMapping(value="/find/address", method = {RequestMethod.POST})
+    @RequestMapping(value="/find/elevator", method = {RequestMethod.POST})
     public Object ElevatorByAPI(String address) {
 //        String address = "부평구 부평문화로 35";
 //        String address = "부평구 경원대로 1397";
