@@ -64,6 +64,7 @@ const SearchBar = (props) => {
         })
         bus.post('api/bus/busInfo/', null, {params: {busName: searchValue}})
         .then(function(res){
+            console.log(res.data);
             navigate('/search', {
                 state: {
                     keyword: searchValue,
