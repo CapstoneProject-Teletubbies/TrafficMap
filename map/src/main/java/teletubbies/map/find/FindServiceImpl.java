@@ -137,7 +137,6 @@ public class FindServiceImpl implements FindService {
      */
     @SneakyThrows
     public List<FindDto> findAddressByTmapAPI(String FindName) {
-
         DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(tmap_url);
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
 
