@@ -27,10 +27,11 @@ import java.util.List;
 @Service
 public class WayServiceImpl implements WayService{
     @Value("${TMAP_URL}")
-    private String tmap_way_url;
+    private String tmap_way_url; // 티맵 URL
 
     @Value("${TMAP_APPKEY}")
-    private String tmap_apikey;
+    private String tmap_apikey; // 티맵 API KEY
+
     @SneakyThrows
     public Object findWay(double startX, double startY, double endX, double endY, String startName, String endName) { // 티맵 도보 길찾기
         DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(tmap_way_url);
@@ -47,9 +48,9 @@ public class WayServiceImpl implements WayService{
                         .queryParam("startY", startY) // 시작 위도
                         .queryParam("endX", endX) // 끝 경도
                         .queryParam("endY", endY) // 끝 위도
-                        .queryParam("startName", encodedStartName) // 개수
-                        .queryParam("endName", encodedEndName)
-                        .queryParam("appKey", tmap_apikey)
+                        .queryParam("startName", encodedStartName) // 출발지 이름
+                        .queryParam("endName", encodedEndName) // 도착지 이름
+                        .queryParam("appKey", tmap_apikey) // api appKey
                         .build())
                 .retrieve() //response 불러옴
                 .toEntity(String.class)
@@ -57,35 +58,4 @@ public class WayServiceImpl implements WayService{
 
         return result.getBody();
     }
-
-//        if (result.getBody() != null) {
-//            //받아온 JSON 데이터 가공
-//            //json parser
-//            JSONParser parser = new JSONParser();
-//            JSONObject object = (JSONObject) parser.parse(result.getBody());
-//            //searchPoiInfo의 value들
-//            JSONObject searchPoiInfo = (JSONObject) object.get("searchPoiInfo");
-//            //pois의 value들
-//            JSONObject pois = (JSONObject) searchPoiInfo.get("pois");
-//            //poi의 value는 배열이라 JSONArray 사용
-//            JSONArray poiArr = (JSONArray) pois.get("poi");
-
-//            List<FindDto> dtos = new ArrayList<>(); //리스트에 담을 dtos 선언
-//
-//            //다시 poi의 value를 받아온 배열을 개수만큼 담기 (검색했을 때 출력하는 리스트 최대 10개)
-//            for (int i = 0; i < poiArr.size(); i++) {
-//                long start1 = System.currentTimeMillis();
-//                FindDto findDto = new FindDto();
-//                object = (JSONObject) poiArr.get(i);
-//
-//
-//                long end1 = System.currentTimeMillis();
-//                System.out.println(i +"번째 하나 생성에 걸리는 시간 : " + (end1 - start1)/1000.0);
-//            }
-//            System.out.println("dtos = " + dtos);
-//            return dtos;
-//        }
-//        else {
-//            return null;
-//        }
 }

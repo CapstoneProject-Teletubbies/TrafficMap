@@ -19,6 +19,7 @@ public class WayController {
     @GetMapping("/way")
 //    @RequestMapping(value="/way", method = {RequestMethod.POST})
     public Object FindWay() { //(startX, startY, endX, endY, startName, endName)) {
+        //테스트용
         double startX = 127.108212;
         double startY = 37.402056;
         double endY = 37.49159726;
