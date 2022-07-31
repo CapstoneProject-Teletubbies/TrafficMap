@@ -90,4 +90,16 @@ public class SubwayServiceImpl implements SubwayService{
             return dtos;
         }
     }
+
+/*
+    @SneakyThrows
+    public List<String> findSubwayPhotoByStopName(String name){
+
+        List<String> dtos = new ArrayList<>();
+
+
+
+        return dtos;
+    }
+*/
 }

@@ -12,6 +12,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
@@ -22,11 +24,12 @@ import reactor.core.scheduler.Schedulers;
 import reactor.netty.http.client.HttpClient;
 import reactor.netty.resources.ConnectionProvider;
 
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.time.Duration;
+import java.util.*;
 import java.util.function.Consumer;
 
 @SpringBootTest
@@ -243,5 +246,53 @@ class MapApplicationTests {
 //	}
 //	*/
 
+	@Test
+	void callPhotoName() throws Exception {
+
+		File doc = new File("C:\\Users\\alicx\\Desktop\\Map\\TrafficMap\\map\\src\\test\\java\\teletubbies\\map\\SubwayPhotoFileName.txt");
+
+		BufferedReader obj = new BufferedReader(new InputStreamReader(new FileInputStream(doc), "utf-8"));
+		String[] Name;
+		String str;
+		String key;
+		String value;
+		MultiValueMap<String,String> map = new LinkedMultiValueMap<String,String>();
+		while((str=obj.readLine())!=null){
+			Name = str.split("\\t");
+			key = Name[0];
+			value = Name[1];
+			map.add(key, value);
+		}
+
+		System.out.println(map.get("인천시청"));
+
+	}
+
+	@Test
+	void callPhotoName2() throws Exception{
+		File doc = new File("C:\\Users\\alicx\\Desktop\\Map\\TrafficMap\\map\\src\\test\\java\\teletubbies\\map\\SubwayPhotoFileName.txt");
+
+		BufferedReader obj = new BufferedReader(new InputStreamReader(new FileInputStream(doc), "utf-8"));
+		String[] Name;
+		String str;
+		String key;
+		String value;
+
+		List<String> result = new ArrayList<String>();
+
+		String test="인천시청";
+
+		while((str=obj.readLine())!=null){
+			Name = str.split("\\t");
+			key = Name[0];
+			value = Name[1];
+			if(key==test){
+			result.add(value);}
+		}
+
+		System.out.println(result);
+
+		//,,,? 어느 포인트에서 안되는겅미..?
+	}
 
 }

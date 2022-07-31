@@ -22,5 +22,10 @@ public class SubwayController {
 //        String name = "테스트";
         return subwayService.findSubwayByStopName(start, end, name);
     }
-
+/*
+    @RequestMapping(value="/subway/photo",method = {RequestMethod.POST})
+    public List<String> GetSubwayPhoto(String name){
+        return subwayService.findSubwayPhotoByStopName(name)
+    }
+*/
 }
