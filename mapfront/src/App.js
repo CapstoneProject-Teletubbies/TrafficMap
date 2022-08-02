@@ -5,7 +5,6 @@ import Search from './pages/Search';
 import ResultSearch from './pages/ResultSearch';
 import BusRoute from './pages/BusRoute';
 import LocationMap from './pages/LocationMap';
-import React from 'react';
 
 function App() {
   return (
