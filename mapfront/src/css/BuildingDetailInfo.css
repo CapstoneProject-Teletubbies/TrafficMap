@@ -25,7 +25,7 @@ footer{
     left: 30px;
     transform: translateY(-100%);
 }
-button{
+.mybutton{
     background-color:#cac3ca;
     width: 80px;
     height:40px;

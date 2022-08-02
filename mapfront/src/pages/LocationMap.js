@@ -191,20 +191,25 @@ function LocationMap() {
       class="navbar navbar-default"
       style={{
         width: "100%",
+        height: "10%",
         display: "flex",
         padding: "0px 10px",
+        backgroundColor: "white",
       }}>
-      <i
-        class="bi bi-arrow-left-circle"
-        style={{ fontSize: "2rem" }}
-        onClick={handlebackButton}
-      ></i>
-
-      <div className="" style={{ flex: 1, textAlign: "left" }}>
-        <SearchBar onChange={handleKeyword} placeholder={keyword} />
+      <div className="row" style={{ textAlign: "center", width: "100%"}}>
+        <div className="col-2" style={{ }}>
+        <i
+          class="bi bi-arrow-left-circle"
+          style={{ fontSize: "2rem"}}
+          onClick={handlebackButton}
+        ></i>
+        </div>
+        <div className="col-10 align-self-center" style={{ right: "5%" }}>
+        {building.state.props.name}
+        </div>
       </div>
 
-</nav>
+    </nav>
 
 
     <div className="left">

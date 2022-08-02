@@ -72,7 +72,7 @@ const BuildingDetailInfo = (props) => {
                     {buildingDetailInfo.elivator}</div>
                 <div id='address' style={styleaddress}>
                     <br></br>{buildingDetailInfo.fullAddressRoad}</div>
-                <div id='button' style={stylebutton}>
+                <div id='mybutton' style={stylebutton}>
                 {/* <button type="button" class="btn btn-default btn-sm" onClick={setArrive}>도착</button> */}
                 <Button variant="outline-success" size="sm" class="startbutton" onClick={setArrive}>도착</Button>
                 <Button variant="outline-success" size="sm" class="startbutton" onClick={setStart}>출발</Button></div>

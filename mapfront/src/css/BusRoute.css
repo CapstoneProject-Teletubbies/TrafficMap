@@ -30,3 +30,8 @@ main{
 ::-webkit-scrollbar{
     display: none;
 }
+.reload-bus{
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+}

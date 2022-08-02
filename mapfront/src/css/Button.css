@@ -1,4 +1,4 @@
-.btn1{
+.mybtn1{
     position: relative;
     text-align: center;
     border: none;
@@ -6,15 +6,14 @@
     width: 47px;
     height: 46px;
 }
-.btn:hover{
+.mybtn:hover{
     border-radius: 10px;
     box-shadow: 3px, 3px, 3px white;
 }
-.btn:hover:one{
+.mybtn:hover:one{
     background-color: white;
     
 }
-
 img{
     position: relative;
     text-align: center;

@@ -28,7 +28,7 @@ import axios from "axios";
         setBuildingList(location.state.building);
     })
 
-    const handlebackButton = () => {   //키워드 문제가 있다
+    const handlebackButton = () => {  
         window.location.href = "/";
     }
     const handlemapButton = () => {

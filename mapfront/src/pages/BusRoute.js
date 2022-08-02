@@ -9,6 +9,8 @@ import '../css/BusRoute.css'
 import {useLocation} from 'react-router';
 import { queryByTitle } from '@testing-library/react';
 
+import refresh from "../images/refresh.png"
+
 function BusRoute(){
     const location = useLocation();
     const [busRoute, setBusRoute] = useState(); 
@@ -52,7 +54,6 @@ function BusRoute(){
     return(
         <main>
             <div className="busname">
-                <button onClick={realtimeBus}>새로고침</button>
                 <h2>{busInfo.routeno}</h2>
             </div>
             <div className="busdirection">
@@ -79,6 +80,9 @@ function BusRoute(){
                     })}
 
                     
+                </div>
+                <div className="reload-bus">
+                    <button type="button" class="btn btn-large btn-primary" style={{ width: "50px", height: "50px", textAlign: "center", }} onClick={realtimeBus}><i class="bi bi-arrow-repeat" style={{ fontSize: "40px", verticalAlign: "middle" }}></i></button>
                 </div>
             </div>
         </main>
