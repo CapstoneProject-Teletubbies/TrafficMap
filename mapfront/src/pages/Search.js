@@ -16,6 +16,7 @@ import axios from "axios";
     const [text, setText] = useState(' ');
     const [buildingList, setBuildingList] = useState([]);
     const [busList, setBusList] = useState([]);
+    const [mylocation, setMylocation] = useState();
     const navigate = useNavigate();
     const location = useLocation();
     const keyword = location.state.keyword;
@@ -26,6 +27,7 @@ import axios from "axios";
     useEffect(()=>{
         setBusList(location.state.bus);
         setBuildingList(location.state.building);
+        setMylocation(location.state.mylocation);
     })
 
     const handlebackButton = () => {  
@@ -63,7 +65,7 @@ import axios from "axios";
                     ></i>
 
                     <div className="" style={{ flex: 1, textAlign: "left" }}>
-                        <SearchBar onChange={onChange} placeholder={keyword} />
+                        <SearchBar onChange={onChange} placeholder={keyword} location={mylocation} />
                     </div>
 
                     <div className="">

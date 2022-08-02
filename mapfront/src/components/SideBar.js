@@ -1,7 +1,7 @@
 import React from 'react';
 import SideMenu from "./SideMenu"
 import '../css/SideBar.css'
-import React from 'react';
+
 
 const SideMenuData =(props)=>{
 
