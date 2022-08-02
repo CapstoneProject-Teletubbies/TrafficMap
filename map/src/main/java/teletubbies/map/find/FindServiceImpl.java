@@ -136,7 +136,7 @@ public class FindServiceImpl implements FindService {
      * 방법2
      */
     @SneakyThrows
-    public List<FindDto> findAddressByTmapAPI(String FindName) {
+    public List<FindDto> findAddressByTmapAPI(String FindName, double longitude, double latitude) { // 티맵 api (통합검색(명칭검색))
         DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(tmap_url);
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
 
@@ -146,10 +146,16 @@ public class FindServiceImpl implements FindService {
 
         ResponseEntity<String> result = wc.get()
                 .uri(uriBuilder -> uriBuilder.path("/tmap/pois")
-                        .queryParam("version", 1)
+                        .queryParam("version", 1) //버전
                         .queryParam("searchKeyword", encodedName) // 검색 키워드
                         .queryParam("count", 10) // 개수
-                        .queryParam("appKey", tmap_apiKey).build())
+                        .queryParam("appKey", tmap_apiKey) // 서비스키
+                        .queryParam("searchtypCd", "R") // 거리순, 정확도순 검색(거리순 : R, 정확도순 : A)
+                        .queryParam("radius", 0) // 반경( 0: 전국반경)
+                        .queryParam("centerLon", longitude) // 중심 좌표의 경도 좌표
+                        .queryParam("centerLat", latitude) // 중심 좌표의 위도 좌표
+                        .build())
+
                 .retrieve() //response 불러옴
                 .toEntity(String.class)
 //                .bodyToMono(String.class);
