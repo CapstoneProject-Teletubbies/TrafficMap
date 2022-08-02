@@ -286,7 +286,7 @@ class MapApplicationTests {
 			Name = str.split("\\t");
 			key = Name[0];
 			value = Name[1];
-			if(key==test){
+			if(key.equals(test)){
 			result.add(value);}
 		}
 
