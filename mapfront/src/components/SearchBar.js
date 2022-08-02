@@ -40,6 +40,7 @@ const SearchBar = (props) => {
         })
         building.post('/api/find/address', null, {params: {keyword: searchValue, latitude: mylocation.latitude, longitude: mylocation.longitude}})
         .then(function(res){
+            console.log(res.data);
             setBuildingList(res.data);
             navigate('/search', {
                 state: {
