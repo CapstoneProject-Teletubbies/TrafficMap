@@ -1,13 +1,9 @@
 package teletubbies.map.find;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
 
 @Data
-public class StairDto {
+public class StairDto { // 계단
     private Long objectid; // id
     private String ctprvnnm; // 인천광역시
     private String signgunm; // ㅇㅇ구

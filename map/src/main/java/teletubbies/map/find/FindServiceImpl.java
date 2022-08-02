@@ -211,12 +211,11 @@ public class FindServiceImpl implements FindService {
 
                 dtos.add(i, findDto);
                 long end1 = System.currentTimeMillis();
-                System.out.println(i +"번째 하나 생성에 걸리는 시간 : " + (end1 - start1)/1000.0);
+                System.out.println(i + "번째 하나 생성에 걸리는 시간 : " + (end1 - start1) / 1000.0);
             }
             System.out.println("dtos = " + dtos);
             return dtos;
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -244,17 +243,16 @@ public class FindServiceImpl implements FindService {
                 .block();
 
         long end = System.currentTimeMillis();
-        System.out.println(address +" 엘레베이터 호출 하나 생성에 걸리는 시간 : " + (end - start)/1000.0);
+        System.out.println(address + " 엘레베이터 호출 하나 생성에 걸리는 시간 : " + (end - start) / 1000.0);
 
         org.json.JSONObject object = XML.toJSONObject(result.getBody());
         org.json.JSONObject response = (org.json.JSONObject) object.get("response");
         org.json.JSONObject body = (org.json.JSONObject) response.get("body");
 
-        if(body.get("items").equals("")) { // 엘리베이터가 없으면 body":{"items":"","numOfRows":,"pageNo":,"totalCount":} 이런식으로 반환
+        if (body.get("items").equals("")) { // 엘리베이터가 없으면 body":{"items":"","numOfRows":,"pageNo":,"totalCount":} 이런식으로 반환
             String elvtrSttsNm = "x";
             return elvtrSttsNm;
-        }
-        else {
+        } else {
             org.json.JSONObject items = (org.json.JSONObject) body.get("items");
             //item value들
             org.json.JSONObject item = (org.json.JSONObject) items.get("item");
@@ -263,7 +261,6 @@ public class FindServiceImpl implements FindService {
             return elvtrSttsNm;
         }
     }
-
 
 
     //계단 api
@@ -277,7 +274,7 @@ public class FindServiceImpl implements FindService {
         //URI 생성
         UriComponents uri = UriComponentsBuilder
                 .fromUriString(stair_url)
-                .path("/" + encodedPath +  "/FeatureServer/12/query")
+                .path("/" + encodedPath + "/FeatureServer/12/query")
                 .queryParam("where", "1%3D1")
                 .queryParam("outFields", "objectid,ctprvnnm,signgunm,signgucode,rdnmadr,lnmadr,startlatitude,startlongitude,endlatitude,endlongitude")
                 .queryParam("outSR", 4326)
@@ -287,7 +284,7 @@ public class FindServiceImpl implements FindService {
         //response
         ResponseEntity<String> result = restTemplate.exchange(uri.toUri(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
 
-        if(result.getBody() != null) {
+        if (result.getBody() != null) {
             //json parser
             JSONParser parser = new JSONParser();
             JSONObject object = (JSONObject) parser.parse(result.getBody());
@@ -330,15 +327,67 @@ public class FindServiceImpl implements FindService {
                 dtos.add(i, stairDto);
             }
             return dtos;
+        } else {
+            return null;
+        }
+    }
+
+    @SneakyThrows
+    public List<ElevatorDto> findElevators() {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders(); //헤더
+        restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 한글깨짐 방지
+
+        String encodedPath = URLEncoder.encode("인천시_이동약자연결시설_18종1", "UTF-8");
+        //URI 생성
+        UriComponents uri = UriComponentsBuilder
+                .fromUriString(stair_url)
+                .path("/" + encodedPath + "/FeatureServer/6/query")
+                .queryParam("where", "1%3D1")
+                .queryParam("outFields", "objectid,latitude,longitude")
+                .queryParam("outSR", 4326)
+                .queryParam("f", "json")
+                .build(true);
+
+        //response
+        ResponseEntity<String> result = restTemplate.exchange(uri.toUri(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
+        System.out.println("result.getBody() = " + result.getBody());
+
+        if(result.getBody() != null) {
+            //json parser
+            JSONParser parser = new JSONParser();
+            JSONObject object = (JSONObject) parser.parse(result.getBody());
+
+            JSONArray features = (JSONArray) object.get("features");
+
+            List<ElevatorDto> dtos = new ArrayList<>(); //리스트에 담을 dtos 선언
+
+            //배열 크기만큼 반복
+            for (int i = 0; i < features.size(); i++) {
+                ElevatorDto elevatorDto = new ElevatorDto();
+                object = (JSONObject) features.get(i);
+
+                JSONObject attributes = (JSONObject) object.get("attributes");
+
+                //이제 필요한 애들 받아오기
+                Long objectid = (Long) attributes.get("objectid"); // id(개수 체크용)
+                double latitude = (double) attributes.get("latitude"); //위도
+                double longitude = (double) attributes.get("longitude"); //경도
+
+                //일단 테스트로 이제 가공한 데이터를 stairDto에 저장
+                elevatorDto.setObjectid(objectid);
+                elevatorDto.setLatitude(latitude);
+                elevatorDto.setLongitude(longitude);
+
+                dtos.add(i, elevatorDto);
+            }
+            return dtos;
         }
         else {
             return null;
         }
     }
 }
-
-
-
 
 /**
  *
