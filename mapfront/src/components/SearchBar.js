@@ -14,6 +14,7 @@ const SearchBar = (props) => {
     const [buildingList, setBuildingList] = useState([]);
     const handleValue = (e) => {        //검색어 입력받는 부분
         setSearchValue(e.target.value);
+        console.log(props);
         console.log(e.target.value);
 
     }
@@ -31,7 +32,7 @@ const SearchBar = (props) => {
         const building = axios.create({
             baseURL: 'http://localhost:8080/'
         })
-        building.post('/api/find/address', null, {params: {keyword: searchValue}})
+        building.post('/api/find/address', null, {params: {keyword: searchValue, latitude: props.location.latitude, longitude: props.location.longitude}})
         .then(function(res){
             setBuildingList(res.data);
             navigate('/search', {
