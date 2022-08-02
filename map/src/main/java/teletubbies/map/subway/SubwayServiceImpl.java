@@ -8,14 +8,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -248,7 +255,7 @@ public class SubwayServiceImpl implements SubwayService {
             return num; // 개수 반환
         }
     }
-}
+
         /*
         리스트로 반환했다가 얘두 장애인화장실 유무만 쓸거 같아서 아래 일단 주석처리!
          */
@@ -284,12 +291,26 @@ public class SubwayServiceImpl implements SubwayService {
 //            return dtos;
 //        }
 
-/*
+
     @SneakyThrows
-    public List<String> findSubwayPhotoByStopName(String name){
+    public MultiValueMap<String, String> findSubwayPhotoByStopName() {
 
-        List<String> dtos = new ArrayList<>();
+        File doc = new File(new File("./src/main/resources/SubwayPhotoFileName.txt").getCanonicalPath());
 
-        return dtos;
+        BufferedReader obj = new BufferedReader(new InputStreamReader(new FileInputStream(doc), "utf-8"));
+        String[] Name;
+        String str;
+        String key;
+        String value;
+        MultiValueMap<String, String> map = new LinkedMultiValueMap<String, String>();
+        while ((str = obj.readLine()) != null) {
+            Name = str.split("\\t");
+            key = Name[0];
+            value = Name[1];
+            map.add(key, value);
+        }
+
+        return map;
     }
-*/
+
+}

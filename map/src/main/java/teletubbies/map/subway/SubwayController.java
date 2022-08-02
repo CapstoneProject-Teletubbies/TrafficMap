@@ -42,10 +42,12 @@ public class SubwayController {
         return subwayService.findToilet(lnCd, stinCd, railOprIsttCd);
     }
 
-/*
+
     @RequestMapping(value="/subway/photo",method = {RequestMethod.POST})
+    //@RequestMapping(value="subway/photo")
     public List<String> GetSubwayPhoto(String name){
-        return subwayService.findSubwayPhotoByStopName(name)
+        //String name = "인천시청";
+        return subwayService.findSubwayPhotoByStopName().get(name);
     }
-*/
+
 }
