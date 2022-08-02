@@ -5,17 +5,16 @@ import '../css/Main.css'
 import '../css/input.css'
 import Search from '../pages/Search'
 import { Link, useNavigate } from "react-router-dom";
-import React from 'react';
 
 const SearchBar = (props) => {
     const navigate = useNavigate();
     const [name, setName] = useState('');
     const [isEnter, setIsEnter] = useState();
     const [searchValue, setSearchValue] = useState('');
+    const [mylocation, setMylocation] = useState();
     const [buildingList, setBuildingList] = useState([]);
     const handleValue = (e) => {        //검색어 입력받는 부분
         setSearchValue(e.target.value);
-        console.log(props);
         console.log(e.target.value);
 
     }
@@ -29,11 +28,17 @@ const SearchBar = (props) => {
             }
         }
     }
+    useEffect(()=>{
+        setMylocation(props.location);
+        console.log(props.location);
+    })
+
+
     const searchBuilding = (props1, props2) => {
         const building = axios.create({
             baseURL: 'http://localhost:8080/'
         })
-        building.post('/api/find/address', null, {params: {keyword: searchValue, latitude: props.location.latitude, longitude: props.location.longitude}})
+        building.post('/api/find/address', null, {params: {keyword: searchValue, latitude: mylocation.latitude, longitude: mylocation.longitude}})
         .then(function(res){
             setBuildingList(res.data);
             navigate('/search', {
@@ -42,6 +47,7 @@ const SearchBar = (props) => {
                     building: res.data,
                     bus: props1,
                     busstop: props2,
+                    mylocation: mylocation,
                 }
             });
         }).catch(function(error){

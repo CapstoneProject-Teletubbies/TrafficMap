@@ -1,6 +1,5 @@
 import React from 'react';
 import '../css/Button.css'
-import React from 'react';
 
 const Button = (props)=>{
     return(
