@@ -16,12 +16,33 @@ public class SubwayController {
 
 //    @GetMapping("/subway")
     @RequestMapping(value="/subway", method = {RequestMethod.POST})
-    public List<SubwayDto> GetSubwayInfo(int start, int end, String name) {
+    public List<SubwayDto> GetSubwayInfo(int start, int end, String name) { // 지하철 관련 컨트롤러
 //        int start = 0;
 //        int end = 5;
 //        String name = "테스트";
         return subwayService.findSubwayByStopName(start, end, name);
     }
+
+//        @GetMapping("/subway/wheelchair")
+    @RequestMapping(value="/subway/wheelchair", method = {RequestMethod.POST})
+    public Integer findWheelchair(int lnCd, int stinCd, String railOprIsttCd) { // 휠체어리프트 관련 컨트롤러
+        // 테스트용
+//        int lnCd = 1;  // 선코드
+//        int stinCd= 133; // 역코드
+//        String railOprIsttCd = "S1";  //철도운영기관코드
+        return subwayService.findWheelchair(lnCd, stinCd, railOprIsttCd); // 개수 반환함
+    }
+
+//    @GetMapping("/subway/toilet")
+    @RequestMapping(value="/subway/toilet", method = {RequestMethod.POST})
+    public List<ToiletDto> findToilet(int lnCd, int stinCd, String railOprIsttCd) { // 장애인화장실 관련 컨트롤러
+        //테스트용
+//        int lnCd = 1;  // 선코드
+//        int stinCd= 133; // 역코드
+//        String railOprIsttCd = "S1";  //철도운영기관코드
+        return subwayService.findToilet(lnCd, stinCd, railOprIsttCd);
+    }
+
 /*
     @RequestMapping(value="/subway/photo",method = {RequestMethod.POST})
     public List<String> GetSubwayPhoto(String name){

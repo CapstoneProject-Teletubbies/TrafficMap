@@ -28,4 +28,15 @@ public class WayController {
         String endName = "스타벅스부평";
         return wayService.findWay(startX, startY, endX, endY, startName, endName);
     }
+
+//    @GetMapping("/way/transit")
+////    @RequestMapping(value="/way/transit", method = {RequestMethod.POST})
+//    public Object ConnectWay() { //(latitude, longitude, name)) {
+//        //테스트용
+//        double longitude = 127.108212;
+//        double latitude = 37.402056;
+//        String name = "카카오판교오피스";
+//        return wayService.findWay(latitude, longitude, name);
+//    }
+
 }
