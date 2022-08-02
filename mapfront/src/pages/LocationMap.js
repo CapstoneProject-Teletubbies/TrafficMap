@@ -4,14 +4,11 @@ import axios from 'axios';
 import '../css/Main.css';
 import SearchBar from "../components/SearchBar";
 import Button from "../components/Button";
-import SideBar from "../components/SideBar"
-import Building from '../components/Building';
-import ReactDOM from "react-dom";
 import getLocation from '../getLocation';
 import plus from "../images/plus.png";
 import minus from "../images/minus.png"
 import target from "../images/location.png"
-import BuildingInfo from "../components/BuildingInfo"
+import BuildingDetailInfo from "../components/BuildingDetailInfo"
 
 import mylocation from "../images/placeholderred.png"
 
@@ -20,7 +17,7 @@ function LocationMap() {
     const [plusbutton, setPlusButton] = useState();
     const [minusbutton, setMinusButton] = useState();
     const [locationbutton, setLocationButton] = useState();
-    const [newwindow, setNewWindow] = useState();
+    const [infoWindow, setInfoWindow] = useState(true);
 
     const building = useLocation();
     const navigate = useNavigate();
@@ -39,10 +36,6 @@ function LocationMap() {
       setLocationButton(true);
     }
 
-    const reload = () =>{
-      navigate.push(building.pathname);
-    }
-
     const handleSuccess = (pos) => {
       var buildinglatitude = building.state.props.obj.latitude;
       var buildinglongitude = building.state.props.obj.longitude;
@@ -59,6 +52,10 @@ function LocationMap() {
     //   setError(error.message);
     // };
 
+    const handlebackButton = () => {
+      window.location.href = "/";
+    }
+
   
 
     const handleKeyword = (e) => setKeyword(e.target.value);
@@ -72,6 +69,8 @@ function LocationMap() {
     var zoomin;
     var zoomout;
     var movelocation;
+
+    console.log("infoWindow : " + infoWindow);
     setScreenSize();
     if(building){
       navigator.geolocation.watchPosition(handleSuccess);
@@ -188,11 +187,30 @@ function LocationMap() {
     >
     </div>
 
-    <div className="search">
-        <SearchBar onChange={handleKeyword} placeholder={'장소, 버스, 지하철, 주소 검색'}/>
-        <p id="result" />
-        <p id="result_mouse" />
-    </div>
+    <nav
+      class="navbar navbar-default"
+      style={{
+        width: "100%",
+        height: "10%",
+        display: "flex",
+        padding: "0px 10px",
+        backgroundColor: "white",
+      }}>
+      <div className="row" style={{ textAlign: "center", width: "100%"}}>
+        <div className="col-2" style={{ }}>
+        <i
+          class="bi bi-arrow-left-circle"
+          style={{ fontSize: "2rem"}}
+          onClick={handlebackButton}
+        ></i>
+        </div>
+        <div className="col-10 align-self-center" style={{ right: "5%" }}>
+        {building.state.props.name}
+        </div>
+      </div>
+
+    </nav>
+
 
     <div className="left">
       <div className="mylocation">
@@ -209,7 +227,7 @@ function LocationMap() {
       </div>
     </div>
     <div className="Infobar">
-      
+      <BuildingDetailInfo props={building.state.props}/>
     </div>
 
     </main>

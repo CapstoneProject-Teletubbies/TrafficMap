@@ -1,3 +1,4 @@
+import React from 'react';
 import '../css/BusRouteList.css'
 import bus from '../images/bus.png'
 import React from 'react';
@@ -20,15 +21,19 @@ const BusRouteList = (props) => {
 
 
     return(
-        <div className="BusRoute">
-            <div className="busreallocation">
-                <p>{num}{test}</p>         
+        <li className="list-group-item">
+            <div className="container">
+                <div className="row">
+                    <div className="col-2" style={{ textAlign: "left" }}>
+                        <p>{num}{test}</p>         
+                    </div>
+                    <div className="col-10" style={{ textAlign: "left" }}>
+                        <p>{props.bstopnm}</p>
+                        <p>{props.sbstopid}</p>
+                    </div>
+                </div>
             </div>
-            <div className="RouteInfo">
-                <p>{props.bstopnm}</p>
-                <p>{props.sbstopid}</p>
-            </div>
-        </div>
+        </li>
     );
 }
 

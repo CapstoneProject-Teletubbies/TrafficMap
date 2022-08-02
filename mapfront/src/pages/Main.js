@@ -4,7 +4,6 @@ import '../css/Main.css';
 import SearchBar from "../components/SearchBar";
 import Button from "../components/Button";
 import SideBar from "../components/SideBar"
-import Building from '../components/Building';
 import ReactDOM from "react-dom";
 import getLocation from '../getLocation';
 import plus from "../images/plus.png";
