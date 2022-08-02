@@ -4,6 +4,7 @@ import '../css/Main.css'
 import '../css/input.css'
 import Search from '../pages/Search'
 import { Link, useNavigate } from "react-router-dom";
+import React from 'react';
 
 const SearchBar = (props) => {
     const navigate = useNavigate();
