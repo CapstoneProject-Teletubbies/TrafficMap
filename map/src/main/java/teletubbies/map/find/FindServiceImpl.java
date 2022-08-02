@@ -333,7 +333,7 @@ public class FindServiceImpl implements FindService {
     }
 
     @SneakyThrows
-    public List<ElevatorDto> findElevators() {
+    public List<ElevatorDto> findElevators() { // 엘리베이터 위도,경도(위치) 가져오는 api
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders(); //헤더
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 한글깨짐 방지
@@ -351,7 +351,6 @@ public class FindServiceImpl implements FindService {
 
         //response
         ResponseEntity<String> result = restTemplate.exchange(uri.toUri(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
-        System.out.println("result.getBody() = " + result.getBody());
 
         if(result.getBody() != null) {
             //json parser
@@ -374,7 +373,7 @@ public class FindServiceImpl implements FindService {
                 double latitude = (double) attributes.get("latitude"); //위도
                 double longitude = (double) attributes.get("longitude"); //경도
 
-                //일단 테스트로 이제 가공한 데이터를 stairDto에 저장
+                //일단 테스트로 이제 가공한 데이터를 elevatorDto에 저장
                 elevatorDto.setObjectid(objectid);
                 elevatorDto.setLatitude(latitude);
                 elevatorDto.setLongitude(longitude);
