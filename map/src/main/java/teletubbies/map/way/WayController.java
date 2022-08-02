@@ -16,16 +16,16 @@ public class WayController {
     @Autowired
     WayServiceImpl wayService;
 
-    @GetMapping("/way")
-//    @RequestMapping(value="/way", method = {RequestMethod.POST})
-    public Object FindWay() { //(startX, startY, endX, endY, startName, endName)) {
+//    @GetMapping("/way")
+    @RequestMapping(value="/way", method = {RequestMethod.POST})
+    public Object FindWay(double startX, double startY, double endX, double endY,String startName, String endName) {
         //테스트용
-        double startX = 127.108212;
-        double startY = 37.402056;
-        double endY = 37.49159726;
-        double endX = 126.72449073;
-        String startName = "카카오판교오피스";
-        String endName = "스타벅스부평";
+//        double startX = 127.108212;
+//        double startY = 37.402056;
+//        double endY = 37.49159726;
+//        double endX = 126.72449073;
+//        String startName = "카카오판교오피스";
+//        String endName = "스타벅스부평";
         return wayService.findWay(startX, startY, endX, endY, startName, endName);
     }
 

@@ -19,7 +19,7 @@ import java.util.List;
 
 
 @Service
-public class SubwayServiceImpl implements SubwayService{
+public class SubwayServiceImpl implements SubwayService {
     @Value("${SUBWAY_APPKEY}")
     private String subway_apikey; //지하철 API 앱키 설정
     @Value("${WHEELCHAIR_APPKEY}")
@@ -60,8 +60,7 @@ public class SubwayServiceImpl implements SubwayService{
 
         if (realtimeArrivalList == null) { // 결과가 없으면 null 처리
             return null;
-        }
-        else {
+        } else {
             List<SubwayDto> dtos = new ArrayList<>();
             for (int i = 0; i < realtimeArrivalList.size(); i++) { //받아올 데이터 개수만큼 반복
 
@@ -98,6 +97,7 @@ public class SubwayServiceImpl implements SubwayService{
             return dtos;
         }
     }
+
     @SneakyThrows
     public Integer findWheelchair(int lnCd, int stinCd, String railOprIsttCd) { // 휠체어리프트
         RestTemplate restTemplate = new RestTemplate();
@@ -107,11 +107,11 @@ public class SubwayServiceImpl implements SubwayService{
         //URI 생성
         UriComponents uri = UriComponentsBuilder
                 .fromHttpUrl(wheelchair_url)
-                .queryParam( "serviceKey", wheelchair_apikey)
-                .queryParam( "format", "json")
-                .queryParam( "railOprIsttCd", railOprIsttCd) //철도운영기관코드
-                .queryParam( "lnCd", lnCd) // 선코드
-                .queryParam( "stinCd", stinCd) // 역코드
+                .queryParam("serviceKey", wheelchair_apikey)
+                .queryParam("format", "json")
+                .queryParam("railOprIsttCd", railOprIsttCd) //철도운영기관코드
+                .queryParam("lnCd", lnCd) // 선코드
+                .queryParam("stinCd", stinCd) // 역코드
                 .build(true);
 
         //response
@@ -123,8 +123,7 @@ public class SubwayServiceImpl implements SubwayService{
 
         if (header.get("resultCnt").equals(0)) { // 만약 휠체어리프트가 없는 역이면
             return null;
-        }
-        else {
+        } else {
             Integer num = Integer.parseInt(header.get("resultCnt").toString());
             return num;
         }
@@ -167,7 +166,7 @@ public class SubwayServiceImpl implements SubwayService{
     }
 
     @SneakyThrows
-    public List<ToiletDto> findToilet(int lnCd, int stinCd, String railOprIsttCd) { // 장애인화장실
+    public Integer findToilet(int lnCd, int stinCd, String railOprIsttCd) { // 장애인화장실
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders(); //헤더
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 한글깨짐 방지
@@ -175,11 +174,11 @@ public class SubwayServiceImpl implements SubwayService{
         //URI 생성
         UriComponents uri = UriComponentsBuilder
                 .fromHttpUrl(toilet_url)
-                .queryParam( "serviceKey", toilet_apikey)
-                .queryParam( "format", "json")
-                .queryParam( "railOprIsttCd", railOprIsttCd) //철도운영기관코드
-                .queryParam( "lnCd", lnCd) // 선코드
-                .queryParam( "stinCd", stinCd) // 역코드
+                .queryParam("serviceKey", toilet_apikey)
+                .queryParam("format", "json")
+                .queryParam("railOprIsttCd", railOprIsttCd) //철도운영기관코드
+                .queryParam("lnCd", lnCd) // 선코드
+                .queryParam("stinCd", stinCd) // 역코드
                 .build(true);
 
         //response
@@ -191,39 +190,46 @@ public class SubwayServiceImpl implements SubwayService{
 
         if (header.get("resultCnt").equals(0)) { // 만약 장애인화장실이 없는 역이면
             return null;
-        }
-        else { // 장애인화장실이 있는 역이면
-            JSONArray body = (JSONArray) object.get("body"); // body의 value들 불러오기 위한 것
-
-            List<ToiletDto> dtos = new ArrayList<>();
-            for(int i=0; i<body.size(); i++) { // 개수만큼 반복
-                JSONObject array = (JSONObject) body.get(i);
-                ToiletDto toiletDto = new ToiletDto();
-
-                Long diapExchNum = (Long) array.get("diapExchNum"); // 기저귀교환대개수
-                String dtlLoc = (String) array.get("dtlLoc"); // 상세위치
-                String exitNo = (String) array.get("exitNo"); // 출구번호
-                String gateInotDvNm = (String) array.get("gateInotDvNm"); // 게이트내외구분
-                String grndDvNm = (String) array.get("grndDvNm"); // 지상구분
-                String mlFmlDvNm = (String) array.get("mlFmlDvNm"); // 남녀구분
-                Long stinFlor = (Long) array.get("stinFlor"); // 역층
-                Long toltNum = (Long) array.get("toltNum");  // 화장실개수
-
-                //toiletDto에 저장
-                toiletDto.setDiapExchNum(diapExchNum);
-                toiletDto.setDtlLoc(dtlLoc);
-                toiletDto.setExitNo(exitNo);
-                toiletDto.setGateInotDvNm(gateInotDvNm);
-                toiletDto.setGrndDvNm(grndDvNm);
-                toiletDto.setMlFmlDvNm(mlFmlDvNm);
-                toiletDto.setStinFlor(stinFlor);
-                toiletDto.setToltNum(toltNum);
-
-                dtos.add(i, toiletDto);
-            }
-            return dtos;
+        } else { // 있는 역이면
+            Integer num = Integer.parseInt(header.get("resultCnt").toString());
+            return num; // 개수 반환
         }
     }
+}
+        /*
+        리스트로 반환했다가 얘두 장애인화장실 유무만 쓸거 같아서 아래 일단 주석처리!
+         */
+//        else { // 장애인화장실이 있는 역이면
+//            JSONArray body = (JSONArray) object.get("body"); // body의 value들 불러오기 위한 것
+//
+//            List<ToiletDto> dtos = new ArrayList<>();
+//            for(int i=0; i<body.size(); i++) { // 개수만큼 반복
+//                JSONObject array = (JSONObject) body.get(i);
+//                ToiletDto toiletDto = new ToiletDto();
+//
+//                Long diapExchNum = (Long) array.get("diapExchNum"); // 기저귀교환대개수
+//                String dtlLoc = (String) array.get("dtlLoc"); // 상세위치
+//                String exitNo = (String) array.get("exitNo"); // 출구번호
+//                String gateInotDvNm = (String) array.get("gateInotDvNm"); // 게이트내외구분
+//                String grndDvNm = (String) array.get("grndDvNm"); // 지상구분
+//                String mlFmlDvNm = (String) array.get("mlFmlDvNm"); // 남녀구분
+//                Long stinFlor = (Long) array.get("stinFlor"); // 역층
+//                Long toltNum = (Long) array.get("toltNum");  // 화장실개수
+//
+//                //toiletDto에 저장
+//                toiletDto.setDiapExchNum(diapExchNum);
+//                toiletDto.setDtlLoc(dtlLoc);
+//                toiletDto.setExitNo(exitNo);
+//                toiletDto.setGateInotDvNm(gateInotDvNm);
+//                toiletDto.setGrndDvNm(grndDvNm);
+//                toiletDto.setMlFmlDvNm(mlFmlDvNm);
+//                toiletDto.setStinFlor(stinFlor);
+//                toiletDto.setToltNum(toltNum);
+//
+//                dtos.add(i, toiletDto);
+//            }
+//            return dtos;
+//        }
 
 /*
     @SneakyThrows
@@ -234,4 +240,3 @@ public class SubwayServiceImpl implements SubwayService{
         return dtos;
     }
 */
-}

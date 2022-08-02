@@ -35,7 +35,7 @@ public class SubwayController {
 
 //    @GetMapping("/subway/toilet")
     @RequestMapping(value="/subway/toilet", method = {RequestMethod.POST})
-    public List<ToiletDto> findToilet(int lnCd, int stinCd, String railOprIsttCd) { // 장애인화장실 관련 컨트롤러
+    public Integer findToilet(int lnCd, int stinCd, String railOprIsttCd) { // 장애인화장실 관련 컨트롤러
         //테스트용
 //        int lnCd = 1;  // 선코드
 //        int stinCd= 133; // 역코드
