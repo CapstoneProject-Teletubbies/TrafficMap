@@ -1,6 +1,9 @@
 package teletubbies.map.way;
 
 import lombok.SneakyThrows;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -48,7 +51,18 @@ public class WayServiceImpl implements WayService {
                 .retrieve() //response 불러옴
                 .toEntity(String.class)
                 .block();
-        System.out.println("result.getBody() = " + result.getBody());
+
+        JSONParser parser = new JSONParser();
+        JSONObject object = (JSONObject) parser.parse(result.getBody());
+        JSONArray features = (JSONArray) object.get("features");
+
+        for(int i=0; i<features.size(); i++) {
+            JSONObject array = (JSONObject)features.get(i);
+//            System.out.println("array = " + array);
+
+
+        }
+
         return result.getBody();
 
     }
