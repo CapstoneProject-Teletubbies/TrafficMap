@@ -16,11 +16,9 @@ public class SubwayController {
 
 //    @GetMapping("/subway")
     @RequestMapping(value="/subway", method = {RequestMethod.POST})
-    public List<SubwayDto> GetSubwayInfo(int start, int end, String name) { // 지하철 관련 컨트롤러
-//        int start = 0;
-//        int end = 5;
-//        String name = "테스트";
-        return subwayService.findSubwayByStopName(start, end, name);
+    public List<SubwayDto> GetSubwayInfo(String name) { // 지하철 관련 컨트롤러
+//        String name = "서울";
+        return subwayService.findSubwayByStopName(name);
     }
 
 //        @GetMapping("/subway/wheelchair")

@@ -240,7 +240,7 @@ public class FindServiceImpl implements FindService {
         ResponseEntity<String> result = wc.get()
                 .uri(uriBuilder -> uriBuilder.path("/getOperationInfoList")
                         .queryParam("serviceKey", elevator_apikey)
-                        .queryParam("buld_address", encodedName) //모다 부평점
+                        .queryParam("buld_address", encodedName) //주소
                         .queryParam("numOfRows", 1) // 1개만 출력
                         .queryParam("pageNo", 1).build())
                 .retrieve() //response 불러옴

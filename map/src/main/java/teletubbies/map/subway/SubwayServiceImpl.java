@@ -35,7 +35,7 @@ public class SubwayServiceImpl implements SubwayService {
     private String toilet_url; // 장애인화장실 URL 설정
 
     @SneakyThrows
-    public List<SubwayDto> findSubwayByStopName(int start, int end, String name) { //지하철역 이름으로 도착정보 조회
+    public List<SubwayDto> findSubwayByStopName(String name) { //지하철역 이름으로 도착정보 조회
         //RestTemplate : REST API 호출이후 응답을 받을 때까지 기다리는 동기방식
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders(); //헤더
@@ -46,7 +46,7 @@ public class SubwayServiceImpl implements SubwayService {
         UriComponents uri = UriComponentsBuilder
                 .fromHttpUrl(subway_url)
                 .path("api/subway/" + subway_apikey + "/json/realtimeStationArrival")
-                .path("/" + start + "/" + end + "/" + encodedName)
+                .path("/0/10/" + encodedName)
                 .build(true);
 
         //response
@@ -80,6 +80,59 @@ public class SubwayServiceImpl implements SubwayService {
                 String arvlMsg3 = (String) array.get("arvlMsg3"); // 두번째 도착메세지
                 String arvlCd = (String) array.get("arvlCd"); // 도착 코드(0:진입, 1:도착, 2:출발, 3:전역출발, 4:전역진입, 5:전역도착, 99:운행중)
 
+                switch (subwayId) { // subwayId가 알아보기 힘들 것 같아서 알아볼 수 있도록 이름 바꿔서 저장해주기 위한 switch문
+                    case "1001":
+                        subwayId = "1호선";
+                        break;
+                    case "1002":
+                        subwayId = "2호선";
+                        break;
+                    case "1003":
+                        subwayId = "3호선";
+                        break;
+                    case "1004":
+                        subwayId = "4호선";
+                        break;
+                    case "1005":
+                        subwayId = "5호선";
+                        break;
+                    case "1006":
+                        subwayId = "6호선";
+                        break;
+                    case "1007":
+                        subwayId = "7호선";
+                        break;
+                    case "1008":
+                        subwayId = "8호선";
+                        break;
+                    case "1009":
+                        subwayId = "9호선";
+                        break;
+                    case "1063":
+                        subwayId = "경의중앙선";
+                        break;
+                    case "1065":
+                        subwayId = "공항철도";
+                        break;
+                    case "1067":
+                        subwayId = "경춘선";
+                        break;
+                    case "1075":
+                        subwayId = "수인분당선";
+                        break;
+                    case "1077":
+                        subwayId = "신분당선";
+                        break;
+                    case "1091":
+                        subwayId = "인천공항자기부상철도";
+                        break;
+                    case "1092":
+                        subwayId = "우이신설선";
+                        break;
+                    default:
+                        subwayId = null;
+                        break;
+                }
                 subwayDto.setSubwayId(subwayId);
                 subwayDto.setUpdnLine(updnLine);
                 subwayDto.setTrainLineNm(trainLineNm);

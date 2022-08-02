@@ -119,7 +119,7 @@ public class BusServiceImpl implements BusService {
         UriComponents uri = UriComponentsBuilder
                 .fromHttpUrl(busLocation_url)
                 .queryParam("serviceKey", encodedKey) //서비스키
-                .queryParam("routeId", routeId) // 정류소ID
+                .queryParam("routeId", routeId) // routeID
                 .queryParam("numOfRows", 50) // 개수
                 .queryParam("pageNo", 1)
                 .build(true);
@@ -145,7 +145,6 @@ public class BusServiceImpl implements BusService {
                 for (int i = 0; i < totalCount; i++) { // 정류장 개수만큼 반복
                     JSONObject array = (JSONObject) itemList.get(i);
                     BusLocationDto busLocationDto = new BusLocationDto();
-                    System.out.println("array = " + array);
 
                     Integer BUSID = (Integer) array.get("BUSID"); // 버스 ID
                     String BUS_NUM_PLATE = (String) array.get("BUS_NUM_PLATE"); // 차량 번호
@@ -227,7 +226,7 @@ public class BusServiceImpl implements BusService {
         UriComponents uri = UriComponentsBuilder
                 .fromHttpUrl(busId_url)
                 .queryParam("serviceKey", encodedKey) //서비스키
-                .queryParam("routeId", routeId) // 정류소ID
+                .queryParam("routeId", routeId) // //routeID
                 .queryParam("numOfRows", 20) // 개수
                 .queryParam("pageNo", 1)
                 .build(true);
@@ -297,7 +296,7 @@ public class BusServiceImpl implements BusService {
         UriComponents uri = UriComponentsBuilder
                 .fromHttpUrl(busIdList_url)
                 .queryParam("serviceKey", encodedKey) //서비스키
-                .queryParam("routeId", routeId) // 정류소ID
+                .queryParam("routeId", routeId) // routeID
                 .queryParam("numOfRows", 300) // 개수
                 .queryParam("pageNo", 1)
                 .build(true);
@@ -361,7 +360,7 @@ public class BusServiceImpl implements BusService {
             Matcher regexMatcher = regex.matcher(str_busNum);
             if (regexMatcher.find()) {
                 str_busNum = regexMatcher.group();
-                busNum = (Object) str_busNum;
+                busNum = str_busNum;
             }
         }
 
@@ -417,7 +416,6 @@ public class BusServiceImpl implements BusService {
                 while (i < result_count && j < totalCount) { // 아이템리스트 반환개수만큼
                     JSONObject array = (JSONObject) itemList.get(j);
                     BusInfoDto busInfoDto = new BusInfoDto();
-                    System.out.println("(" + j + ")");
 
                     Object ROUTENO = array.get("ROUTENO"); // 노선 번호
                     String str_routeno = ROUTENO.toString();
@@ -459,7 +457,6 @@ public class BusServiceImpl implements BusService {
 
             else {
             JSONObject itemList = (JSONObject) msgBody.get("itemList");
-            System.out.println("itemList = " + itemList);
             return null;
             }
         }
