@@ -1,5 +1,4 @@
 import React, {useState, useEffect } from 'react';
-import {Link} from 'react-router-dom';
 import '../css/search.css';
 import '../css/input.css'
 import ReactDOM from "react-dom";
@@ -29,7 +28,7 @@ import axios from "axios";
         setBuildingList(location.state.building);
     })
 
-    const handlebackButton = () => {
+    const handlebackButton = () => {   //키워드 문제가 있다
         window.location.href = "/";
     }
     const handlemapButton = () => {

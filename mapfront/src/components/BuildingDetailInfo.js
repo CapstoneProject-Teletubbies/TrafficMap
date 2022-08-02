@@ -1,10 +1,19 @@
 import React from 'react';
 import '../css/BuildingDetailInfo.css'
 import { useNavigate } from "react-router-dom";
+import {useState, useEffect} from 'react';
 import button from 'react-bootstrap/button';
 import Button from 'react-bootstrap/Button';
 
 const BuildingDetailInfo = (props) => {
+
+    const [buildingDetailInfo, setBuildingDetailInfo] = useState();
+
+    useEffect(()=>{
+        setBuildingDetailInfo(props.props.obj);
+        console.log(buildingDetailInfo);
+    })
+
 
     const startbutton =()=>{
         console.log('startbutton');
@@ -53,16 +62,16 @@ const BuildingDetailInfo = (props) => {
     const setStart = (props) => {
         let departure = props.address;
     };//출발지로 주소 넘기기
-
+    if(buildingDetailInfo){
     return(
         <footer>
         <div id='Info' className="detailInfo">
                 <div id='headInfo' style={stylehead}>
-                    <b>{props.name}</b> {props.bizname}</div>
+                    <b>{buildingDetailInfo.name}</b> {buildingDetailInfo.bizname}</div>
                 <div id='elivator' style={styleelivator}>
-                    {props.elivator}</div>
+                    {buildingDetailInfo.elivator}</div>
                 <div id='address' style={styleaddress}>
-                    <br></br>{props.address}</div>
+                    <br></br>{buildingDetailInfo.fullAddressRoad}</div>
                 <div id='button' style={stylebutton}>
                 {/* <button type="button" class="btn btn-default btn-sm" onClick={setArrive}>도착</button> */}
                 <Button variant="outline-success" size="sm" class="startbutton" onClick={setArrive}>도착</Button>
@@ -70,6 +79,7 @@ const BuildingDetailInfo = (props) => {
             </div>
             </footer>
     );
+    }
 }
 
 
