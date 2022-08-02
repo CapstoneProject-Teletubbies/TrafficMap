@@ -25,7 +25,7 @@ import axios from "axios";
     }
 
     useEffect(()=>{
-        console.log(location.state.building);
+        setBusList(location.state.bus);
         setBuildingList(location.state.building);
     })
 
@@ -39,28 +39,63 @@ import axios from "axios";
     }
 
     return (
-    <div className="main"> 
-        <div className="searchbar">
-            <div className="button">
-                <Button onClick={handlebackButton} src={back} />     
+        <div className="searchjs">
+            <div
+                style={{
+                    justifyContent: "center",
+                    display: "flex",
+                    padding: "10px 0px",
+                }}
+            >
+                <nav
+                    class="navbar navbar-default"
+                    style={{
+                        width: "95%",
+                        display: "flex",
+                        padding: "0px 10px",
+                        border: "1px solid",
+                        borderRadius: "20px",
+                    }}
+                >
+                    <i
+                        class="bi bi-arrow-left-circle"
+                        style={{ fontSize: "2rem" }}
+                        onClick={handlebackButton}
+                    ></i>
+
+                    <div className="" style={{ flex: 1, textAlign: "left" }}>
+                        <SearchBar onChange={onChange} placeholder={keyword} />
+                    </div>
+
+                    <div className="">
+                        {buildingList && (
+                            <i
+                                class="bi bi-pin-map-fill"
+                                style={{ fontSize: "2rem" }}
+                                onClick={handlemapButton}
+                            ></i>
+                        )}{" "}
+                        {/*버스만 받아올때는 안뜸 */}
+                    </div>
+                </nav>
             </div>
-            <div className="searchtest">
-                <SearchBar onChange = {onChange} placeholder={keyword}/>
-            </div>
-            <div className="mapbutton">
-                {buildingList  && <Button onClick={handlemapButton} src={map} />}   {/*버스만 받아올때는 안뜸 */}
+
+            <div className="searchlist">
+                {}
+
+                <ol className="list-group">
+                    {busList && busList.map((obj, index) => <BusInfo obj={obj}></BusInfo>)}
+                    {buildingList &&
+                        buildingList.map((obj, index) => (
+                            <BuildingInfo
+                                obj={obj}
+                                name={obj.name}
+                                address={obj.fullAddressRoad}
+                            ></BuildingInfo>
+                        ))}
+                </ol>
             </div>
         </div>
-        <div className="buildingList">
-            {}
-            {busList && busList.map((obj, index)=>(
-                <BusInfo obj={obj}></ BusInfo>
-            ))}
-            {buildingList && buildingList.map((obj, index)=>(
-                <BuildingInfo  obj={obj} name={obj.name} address={obj.fullAddressRoad}></BuildingInfo>
-            ))} 
-        </div> 
-    </div>
     );
  }
  export default Search;

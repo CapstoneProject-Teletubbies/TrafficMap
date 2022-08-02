@@ -11,7 +11,7 @@ import getLocation from '../getLocation';
 import plus from "../images/plus.png";
 import minus from "../images/minus.png"
 import target from "../images/location.png"
-import BuildingInfo from "../components/BuildingInfo"
+import BuildingDetailInfo from "../components/BuildingDetailInfo"
 
 import mylocation from "../images/placeholderred.png"
 
@@ -209,7 +209,7 @@ function LocationMap() {
       </div>
     </div>
     <div className="Infobar">
-      
+      <BuildingDetailInfo />
     </div>
 
     </main>

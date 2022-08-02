@@ -59,7 +59,7 @@ function BusRoute(){
                 <h5>{busInfo.origin_BSTOPNM}</h5>
             </div>
             <div className="body">
-                <div className="rightbar">
+                <div className="list-group">
                     {isitbus && busInfo && busRoute && busRoute.map((obj, index)=>{
                         var isit;
                         var bus = undefined;

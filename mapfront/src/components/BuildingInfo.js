@@ -1,27 +1,30 @@
-import '../css/BuildingInfo.css'
+// `import "../css/BuildingInfo.css";`
 import { useNavigate } from "react-router-dom";
+import React from "react";
 
 const BuildingInfo = (props) => {
     const navigate = useNavigate();
 
     const handleClick = () => {
         console.log(props.obj);
-        navigate('/location-map', {
+        navigate("/location-map", {
             state: {
                 props: props,
-            }
+            },
         });
-        window.location.href = "/location-map"; 
-    }
+        window.location.href = "/location-map";
+    };
 
-    return(
-        <div className="buildingInfo" onClick={handleClick}>
-            <div className="Info">
-                <p>{props.name}</p>
-                <p>{props.address}</p>
+    return (
+        <li className="list-group-item" onClick={handleClick}>
+            <div className="ms-2" style={{ textAlign: "left" }}>
+                <div className="fw-bold" style={{ textAlign: "left" }}>
+                    {props.name}
+                </div>
+                {props.address}
             </div>
-        </div>
+        </li>
     );
-}
+};
 
 export default BuildingInfo;

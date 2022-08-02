@@ -1,3 +1,4 @@
+import React from 'react';
 import '../css/BuildingInfo.css'
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -40,13 +41,14 @@ const BuildingInfo = (props) => {
      }
 
     return(
-        <div className="buildingInfo" onClick={searchBusRouteInfo} >
-            <div className="Info">
+        <li className="list-group-item" onClick={searchBusRouteInfo} >
+            <div className="ms-2" style={{ textAlign: "left" }}>
+                <div className="fw-bold" style={{ textAlign: "left"}}>
                 <p>{props.obj.routeno}</p>
+                </div>
                 <p>{props.obj.origin_BSTOPNM} {props.obj.turn_BSTOPNM}</p>
-               
             </div>
-        </div>
+        </li>
     );
 }
 
