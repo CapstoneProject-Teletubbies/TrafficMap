@@ -5,20 +5,15 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 
+import java.lang.reflect.Array;
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class WayServiceImpl implements WayService {
@@ -29,7 +24,7 @@ public class WayServiceImpl implements WayService {
     private String tmap_apikey; // 티맵 API KEY
 
     @SneakyThrows
-    public Object findWay(double startX, double startY, double endX, double endY, String startName, String endName) { // 티맵 도보 길찾기
+    public List<WayDto> findWay(double startX, double startY, double endX, double endY, String startName, String endName) { // 티맵 도보 길찾기
         DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(tmap_way_url);
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
 
@@ -56,14 +51,81 @@ public class WayServiceImpl implements WayService {
         JSONObject object = (JSONObject) parser.parse(result.getBody());
         JSONArray features = (JSONArray) object.get("features");
 
+        List<WayDto> dtos = new ArrayList<>();
         for(int i=0; i<features.size(); i++) {
             JSONObject array = (JSONObject)features.get(i);
-//            System.out.println("array = " + array);
+            JSONObject geometry = (JSONObject)array.get("geometry");
+            JSONObject properties = (JSONObject)array.get("properties");
+            WayDto wayDto = new WayDto();
 
+            // 좌표 배열 자르기
+            JSONArray coordinates = (JSONArray) geometry.get("coordinates");
+            for(int j=0; j<coordinates.size(); j++) {
+                if (geometry.get("type").equals("Point") && coordinates.get(j).getClass().getName() == "java.lang.Double") { // [경도,위도] 이런 경우
+                    Double array1 = (Double) coordinates.get(j);
+                    wayDto.setPointLongitude(array1);
+                    System.out.println("PointLongitude() = " + wayDto.getPointLongitude());
+                    j += 1;
+                    wayDto.setPointLatitude((Double)coordinates.get(j));
+                    System.out.println("PointLatitude() = " + wayDto.getPointLatitude());
+                    continue;
+                }
+                else if (geometry.get("type").equals("LineString") && coordinates.get(j).getClass().getName() == "org.json.simple.JSONArray") { // 배열 안에 배열 있을 경우
+                    System.out.println("j = " + j);
+                    JSONArray lArray = (JSONArray) coordinates.get(j); // 배열을 다시 자르기 위해 필요
+                    for (int k = 0; k < lArray.size(); k++) {
+                        Double array2 = (Double) lArray.get(k);
+                        wayDto.setLineLongitude(array2);
+                        System.out.println(k + " LineLongitude = " + wayDto.getLineLongitude());
+                        k += 1;
+                        wayDto.setLineLatitude((Double) lArray.get(k));
+                        System.out.println(k + " LineLatitude = " + wayDto.getLineLatitude());
 
+                    }
+                }
+                break;
+            }
+
+            // properties 안의 value들 얻기
+            if(geometry.get("type").equals("Point")) { // point(안내지점)
+                if(i==0) {
+                    Number totalDistance = (Number) properties.get("totalDistance"); // 총 거리
+                    Number totalTime = (Number) properties.get("totalTime"); // 총 소요시간
+                    wayDto.setTotalDistance(totalDistance);
+                    wayDto.setTotalTime(totalTime);
+
+                }
+
+                Long pointIndex = (Long) properties.get("pointIndex"); // 안내지점 순번
+                String description = (String) properties.get("description"); // 길 안내 정보
+                Number turnType = (Number) properties.get("turnType"); //회전정보
+                String pointType = (String) properties.get("pointType"); //안내지점 구분
+                String facilityType = (String) properties.get("facilityType"); //시설물 구분
+                wayDto.setPointIndex(pointIndex);
+                wayDto.setPointDescription(description);
+                wayDto.setTurnType(turnType);
+                wayDto.setPointType(pointType);
+                wayDto.setPointFacilityType(facilityType);
+
+            }
+            else { // line(구간)
+                Long lineIndex = (Long) properties.get("lineIndex"); // 구간 순번
+                String description = (String) properties.get("description"); // 길 안내 정보
+                Number distance = (Number) properties.get("distance"); // 구간거리
+                Number time = (Number) properties.get("time");  // 구간 소요시간
+                Number roadType = (Number) properties.get("roadType"); //도로 타입 정보
+                String facilityType = (String) properties.get("facilityType"); //시설물 구분
+                wayDto.setLineIndex(lineIndex);
+                wayDto.setLineDescription(description);
+                wayDto.setDistance(distance);
+                wayDto.setTime(time);
+                wayDto.setRoadType(roadType);
+                wayDto.setLineFacilityType(facilityType);
+            }
+            dtos.add(i, wayDto);
         }
-
-        return result.getBody();
+//        System.out.println("dtos = " + dtos);
+        return dtos;
 
     }
 }
