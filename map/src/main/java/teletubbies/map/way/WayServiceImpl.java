@@ -72,16 +72,22 @@ public class WayServiceImpl implements WayService {
                 }
                 else if (geometry.get("type").equals("LineString") && coordinates.get(j).getClass().getName() == "org.json.simple.JSONArray") { // 배열 안에 배열 있을 경우
                     System.out.println("j = " + j);
-                    JSONArray lArray = (JSONArray) coordinates.get(j); // 배열을 다시 자르기 위해 필요
-                    for (int k = 0; k < lArray.size(); k++) {
-                        Double array2 = (Double) lArray.get(k);
-                        wayDto.setLineLongitude(array2);
-                        System.out.println(k + " LineLongitude = " + wayDto.getLineLongitude());
-                        k += 1;
-                        wayDto.setLineLatitude((Double) lArray.get(k));
-                        System.out.println(k + " LineLatitude = " + wayDto.getLineLatitude());
-
+                    //JSONArray lArray = (JSONArray) coordinates.get(j); // 배열을 다시 자르기 위해 필요
+                    System.out.println(coordinates);
+                    ArrayList<WayLinePointDto> lineArray = new ArrayList<WayLinePointDto>();
+                    //WayLinePointDto linePointDto = new WayLinePointDto(); (복사로 인해 같은 값 반복됨 -> 약간 킹받지만 for안에 매번 생성)
+                    //System.out.println(lArray);
+                    for (int k = 0; k < coordinates.size(); k++) {
+                        JSONArray lArray = (JSONArray) coordinates.get(k);
+                        WayLinePointDto linePointDto = new WayLinePointDto();
+                        Double array2 = (Double) lArray.get(0);
+                        linePointDto.setLineLongitude(array2);
+                        System.out.println(k + " LineLongitude = " + linePointDto.getLineLongitude());
+                        linePointDto.setLineLatitude((Double) lArray.get(1));
+                        System.out.println(k + " LineLatitude = " + linePointDto.getLineLatitude());
+                        lineArray.add(linePointDto);
                     }
+                    wayDto.setLinePointArray(lineArray);
                 }
                 break;
             }
