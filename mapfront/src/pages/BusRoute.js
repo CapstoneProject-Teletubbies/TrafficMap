@@ -7,8 +7,7 @@ import BusRouteList from '../components/BusRouteList';
 import '../css/BusRoute.css'
 
 import {useLocation} from 'react-router';
-import { queryByTitle } from '@testing-library/react';
-
+import { useNavigate } from "react-router-dom";
 import refresh from "../images/refresh.png"
 
 function BusRoute(){
@@ -17,6 +16,12 @@ function BusRoute(){
     const [busInfo, setBusInfo] = useState();
     const [reallocation, setRealLocation] = useState();
     const [isitbus, setIsItBus] = useState();
+
+    const navigate = useNavigate();
+
+    const handlebackButton = () => {
+        navigate(-1);
+    }
 
     useEffect(() => {                               //받아온 버스 정보 버스 노선 정보, 버스 실시간 위치 정보
         setBusRoute(location.state.busroute);
@@ -54,6 +59,11 @@ function BusRoute(){
     return(
         <main>
             <div className="busname">
+                <i
+                        class="bi bi-arrow-left-circle"
+                        style={{ fontSize: "2rem" }}
+                        onClick={handlebackButton}
+                    ></i>
                 <h2>{busInfo.routeno}</h2>
             </div>
             <div className="busdirection">

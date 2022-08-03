@@ -83,17 +83,30 @@ import axios from "axios";
 
             <div className="searchlist">
                 {}
-
                 <ol className="list-group">
                     {busList && busList.map((obj, index) => <BusInfo obj={obj}></BusInfo>)}
                     {buildingList &&
-                        buildingList.map((obj, index) => (
-                            <BuildingInfo
-                                obj={obj}
-                                name={obj.name}
-                                address={obj.fullAddressRoad}
-                            ></BuildingInfo>
-                        ))}
+                        buildingList.map((obj, index) => {
+                            if(obj.upperBizName === "교통편의"){
+                                if(!(obj.name).includes("출구") && !(obj.name).includes("방향") && !(obj.name).includes("방면")){
+                                    return(<BuildingInfo
+                                        obj={obj}
+                                        name={obj.name}
+                                        address={obj.fullAddressRoad}
+                                    ></BuildingInfo>);
+                                }
+                            }
+                            else{
+                                return(
+                                    <BuildingInfo
+                                        obj={obj}
+                                        name={obj.name}
+                                        address={obj.fullAddressRoad}
+                                    ></BuildingInfo>
+                                    );
+                            }
+                            
+                    })}
                 </ol>
             </div>
         </div>

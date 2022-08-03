@@ -68,7 +68,7 @@ const SearchBar = (props) => {
         })
     }
 
-    const searchOnlyBus = () => {
+    const searchOnlyBus = () => {           //~번 버스로 서치했을 때
         const bus = axios.create({
             baseURL: 'http://localhost:8080/'
         })
@@ -79,6 +79,7 @@ const SearchBar = (props) => {
                 state: {
                     keyword: searchValue,
                     bus: res.data,
+                    mylocation: mylocation,
                 }
             });
         }).catch(function(error){
