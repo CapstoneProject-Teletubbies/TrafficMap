@@ -52,8 +52,7 @@ public class SubwayServiceImpl implements SubwayService {
         //URI 생성
         UriComponents uri = UriComponentsBuilder
                 .fromHttpUrl(subway_url)
-                .path("api/subway/" + subway_apikey + "/json/realtimeStationArrival")
-                .path("/0/10/" + encodedName)
+                .path("api/subway/" + subway_apikey + "/json/realtimeStationArrival/0/10/" + encodedName)
                 .build(true);
 
         //response
@@ -74,7 +73,6 @@ public class SubwayServiceImpl implements SubwayService {
                 JSONObject array = (JSONObject) realtimeArrivalList.get(i);
                 SubwayDto subwayDto = new SubwayDto();
 
-                //1063: 경의중앙, 1065: 공항철도, 1067: 경춘선, 1075: 수인분당, 1077: 신분당, 1091: 자기부상, 1092: 우이신설
                 String subwayId = (String) array.get("subwayId"); // 지하철호선 ID
                 String updnLine = (String) array.get("updnLine"); // 상행/하행 표시
                 String trainLineNm = (String) array.get("trainLineNm"); // 도착지 방면
