@@ -52,7 +52,7 @@ public class SubwayServiceImpl implements SubwayService {
         //URI 생성
         UriComponents uri = UriComponentsBuilder
                 .fromHttpUrl(subway_url)
-                .path("api/subway/" + subway_apikey + "/json/realtimeStationArrival/0/10/" + encodedName)
+                .path("api/subway/" + subway_apikey + "/json/realtimeStationArrival/0/15/" + encodedName)
                 .build(true);
 
         //response

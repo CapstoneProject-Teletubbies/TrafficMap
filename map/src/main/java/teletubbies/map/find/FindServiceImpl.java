@@ -148,7 +148,7 @@ public class FindServiceImpl implements FindService {
                 .uri(uriBuilder -> uriBuilder.path("/tmap/pois")
                         .queryParam("version", 1) //버전
                         .queryParam("searchKeyword", encodedName) // 검색 키워드
-                        .queryParam("count", 10) // 개수
+                        .queryParam("count", 15) // 개수
                         .queryParam("appKey", tmap_apiKey) // 서비스키
                         .queryParam("searchtypCd", "A") // 거리순, 정확도순 검색(거리순 : R, 정확도순 : A)
                         .queryParam("radius", 0) // 반경( 0: 전국반경)
