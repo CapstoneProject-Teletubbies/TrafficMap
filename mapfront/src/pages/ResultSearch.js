@@ -158,8 +158,8 @@ function ResultSearch() {
                   
                   ${test = `i`};
                   console.log('test: '+${test});
-              
-                  
+                  console.log(i);
+          
                 }
               }
             })

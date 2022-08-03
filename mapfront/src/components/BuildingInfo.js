@@ -2,18 +2,21 @@
 import React from 'react';
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from 'react';
 
 
 const BuildingInfo = (props) => {
     const navigate = useNavigate();
+    const [selectSubway, SetSelectSubway] = useState();
 
-    const searchsubwayinfo = () => {
+    const searchsubwayinfo = (subwaynm) => {
         const subwayinfo = axios.create({
             baseURL: 'http://localhost:8080/'
         })
-        subwayinfo.post('/api/subway', null, {params: {start: 0, end: 10, name: '부평'}})
+        subwayinfo.post('/api/subway', null, {params: {name: subwaynm}})
         .then(function(res){
             console.log(res.data);
+            SetSelectSubway(res.data);
         }).catch(function(err){
             console.log("지하철 정보 못받아옴");
         })
@@ -22,19 +25,21 @@ const BuildingInfo = (props) => {
 
 
 
+
     const handleClick = () => {
         console.log(props);
-        searchsubwayinfo();
         if(props.obj.upperBizName === "교통편의"){
-            // searchsubwayinfo();       
+            var subwayname = (props.obj.name).split('역');
+            console.log(subwayname[0]);
+            searchsubwayinfo(subwayname[0]);       
         }
         else{
-            // navigate("/location-map", {
-            //     state: {
-            //         props: props,
-            //     },
-            // });
-            // window.location.href = "/location-map";
+            navigate("/location-map", {
+                state: {
+                    props: props,
+                },
+            });
+            window.location.href = "/location-map";
         }
     };
 
