@@ -4,8 +4,7 @@ import java.util.List;
 
 public interface BusService {
     List<BusStopDto> findBusStopByBusStopName(String name);
-//    Object findBusArrivalByBusStopId(int bStopId);
-
+    List<BusArrivalDto>  findBusArrivalByBusStopId(int bStopId); // 정류소ID로 도착예정인 버스 조회
     List<BusRouteDetailDto> findBusRouteDetailByRouteId(int routeId); //RouteID로 버스 상세 정보 조회
     List<BusLocationDto> findBusLocationtByRouteId(int routeId); //RouteID로 버스 위치 조회
     List<BusRouteListDto> findBusRouteListByRouteId(int routeId); //RouteID로 버스 노선 조회
