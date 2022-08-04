@@ -41,6 +41,10 @@ public class BusServiceImpl implements BusService {
     @Value("${BUSNUM_URL}")
     private String busNum_url;
 
+    /**
+     *
+     * 여기 반복되는 코드 나중에 수정해야함
+     */
     @SneakyThrows
     public List<BusStopDto> findBusStopByBusStopName(String name) { //정류소명으로 정류소(ID) 검색
 
@@ -68,25 +72,47 @@ public class BusServiceImpl implements BusService {
 
         //xml 형식을 json 형식으로 변환
         JSONObject response = XML.toJSONObject(result.getBody());
-
         JSONObject ServiceResult = (JSONObject) response.get("ServiceResult"); //ServiceResult의 value들
         JSONObject msgHeader = (JSONObject) ServiceResult.get("msgHeader"); //msgHeader의 value들
 
         if(msgHeader.get("resultCode").equals(0)) { // 결과가 없을 경우
             JSONObject msgBody = (JSONObject) ServiceResult.get("msgBody"); //msgBody의 value들
-            JSONArray itemList = (JSONArray) msgBody.get("itemList"); //itemList의 value들
-            List<BusStopDto> dtos = new ArrayList<>();
 
-            System.out.println("정류소명으로 정류소(ID) 검색");
-            for (int i = 0; i < itemList.length(); i++) { // 받아올 데이터 개수만큼 반복
-                JSONObject array = (JSONObject) itemList.get(i);
+            if (msgBody.get("itemList").getClass().getName() != "org.json.JSONObject") { // itemList가 jsonArray라면
+                JSONArray itemList = (JSONArray) msgBody.get("itemList"); //itemList의 value들
+                List<BusStopDto> dtos = new ArrayList<>();
+
+                System.out.println("정류소명으로 정류소(ID) 검색");
+                for (int i = 0; i < itemList.length(); i++) { // 받아올 데이터 개수만큼 반복
+                    JSONObject array = (JSONObject) itemList.get(i);
+                    BusStopDto busStopDto = new BusStopDto();
+
+                    Integer BSTOPID = (Integer) array.get("BSTOPID"); //정류소 ID
+                    Integer SHORT_BSTOPID = (Integer) array.get("SHORT_BSTOPID"); // 단축 정류소ID
+                    String BSTOPNM = (String) array.get("BSTOPNM"); //정류소 ID
+                    BigDecimal POSX = (BigDecimal) array.get("POSX"); //X좌표
+                    BigDecimal POSY = (BigDecimal) array.get("POSY"); //Y좌표
+
+                    busStopDto.setBSTOPID(BSTOPID);
+                    busStopDto.setSHORT_BSTOPID(SHORT_BSTOPID);
+                    busStopDto.setBSTOPNM(BSTOPNM);
+                    busStopDto.setPOSX(POSX);
+                    busStopDto.setPOSY(POSY);
+
+                    dtos.add(i, busStopDto);
+                }
+                return dtos;
+            }
+            else { //itemList가 jsonObject 라면
+                JSONObject itemList = (JSONObject) msgBody.get("itemList"); //itemList가 JSONObject라면
+
+                List<BusStopDto> dtos = new ArrayList<>();
                 BusStopDto busStopDto = new BusStopDto();
-
-                Integer BSTOPID = (Integer) array.get("BSTOPID"); //정류소 ID
-                Integer SHORT_BSTOPID = (Integer) array.get("SHORT_BSTOPID"); // 단축 정류소ID
-                String BSTOPNM = (String) array.get("BSTOPNM"); //정류소 ID
-                BigDecimal POSX = (BigDecimal) array.get("POSX"); //X좌표
-                BigDecimal POSY = (BigDecimal) array.get("POSY"); //Y좌표
+                Integer BSTOPID = (Integer) itemList.get("BSTOPID"); //정류소 ID
+                Integer SHORT_BSTOPID = (Integer) itemList.get("SHORT_BSTOPID"); // 단축 정류소ID
+                String BSTOPNM = (String) itemList.get("BSTOPNM"); //정류소 ID
+                BigDecimal POSX = (BigDecimal) itemList.get("POSX"); //X좌표
+                BigDecimal POSY = (BigDecimal) itemList.get("POSY"); //Y좌표
 
                 busStopDto.setBSTOPID(BSTOPID);
                 busStopDto.setSHORT_BSTOPID(SHORT_BSTOPID);
@@ -94,9 +120,9 @@ public class BusServiceImpl implements BusService {
                 busStopDto.setPOSX(POSX);
                 busStopDto.setPOSY(POSY);
 
-                dtos.add(i, busStopDto);
+                dtos.add(busStopDto);
+                return dtos;
             }
-            return dtos;
         }
         else {
             return null;

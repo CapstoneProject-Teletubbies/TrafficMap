@@ -9,8 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
-
-import java.lang.reflect.Array;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,10 +62,10 @@ public class WayServiceImpl implements WayService {
                 if (geometry.get("type").equals("Point") && coordinates.get(j).getClass().getName() == "java.lang.Double") { // [경도,위도] 이런 경우
                     Double array1 = (Double) coordinates.get(j);
                     wayDto.setPointLongitude(array1);
-                    System.out.println("PointLongitude() = " + wayDto.getPointLongitude());
+//                    System.out.println("PointLongitude() = " + wayDto.getPointLongitude());
                     j += 1;
                     wayDto.setPointLatitude((Double)coordinates.get(j));
-                    System.out.println("PointLatitude() = " + wayDto.getPointLatitude());
+//                    System.out.println("PointLatitude() = " + wayDto.getPointLatitude());
                     continue;
                 }
                 else if (geometry.get("type").equals("LineString") && coordinates.get(j).getClass().getName() == "org.json.simple.JSONArray") { // 배열 안에 배열 있을 경우
@@ -82,9 +80,7 @@ public class WayServiceImpl implements WayService {
                         WayLinePointDto linePointDto = new WayLinePointDto();
                         Double array2 = (Double) lArray.get(0);
                         linePointDto.setLineLongitude(array2);
-                        System.out.println(k + " LineLongitude = " + linePointDto.getLineLongitude());
                         linePointDto.setLineLatitude((Double) lArray.get(1));
-                        System.out.println(k + " LineLatitude = " + linePointDto.getLineLatitude());
                         lineArray.add(linePointDto);
                     }
                     wayDto.setLinePointArray(lineArray);
@@ -99,9 +95,7 @@ public class WayServiceImpl implements WayService {
                     Number totalTime = (Number) properties.get("totalTime"); // 총 소요시간
                     wayDto.setTotalDistance(totalDistance);
                     wayDto.setTotalTime(totalTime);
-
                 }
-
                 Long pointIndex = (Long) properties.get("pointIndex"); // 안내지점 순번
                 String description = (String) properties.get("description"); // 길 안내 정보
                 Number turnType = (Number) properties.get("turnType"); //회전정보
@@ -112,7 +106,6 @@ public class WayServiceImpl implements WayService {
                 wayDto.setTurnType(turnType);
                 wayDto.setPointType(pointType);
                 wayDto.setPointFacilityType(facilityType);
-
             }
             else { // line(구간)
                 Long lineIndex = (Long) properties.get("lineIndex"); // 구간 순번
@@ -130,9 +123,7 @@ public class WayServiceImpl implements WayService {
             }
             dtos.add(i, wayDto);
         }
-//        System.out.println("dtos = " + dtos);
         return dtos;
-
     }
 }
 
