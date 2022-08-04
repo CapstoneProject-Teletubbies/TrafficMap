@@ -53,10 +53,10 @@ public class BusController { // 버스노선, 버스 위치 2개
         return busService.findBusStopByBusStopName(busStopName);
     }
 
-        @GetMapping(value="/bus/busArrival")
-//    @RequestMapping(value="/bus/busArrival", method = {RequestMethod.POST})
-    public List<BusArrivalDto> GetBusArrivalList() { //(int busStopId) { // 버스정류장
-        int busStopId = 166000865;
+//        @GetMapping(value="/bus/busArrival")
+    @RequestMapping(value="/bus/busArrival", method = {RequestMethod.POST})
+    public List<BusArrivalDto> GetBusArrivalList(int busStopId) { // 버스정류장
+//        int busStopId = 166000865;
         return busService.findBusArrivalByBusStopId(busStopId);
     }
 
