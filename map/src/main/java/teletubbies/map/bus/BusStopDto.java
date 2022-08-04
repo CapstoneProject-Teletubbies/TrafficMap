@@ -11,5 +11,6 @@ public class BusStopDto {
     private String BSTOPNM; // 정류소명
     private BigDecimal POSX; // X좌표
     private BigDecimal POSY; // Y좌표
+    private boolean isBusStop; // 버스정류소 인지 체크용
 
 }

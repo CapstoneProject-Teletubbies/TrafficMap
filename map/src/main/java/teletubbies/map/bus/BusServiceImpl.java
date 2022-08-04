@@ -89,7 +89,7 @@ public class BusServiceImpl implements BusService {
 
                     Integer BSTOPID = (Integer) array.get("BSTOPID"); //정류소 ID
                     Integer SHORT_BSTOPID = (Integer) array.get("SHORT_BSTOPID"); // 단축 정류소ID
-                    String BSTOPNM = (String) array.get("BSTOPNM"); //정류소 ID
+                    String BSTOPNM = (String) array.get("BSTOPNM"); //정류소명
                     BigDecimal POSX = (BigDecimal) array.get("POSX"); //X좌표
                     BigDecimal POSY = (BigDecimal) array.get("POSY"); //Y좌표
 
@@ -98,6 +98,7 @@ public class BusServiceImpl implements BusService {
                     busStopDto.setBSTOPNM(BSTOPNM);
                     busStopDto.setPOSX(POSX);
                     busStopDto.setPOSY(POSY);
+                    busStopDto.setBusStop(true);
 
                     dtos.add(i, busStopDto);
                 }
@@ -119,6 +120,7 @@ public class BusServiceImpl implements BusService {
                 busStopDto.setBSTOPNM(BSTOPNM);
                 busStopDto.setPOSX(POSX);
                 busStopDto.setPOSY(POSY);
+                busStopDto.setBusStop(true);
 
                 dtos.add(busStopDto);
                 return dtos;
