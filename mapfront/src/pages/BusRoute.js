@@ -20,6 +20,7 @@ function BusRoute(){
     const navigate = useNavigate();
 
     const handlebackButton = () => {
+        console.log("back");
         navigate(-1);
     }
 
@@ -58,16 +59,33 @@ function BusRoute(){
 
     return(
         <main>
-            <div className="busname">
-                <i
-                        class="bi bi-arrow-left-circle"
-                        style={{ fontSize: "2rem" }}
-                        onClick={handlebackButton}
+            <div className="busname" style={{position: "relative"}}>  
+            <div className="container row" style={{height: "100%"}}>  
+                <div className="col-2 align-middle" style={{position: "absolute", margin: "10px", padding: "0px"}}>
+                    <i
+                    class="bi bi-arrow-left-circle"
+                    style={{ fontSize: "2.2rem", }}
+                    onClick={handlebackButton}
                     ></i>
-                <h2>{busInfo.routeno}</h2>
+                </div> 
             </div>
-            <div className="busdirection">
-                <h5>{busInfo.origin_BSTOPNM}</h5>
+                <div className="col" style={{position: "absolute", width: "100%" ,top: "34%"}}>
+                    <h2>{busInfo.routeno}</h2>
+                </div>   
+            </div>
+            <div className="busdirection" style={{position: "relative"}}>
+
+                <div className="container row" style={{position: "absolute" , height:"100%", margin: "0px", padding: "1px"}}>
+                    <div className="col-6" style={{ position: "relative", padding: "0px", }}>
+                        <button type="button" class="btn btn-outline-dark" style={{width: "100%", height: "100%", borderRadius: "1px" }}>{busInfo.turn_BSTOPNM}</button>
+                        
+                    </div>
+                    
+                    <div className="col-6" style={{ position: "relative", padding: "0px",  }}>
+                    <button type="button" class="btn btn-outline-dark" style={{width: "100%", height: "100%", borderRadius: "1px"}}>{busInfo.origin_BSTOPNM}</button>
+                      
+                    </div>
+                </div>
             </div>
             <div className="body">
                 <div className="list-group">
@@ -92,7 +110,7 @@ function BusRoute(){
                     
                 </div>
                 <div className="reload-bus">
-                    <button type="button" class="btn btn-large btn-primary" style={{ width: "50px", height: "50px", textAlign: "center", }} onClick={realtimeBus}><i class="bi bi-arrow-repeat" style={{ fontSize: "40px", verticalAlign: "middle" }}></i></button>
+                    <button type="button" class="btn btn-large btn-outline-dark" style={{ width: "50px", height: "50px", textAlign: "center", padding: "0px" }} onClick={realtimeBus}><i class="bi bi-arrow-repeat" style={{ fontSize: "30px",}}></i></button>
                 </div>
             </div>
         </main>

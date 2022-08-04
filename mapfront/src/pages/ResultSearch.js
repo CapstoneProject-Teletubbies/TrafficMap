@@ -27,6 +27,7 @@ function ResultSearch() {
 
     const [buildingList, setBuildingList] = useState([]);
     const marker = useLocation();
+    console.log(marker.state.keyword);  //test
  
     const [location, setLocation] = useState();
     const [error, setError] = useState();
@@ -235,7 +236,7 @@ function ResultSearch() {
     >
     </div>
 
-    <NavBar />
+    <NavBar keyword={marker.state.keyword}/>
 
     <div className="search">
         

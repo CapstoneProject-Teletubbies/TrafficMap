@@ -5,6 +5,7 @@ import axios from "axios";
 
 const BuildingInfo = (props) => {
     const navigate = useNavigate();
+    const arrow = "<->";
 
     const searchBusRoute = (detail) => {
         const busroute = axios.create({
@@ -43,9 +44,9 @@ const BuildingInfo = (props) => {
         <li className="list-group-item" onClick={searchBusRouteInfo} >
             <div className="ms-2" style={{ textAlign: "left" }}>
                 <div className="fw-bold" style={{ textAlign: "left"}}>
-                <p>{props.obj.routeno}</p>
+                    {props.obj.routeno}
                 </div>
-                <p>{props.obj.origin_BSTOPNM} {props.obj.turn_BSTOPNM}</p>
+                {props.obj.origin_BSTOPNM} {arrow} {props.obj.turn_BSTOPNM}
             </div>
         </li>
     );

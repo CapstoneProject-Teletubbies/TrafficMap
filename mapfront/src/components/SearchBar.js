@@ -15,8 +15,6 @@ const SearchBar = (props) => {
     const [buildingList, setBuildingList] = useState([]);
     const handleValue = (e) => {        //검색어 입력받는 부분
         setSearchValue(e.target.value);
-        console.log(e.target.value);
-
     }
     const handleKeyPress = (e) => { //enter키 추적용 -> 검색 결과창으로 이동시킴
         if(e.key === 'Enter'){
@@ -94,6 +92,8 @@ const SearchBar = (props) => {
         busstop.post('api/bus/busStop', null, {params: {busStopName: searchValue}})
         .then(function(res){
             searchBus(res.data);
+            console.log('버스정륙소');
+            console.log(res.data);
         }).catch(function(error){
             console.log('에러');
         })
@@ -101,7 +101,7 @@ const SearchBar = (props) => {
 
     return(
         <>       
-            <input className="gg" type="text" placeholder={props.placeholder} 
+            <input className="gg" type="text" style={props.style} placeholder={props.placeholder} 
             onChange={handleValue}
             onKeyDown={handleKeyPress}
             />
