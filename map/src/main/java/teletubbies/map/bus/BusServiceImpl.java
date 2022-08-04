@@ -563,6 +563,7 @@ public class BusServiceImpl implements BusService {
             }
             else { //array 가 아니라면
                 JSONObject itemList = (JSONObject) msgBody.get("itemList"); //itemList가 JSONObject라면
+                System.out.println("itemList = " + itemList);
 
                 List<BusArrivalDto> dtos = new ArrayList<>();
                 BusArrivalDto busArrivalDto = new BusArrivalDto();
@@ -574,11 +575,25 @@ public class BusServiceImpl implements BusService {
                 Integer ARRIVALESTIMATETIME = (Integer) itemList.get("ARRIVALESTIMATETIME"); // 도착예정시간(몇 초 전)
                 Integer LATEST_STOP_ID = (Integer) itemList.get("LATEST_STOP_ID"); //버스의 최근 정류소 ID
                 String LATEST_STOP_NAME = (String) itemList.get("LATEST_STOP_NAME"); //버스의 최근 정류소 명
-                Integer LOW_TP_CD = (Integer) itemList.get("LOW_TP_CD"); // 저상버스 여부(0:일반, 1:저상)
-                Integer REMAIND_SEAT = (Integer) itemList.get("REMAIND_SEAT"); // 차량 빈자리 수 (255:사용안함)
-                Integer CONGESTION = (Integer) itemList.get("CONGESTION"); // 혼잡도 (1:여유, 2:보통, 3:혼잡,  255:사용안함)
-                Integer LASTBUSYN = (Integer) itemList.get("LASTBUSYN"); // 막차코드 (0:일반 1:막차)
                 Integer DIRCD = (Integer) itemList.get("DIRCD"); // 진행방향코드(0:상행, 1:하행, 2:순환)
+
+                if (itemList.has("LOW_TP_CD")) {
+                    Integer LOW_TP_CD = (Integer) itemList.get("LOW_TP_CD"); // 저상버스 여부(0:일반, 1:저상)
+                    busArrivalDto.setLOW_TP_CD(LOW_TP_CD);
+                }
+                if (itemList.has("REMAIND_SEAT")) {
+                    Integer REMAIND_SEAT = (Integer) itemList.get("REMAIND_SEAT"); // 차량 빈자리 수 (255:사용안함)
+                    busArrivalDto.setREMAIND_SEAT(REMAIND_SEAT);
+                }
+                if (itemList.has("CONGESTION")) {
+                    Integer CONGESTION = (Integer) itemList.get("CONGESTION"); // 혼잡도 (1:여유, 2:보통, 3:혼잡,  255:사용안함)
+                    busArrivalDto.setCONGESTION(CONGESTION);
+                }
+                if (itemList.has("LASTBUSYN")) {
+                    Integer LASTBUSYN = (Integer) itemList.get("LASTBUSYN"); // 막차코드 (0:일반 1:막차)
+                    busArrivalDto.setLASTBUSYN(LASTBUSYN);
+                }
+
 
                 busArrivalDto.setROUTEID(ROUTEID);
                 busArrivalDto.setBUSID(BUSID);
@@ -587,10 +602,6 @@ public class BusServiceImpl implements BusService {
                 busArrivalDto.setARRIVALESTIMATETIME(ARRIVALESTIMATETIME);
                 busArrivalDto.setLATEST_STOP_ID(LATEST_STOP_ID);
                 busArrivalDto.setLATEST_STOP_NAME(LATEST_STOP_NAME);
-                busArrivalDto.setLOW_TP_CD(LOW_TP_CD);
-                busArrivalDto.setREMAIND_SEAT(REMAIND_SEAT);
-                busArrivalDto.setCONGESTION(CONGESTION);
-                busArrivalDto.setLASTBUSYN(LASTBUSYN);
                 busArrivalDto.setDIRCD(DIRCD);
                 dtos.add(busArrivalDto);
 
