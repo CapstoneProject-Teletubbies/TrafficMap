@@ -45,6 +45,7 @@ input{
     margin: 1px; /*리스트 양옆 살짝 검은끼*/
 }
 .searchlist{
+    height: 93%;
     overflow-y: auto;
     overflow-x: hidden;
 }

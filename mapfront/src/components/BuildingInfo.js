@@ -17,6 +17,13 @@ const BuildingInfo = (props) => {
         .then(function(res){
             console.log(res.data);
             SetSelectSubway(res.data);
+            navigate("/location-map", {
+                state: {
+                    props: props,
+                    subway: res.data,
+                }
+            });
+            window.location.href = "/location-map";
         }).catch(function(err){
             console.log("지하철 정보 못받아옴");
         })

@@ -5,6 +5,7 @@ import ReactDOM from "react-dom";
 import SearchBar from "../components/SearchBar";
 import BuildingInfo from '../components/BuildingInfo';
 import BusInfo from '../components/BusInfo';
+import BusStopInfo from '../components/BusStopInfo';
 import {useLocation} from 'react-router';
 import { useNavigate } from "react-router-dom";
 import Button from "../components/Button";
@@ -16,6 +17,7 @@ import axios from "axios";
     const [text, setText] = useState(' ');
     const [buildingList, setBuildingList] = useState([]);
     const [busList, setBusList] = useState([]);
+    const [busStopList, setBusStopList] = useState([]);
     const [mylocation, setMylocation] = useState();
     const navigate = useNavigate();
     const location = useLocation();
@@ -27,16 +29,20 @@ import axios from "axios";
     useEffect(()=>{
         setBusList(location.state.bus);
         setBuildingList(location.state.building);
+        setBusStopList(location.state.busstop);
+        
         setMylocation(location.state.mylocation);
     })
 
-    const handlebackButton = () => {  
+    const handlebackButton = () => {            //뒤로가기 버튼 클릭
         window.location.href = "/";
     }
-    const handlemapButton = () => {
+    const handlemapButton = () => {             //지도 버튼 클릭
         navigate('/resultsearch', { state: {
-            building: buildingList}});
-            window.location.href = "/resultsearch";  
+            building: buildingList,
+            keyword: keyword,
+        }});
+        window.location.href = "/resultsearch";  
     }
 
     return (
@@ -65,7 +71,7 @@ import axios from "axios";
                     ></i>
 
                     <div className="" style={{ flex: 1, textAlign: "left" }}>
-                        <SearchBar onChange={onChange} placeholder={keyword} location={mylocation} />
+                        <SearchBar keyword={keyword} onChange={onChange} placeholder={keyword} location={mylocation} />
                     </div>
 
                     <div className="">
@@ -83,17 +89,32 @@ import axios from "axios";
 
             <div className="searchlist">
                 {}
-
                 <ol className="list-group">
                     {busList && busList.map((obj, index) => <BusInfo obj={obj}></BusInfo>)}
+                    {busStopList && busStopList.map((obj, index)=><BusStopInfo obj={obj} name={obj.bstopnm} address='버스정류장' />)}
                     {buildingList &&
-                        buildingList.map((obj, index) => (
-                            <BuildingInfo
-                                obj={obj}
-                                name={obj.name}
-                                address={obj.fullAddressRoad}
-                            ></BuildingInfo>
-                        ))}
+                        buildingList.map((obj, index) => {
+                            if(obj.upperBizName === "교통편의"){
+                                if(!(obj.name).includes("출구") && !(obj.name).includes("방향") && !(obj.name).includes("방면")
+                                    && !(obj.name).includes("버스정류장")){
+                                    return(<BuildingInfo
+                                        obj={obj}
+                                        name={obj.name}
+                                        address={obj.fullAddressRoad}
+                                    ></BuildingInfo>);
+                                }
+                            }
+                            else{
+                                return(
+                                    <BuildingInfo
+                                        obj={obj}
+                                        name={obj.name}
+                                        address={obj.fullAddressRoad}
+                                    ></BuildingInfo>
+                                    );
+                            }
+                            
+                    })}
                 </ol>
             </div>
         </div>
