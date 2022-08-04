@@ -51,8 +51,13 @@ public class BusController { // 버스노선, 버스 위치 2개
     public List<BusStopDto> GetBusStop(String busStopName) { // 버스정류장
 //        String busStopName = "부평구청역";
         return busService.findBusStopByBusStopName(busStopName);
-
     }
 
+//        @GetMapping(value="/bus/busArrival")
+    @RequestMapping(value="/bus/busArrival", method = {RequestMethod.POST})
+    public List<BusArrivalDto> GetBusArrivalList(int busStopId) { // 버스정류장
+//        int busStopId = 165000123;
+        return busService.findBusArrivalByBusStopId(busStopId);
+    }
 
 }
