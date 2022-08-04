@@ -522,26 +522,63 @@ public class BusServiceImpl implements BusService {
 
         if (msgHeader.get("resultCode").equals(0)) {
             JSONObject msgBody = (JSONObject) ServiceResult.get("msgBody"); //msgBody의 value들
-            JSONArray itemList = (JSONArray) msgBody.get("itemList"); //itemList의 value들
-            System.out.println("정류소 ID로 버스 도착정보목록 조회");
-            List<BusArrivalDto> dtos = new ArrayList<>();
+            if(msgBody.get("itemList").getClass().getName() == "org.json.JSONArray") {
+                JSONArray itemList = (JSONArray) msgBody.get("itemList"); //itemList의 value들
+                System.out.println("정류소 ID로 버스 도착정보목록 조회");
+                List<BusArrivalDto> dtos = new ArrayList<>();
 
-            for (int i = 0; i < itemList.length(); i++) { // 받아올 데이터 개수만큼 반복
-                JSONObject array = (JSONObject) itemList.get(i);
+                for (int i = 0; i < itemList.length(); i++) { // 받아올 데이터 개수만큼 반복
+                    JSONObject array = (JSONObject) itemList.get(i);
+                    BusArrivalDto busArrivalDto = new BusArrivalDto();
+
+                    Integer ROUTEID = (Integer) array.get("ROUTEID"); // 노선 ID(버스 노선 고유번호)
+                    Integer BUSID = (Integer) array.get("BUSID"); // 버스 ID(차량 고유번호)
+                    String BUS_NUM_PLATE = (String) array.get("BUS_NUM_PLATE"); // 차량 번호
+                    Integer REST_STOP_COUNT = (Integer) array.get("REST_STOP_COUNT"); // 몇 정거장 전
+                    Integer ARRIVALESTIMATETIME = (Integer) array.get("ARRIVALESTIMATETIME"); // 도착예정시간(몇 초 전)
+                    Integer LATEST_STOP_ID = (Integer) array.get("LATEST_STOP_ID"); //버스의 최근 정류소 ID
+                    String LATEST_STOP_NAME = (String) array.get("LATEST_STOP_NAME"); //버스의 최근 정류소 명
+                    Integer LOW_TP_CD = (Integer) array.get("LOW_TP_CD"); // 저상버스 여부(0:일반, 1:저상)
+                    Integer REMAIND_SEAT = (Integer) array.get("REMAIND_SEAT"); // 차량 빈자리 수 (255:사용안함)
+                    Integer CONGESTION = (Integer) array.get("CONGESTION"); // 혼잡도 (1:여유, 2:보통, 3:혼잡,  255:사용안함)
+                    Integer LASTBUSYN = (Integer) array.get("LASTBUSYN"); // 막차코드 (0:일반 1:막차)
+                    Integer DIRCD = (Integer) array.get("DIRCD"); // 진행방향코드(0:상행, 1:하행, 2:순환)
+
+                    busArrivalDto.setROUTEID(ROUTEID);
+                    busArrivalDto.setBUSID(BUSID);
+                    busArrivalDto.setBUS_NUM_PLATE(BUS_NUM_PLATE);
+                    busArrivalDto.setREST_STOP_COUNT(REST_STOP_COUNT);
+                    busArrivalDto.setARRIVALESTIMATETIME(ARRIVALESTIMATETIME);
+                    busArrivalDto.setLATEST_STOP_ID(LATEST_STOP_ID);
+                    busArrivalDto.setLATEST_STOP_NAME(LATEST_STOP_NAME);
+                    busArrivalDto.setLOW_TP_CD(LOW_TP_CD);
+                    busArrivalDto.setREMAIND_SEAT(REMAIND_SEAT);
+                    busArrivalDto.setCONGESTION(CONGESTION);
+                    busArrivalDto.setLASTBUSYN(LASTBUSYN);
+                    busArrivalDto.setDIRCD(DIRCD);
+                    dtos.add(i, busArrivalDto);
+
+                }
+                return dtos;
+            }
+            else { //array 가 아니라면
+                JSONObject itemList = (JSONObject) msgBody.get("itemList"); //itemList가 JSONObject라면
+
+                List<BusArrivalDto> dtos = new ArrayList<>();
                 BusArrivalDto busArrivalDto = new BusArrivalDto();
 
-                Integer ROUTEID = (Integer) array.get("ROUTEID"); // 노선 ID(버스 노선 고유번호)
-                Integer BUSID = (Integer) array.get("BUSID"); // 버스 ID(차량 고유번호)
-                String BUS_NUM_PLATE = (String) array.get("BUS_NUM_PLATE"); // 차량 번호
-                Integer REST_STOP_COUNT = (Integer) array.get("REST_STOP_COUNT"); // 몇 정거장 전
-                Integer ARRIVALESTIMATETIME = (Integer) array.get("ARRIVALESTIMATETIME"); // 도착예정시간(몇 초 전)
-                Integer LATEST_STOP_ID = (Integer) array.get("LATEST_STOP_ID"); //버스의 최근 정류소 ID
-                String LATEST_STOP_NAME = (String) array.get("LATEST_STOP_NAME"); //버스의 최근 정류소 명
-                Integer LOW_TP_CD = (Integer) array.get("LOW_TP_CD"); // 저상버스 여부(0:일반, 1:저상)
-                Integer REMAIND_SEAT = (Integer) array.get("REMAIND_SEAT"); // 차량 빈자리 수 (255:사용안함)
-                Integer CONGESTION = (Integer) array.get("CONGESTION"); // 혼잡도 (1:여유, 2:보통, 3:혼잡,  255:사용안함)
-                Integer LASTBUSYN = (Integer) array.get("LASTBUSYN"); // 막차코드 (0:일반 1:막차)
-                Integer DIRCD = (Integer) array.get("DIRCD"); // 진행방향코드(0:상행, 1:하행, 2:순환)
+                Integer ROUTEID = (Integer) itemList.get("ROUTEID"); // 노선 ID(버스 노선 고유번호)
+                Integer BUSID = (Integer) itemList.get("BUSID"); // 버스 ID(차량 고유번호)
+                String BUS_NUM_PLATE = (String) itemList.get("BUS_NUM_PLATE"); // 차량 번호
+                Integer REST_STOP_COUNT = (Integer) itemList.get("REST_STOP_COUNT"); // 몇 정거장 전
+                Integer ARRIVALESTIMATETIME = (Integer) itemList.get("ARRIVALESTIMATETIME"); // 도착예정시간(몇 초 전)
+                Integer LATEST_STOP_ID = (Integer) itemList.get("LATEST_STOP_ID"); //버스의 최근 정류소 ID
+                String LATEST_STOP_NAME = (String) itemList.get("LATEST_STOP_NAME"); //버스의 최근 정류소 명
+                Integer LOW_TP_CD = (Integer) itemList.get("LOW_TP_CD"); // 저상버스 여부(0:일반, 1:저상)
+                Integer REMAIND_SEAT = (Integer) itemList.get("REMAIND_SEAT"); // 차량 빈자리 수 (255:사용안함)
+                Integer CONGESTION = (Integer) itemList.get("CONGESTION"); // 혼잡도 (1:여유, 2:보통, 3:혼잡,  255:사용안함)
+                Integer LASTBUSYN = (Integer) itemList.get("LASTBUSYN"); // 막차코드 (0:일반 1:막차)
+                Integer DIRCD = (Integer) itemList.get("DIRCD"); // 진행방향코드(0:상행, 1:하행, 2:순환)
 
                 busArrivalDto.setROUTEID(ROUTEID);
                 busArrivalDto.setBUSID(BUSID);
@@ -555,11 +592,12 @@ public class BusServiceImpl implements BusService {
                 busArrivalDto.setCONGESTION(CONGESTION);
                 busArrivalDto.setLASTBUSYN(LASTBUSYN);
                 busArrivalDto.setDIRCD(DIRCD);
-                dtos.add(i, busArrivalDto);
+                dtos.add(busArrivalDto);
 
+                return dtos;
             }
-            return dtos;
-        } else {
+        }
+        else {
             return null;
         }
     }
