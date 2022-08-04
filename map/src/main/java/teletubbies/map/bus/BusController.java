@@ -56,7 +56,7 @@ public class BusController { // 버스노선, 버스 위치 2개
 //        @GetMapping(value="/bus/busArrival")
     @RequestMapping(value="/bus/busArrival", method = {RequestMethod.POST})
     public List<BusArrivalDto> GetBusArrivalList(int busStopId) { // 버스정류장
-//        int busStopId = 165000123;
+//        int busStopId = 1660008656;
         return busService.findBusArrivalByBusStopId(busStopId);
     }
 
