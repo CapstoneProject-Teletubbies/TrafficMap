@@ -3,6 +3,7 @@ import {useLocation} from 'react-router';
 import axios from 'axios';
 import '../css/Main.css';
 import SearchBar from "../components/SearchBar";
+import NavBar from "../components/NavBar";
 import Button from "../components/Button";
 import ReactDOM from "react-dom";
 import getLocation from '../getLocation';
@@ -234,8 +235,10 @@ function ResultSearch() {
     >
     </div>
 
+    <NavBar />
+
     <div className="search">
-        <SearchBar onChange={handleKeyword} placeholder={'장소, 버스, 지하철, 주소 검색'}/>
+        
         <p id="result" />
         <p id="result_mouse" />
     </div>
