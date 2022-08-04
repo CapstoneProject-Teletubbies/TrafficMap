@@ -219,7 +219,6 @@ public class FindServiceImpl implements FindService {
                 long end1 = System.currentTimeMillis();
                 System.out.println(i + "번째 하나 생성에 걸리는 시간 : " + (end1 - start1) / 1000.0);
             }
-            System.out.println("dtos = " + dtos);
             return dtos;
         } else {
             return null;
