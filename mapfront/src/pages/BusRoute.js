@@ -36,9 +36,9 @@ function BusRoute(){
     }, [busInfo]);
 
     const handlefbutton = () => {
-        window.scrollTo(0, 0);
-
-        
+        var sec = document.querySelector('#test');
+        var test1 = sec.offsetTop;
+        console.log(test1);
         console.log("fbutotn");
     }
     const handlebbutton = () => {
@@ -92,7 +92,7 @@ function BusRoute(){
                     </div>
                 </div>
             </div>
-            <div className="body" style={{position: "relative", top: "1px"}}>
+            <div id="test" className="body" style={{position: "relative", top: "1px"}}>
                 <div className="row" style={{margin: "0px", padding: "0px"}}>
                     {/* <div className="col-3" style={{backgroundColor: "white", borderRadius: "3px"}}>
 

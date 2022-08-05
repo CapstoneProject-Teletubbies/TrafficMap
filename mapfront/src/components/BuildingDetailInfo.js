@@ -15,8 +15,7 @@ const BuildingDetailInfo = (props) => {
     useEffect(()=>{
         setBuildingDetailInfo(props.props.props.obj);
         SetSubway(props.props.subway);
-        // console.log(subway);
-        // console.log(buildingDetailInfo);
+
         if(buildingDetailInfo && subway){
             var i= 0, j = 0;
             {subway.map((obj)=>{
@@ -33,7 +32,6 @@ const BuildingDetailInfo = (props) => {
                 };
             })}
         }
-        
     }, [subway])
 
     if(subwayUp){
@@ -41,6 +39,7 @@ const BuildingDetailInfo = (props) => {
     }
 
     const startbutton =()=>{
+        var sec = document.querySelector('#body');
         console.log('startbutton');
     }
 
