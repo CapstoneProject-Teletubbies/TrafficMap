@@ -554,19 +554,19 @@ public class BusServiceImpl implements BusService {
                     Integer DIRCD = array.getInt("DIRCD"); // 진행방향코드(0:상행, 1:하행, 2:순환)
 
                     if (array.has("LOW_TP_CD")) { // LOW_TP_CD가 있다면
-                        Integer LOW_TP_CD = itemList.getInt(Integer.parseInt("LOW_TP_CD")); // 저상버스 여부(0:일반, 1:저상)
+                        Integer LOW_TP_CD = array.getInt("LOW_TP_CD"); // 저상버스 여부(0:일반, 1:저상)
                         busArrivalDto.setLOW_TP_CD(LOW_TP_CD);
                     }
                     if (array.has("REMAIND_SEAT")) { // REMAIND_SEAT가 있다면
-                        Integer REMAIND_SEAT = itemList.getInt(Integer.parseInt("REMAIND_SEAT")); // 차량 빈자리 수 (255:사용안함)
+                        Integer REMAIND_SEAT = array.getInt("REMAIND_SEAT"); // 차량 빈자리 수 (255:사용안함)
                         busArrivalDto.setREMAIND_SEAT(REMAIND_SEAT);
                     }
                     if (array.has("CONGESTION")) { // CONGESTION가 있다면
-                        Integer CONGESTION =itemList.getInt(Integer.parseInt("CONGESTION")); // 혼잡도 (1:여유, 2:보통, 3:혼잡,  255:사용안함)
+                        Integer CONGESTION =array.getInt("CONGESTION"); // 혼잡도 (1:여유, 2:보통, 3:혼잡,  255:사용안함)
                         busArrivalDto.setCONGESTION(CONGESTION);
                     }
                     if (array.has("LASTBUSYN")) { //LASTBUSYN가 있다면
-                        Integer LASTBUSYN = itemList.getInt(Integer.parseInt("LASTBUSYN")); // 막차코드 (0:일반 1:막차)
+                        Integer LASTBUSYN = array.getInt("LASTBUSYN"); // 막차코드 (0:일반 1:막차)
                         busArrivalDto.setLASTBUSYN(LASTBUSYN);
                     }
                     busArrivalDto.setROUTEID(ROUTEID);
