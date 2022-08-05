@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class BusArrivalDto {
+    // 버스 도착예정
     private Integer ROUTEID; // 노선 ID(버스 노선 고유번호)
     private Integer BUSID; // 버스 ID(차량 고유번호)
     private String BUS_NUM_PLATE; // 차량 번호
