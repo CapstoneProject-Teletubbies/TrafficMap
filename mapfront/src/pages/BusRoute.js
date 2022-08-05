@@ -37,8 +37,7 @@ function BusRoute(){
 
     const handlefbutton = () => {
         var sec = document.querySelector('#test');
-        var test1 = sec.offsetTop;
-        console.log(test1);
+        window.scrollTo({top: 0, behavior: "smooth"});
         console.log("fbutotn");
     }
     const handlebbutton = () => {
@@ -68,7 +67,7 @@ function BusRoute(){
 
     return(
         <main>
-            <div className="busname" style={{position: "relative"}}>  
+            <div className="busname" >  
             <div className="container row" style={{height: "100%"}}>  
                 <div className="col-2 align-middle" style={{position: "absolute", margin: "10px", padding: "0px"}}>
                     <i
@@ -82,7 +81,7 @@ function BusRoute(){
                     <h2>{busInfo.routeno}</h2>
                 </div>   
             </div>
-            <div className="busdirection" style={{position: "relative", width: "100%"}}>
+            <div className="busdirection" style={{width: "100%"}}>
                 <div className="row" style={{position: "absolute" , width: "100%", height:"100%", margin: "0px", padding: "1px"}}>
                     <div className="col-6" style={{ position: "relative", padding: "0px", overflow: "hidden", textOverflow: "ellipsis"}}>
                         <button type="button" class="btn btn-outline-dark" style={{width: "100%", height: "100%", borderRadius: "1px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}} onClick={handlefbutton}>{busInfo.turn_BSTOPNM} 방면</button>                     
@@ -92,7 +91,7 @@ function BusRoute(){
                     </div>
                 </div>
             </div>
-            <div id="test" className="body" style={{position: "relative", top: "1px"}}>
+            <div id="test" className="bbody">
                 <div className="row" style={{margin: "0px", padding: "0px"}}>
                     {/* <div className="col-3" style={{backgroundColor: "white", borderRadius: "3px"}}>
 
