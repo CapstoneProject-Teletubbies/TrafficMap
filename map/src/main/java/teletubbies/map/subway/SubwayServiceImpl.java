@@ -66,7 +66,8 @@ public class SubwayServiceImpl implements SubwayService {
 
         if (realtimeArrivalList == null) { // 결과가 없으면 null 처리
             return null;
-        } else {
+        }
+        else {
             List<SubwayDto> dtos = new ArrayList<>();
             for (int i = 0; i < realtimeArrivalList.size(); i++) { //받아올 데이터 개수만큼 반복
 

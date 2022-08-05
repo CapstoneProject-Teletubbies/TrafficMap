@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class BusRouteDetailDto {
+    //버스노선 상세정보
     private Integer ROUTEID; // 버스 노선 고유번호
     private Object ROUTENO; // 노선 명
     private Integer ROUTETPCD; // 노선유형코드 [1:지선형, 2:간선형, 3:좌석형, 4:광역형, 5:리무진, 6:마을버스, 7:순환형, 8:급행간선, 9:지선(순환)]
