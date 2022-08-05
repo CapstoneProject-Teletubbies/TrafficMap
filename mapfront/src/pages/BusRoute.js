@@ -40,6 +40,7 @@ function BusRoute(){
         window.scrollTo({top: 0, behavior: "smooth"});
         console.log("fbutotn");
     }
+
     const handlebbutton = () => {
 
     }
@@ -67,9 +68,9 @@ function BusRoute(){
 
     return(
         <main>
-            <div className="busname" >  
-            <div className="container row" style={{height: "100%"}}>  
-                <div className="col-2 align-middle" style={{position: "absolute", margin: "10px", padding: "0px"}}>
+            <div className="busname" style={{width: "100%", display: "flex"}} >  
+            <div className="row" style={{width: "100%", height: "100%", display: "flex", margin: "0px"}}>  
+                <div className="col-2 align-middle" style={{position: "absolute", padding: "0px"}}>
                     <i
                     class="bi bi-arrow-left-circle"
                     style={{ fontSize: "2.2rem", }}

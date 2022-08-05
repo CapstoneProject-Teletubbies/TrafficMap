@@ -38,7 +38,7 @@ main{
     float: right;
 }
 ::-webkit-scrollbar{
-    /* display: none; */
+    display: none;
 }
 .reload-bus{
     position: fixed;
