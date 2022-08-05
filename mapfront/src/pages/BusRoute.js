@@ -73,41 +73,41 @@ function BusRoute(){
                     <h2>{busInfo.routeno}</h2>
                 </div>   
             </div>
-            <div className="busdirection" style={{position: "relative"}}>
-
-                <div className="container row" style={{position: "absolute" , height:"100%", margin: "0px", padding: "1px"}}>
+            <div className="busdirection" style={{position: "relative", width: "100%"}}>
+                <div className="row" style={{position: "absolute" , width: "100%", height:"100%", margin: "0px", padding: "1px"}}>
                     <div className="col-6" style={{ position: "relative", padding: "0px", }}>
-                        <button type="button" class="btn btn-outline-dark" style={{width: "100%", height: "100%", borderRadius: "1px" }}>{busInfo.turn_BSTOPNM}</button>
-                        
-                    </div>
-                    
+                        <button type="button" class="btn btn-outline-dark" style={{width: "100%", height: "100%", borderRadius: "1px", }}>{busInfo.turn_BSTOPNM}</button>                     
+                    </div>                 
                     <div className="col-6" style={{ position: "relative", padding: "0px",  }}>
-                    <button type="button" class="btn btn-outline-dark" style={{width: "100%", height: "100%", borderRadius: "1px"}}>{busInfo.origin_BSTOPNM}</button>
-                      
+                    <button type="button" class="btn btn-outline-dark" style={{width: "100%", height: "100%", borderRadius: "1px"}}>{busInfo.origin_BSTOPNM}</button>    
                     </div>
                 </div>
             </div>
-            <div className="body">
-                <div className="list-group">
-                    {isitbus && busInfo && busRoute && busRoute.map((obj, index)=>{
-                        var isit;
-                        var bus = undefined;
-                        for(var i = 0; i < reallocation.length; i++){
-                            if(reallocation[i].latest_STOP_ID === obj.bstopid && reallocation[i].dircd === obj.dircd){
-                                isit = true;  
-                                bus = i;
-                                break;
-                            }
-                            else{
-                                isit = false;
-                            }     
-                        }
-                        return(
-                            <BusRouteList businfo={reallocation[bus]} isit={isit} bstopnm={obj.bstopnm} sbstopid={obj.short_BSTOPID}></BusRouteList>
-                        )
-                    })}
+            <div className="body" style={{position: "relative", top: "1px"}}>
+                <div className="row" style={{margin: "0px", padding: "0px"}}>
+                    <div className="col-3" style={{backgroundColor: "white", borderRadius: "3px"}}>
 
-                    
+                    </div>
+                    <div className="list-group col-9" style={{padding: "0px"}}>
+                        {isitbus && busInfo && busRoute && busRoute.map((obj, index)=>{
+                            var isit;
+                            var bus = undefined;
+                            for(var i = 0; i < reallocation.length; i++){
+                                if(reallocation[i].latest_STOP_ID === obj.bstopid && reallocation[i].dircd === obj.dircd){
+                                    isit = true;  
+                                    bus = i;
+                                    break;
+                                }
+                                else{
+                                    isit = false;
+                                }     
+                            }
+                            return(
+                                <BusRouteList businfo={reallocation[bus]} isit={isit} bstopnm={obj.bstopnm} sbstopid={obj.short_BSTOPID}></BusRouteList>
+                            )
+                        })}
+              
+                    </div>
                 </div>
                 <div className="reload-bus">
                     <button type="button" class="btn btn-large btn-outline-dark" style={{ width: "50px", height: "50px", textAlign: "center", padding: "0px" }} onClick={realtimeBus}><i class="bi bi-arrow-repeat" style={{ fontSize: "30px",}}></i></button>
