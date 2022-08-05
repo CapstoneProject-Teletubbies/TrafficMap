@@ -9,6 +9,7 @@ import '../css/BusRoute.css'
 import {useLocation} from 'react-router';
 import { useNavigate } from "react-router-dom";
 import refresh from "../images/refresh.png"
+import { ModalBody } from 'react-bootstrap';
 
 function BusRoute(){
     const location = useLocation();
@@ -27,14 +28,22 @@ function BusRoute(){
     useEffect(() => {                               //받아온 버스 정보 버스 노선 정보, 버스 실시간 위치 정보
         setBusRoute(location.state.busroute);
         setBusInfo(location.state.props);
-        console.log(busInfo);
     })
-
     useEffect(()=>{             
         if(busInfo){
             realtimeBus();
         }
     }, [busInfo]);
+
+    const handlefbutton = () => {
+        window.scrollTo(0, 0);
+
+        
+        console.log("fbutotn");
+    }
+    const handlebbutton = () => {
+
+    }
 
     const realtimeBus = () => {
         const buslocation = axios.create({
@@ -75,20 +84,20 @@ function BusRoute(){
             </div>
             <div className="busdirection" style={{position: "relative", width: "100%"}}>
                 <div className="row" style={{position: "absolute" , width: "100%", height:"100%", margin: "0px", padding: "1px"}}>
-                    <div className="col-6" style={{ position: "relative", padding: "0px", }}>
-                        <button type="button" class="btn btn-outline-dark" style={{width: "100%", height: "100%", borderRadius: "1px", }}>{busInfo.turn_BSTOPNM}</button>                     
+                    <div className="col-6" style={{ position: "relative", padding: "0px", overflow: "hidden", textOverflow: "ellipsis"}}>
+                        <button type="button" class="btn btn-outline-dark" style={{width: "100%", height: "100%", borderRadius: "1px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}} onClick={handlefbutton}>{busInfo.turn_BSTOPNM} 방면</button>                     
                     </div>                 
-                    <div className="col-6" style={{ position: "relative", padding: "0px",  }}>
-                    <button type="button" class="btn btn-outline-dark" style={{width: "100%", height: "100%", borderRadius: "1px"}}>{busInfo.origin_BSTOPNM}</button>    
+                    <div className="col-6" style={{ position: "relative", padding: "0px", textOverflow: "ellipsis"}}>
+                    <button type="button" class="btn btn-outline-dark" style={{width: "100%", height: "100%", whiteSpace: "nowrap", overflow: "hidden", borderRadius: "1px", overflow: "hidden", textOverflow: "ellipsis"}} onClick={handlebbutton}>{busInfo.origin_BSTOPNM} 방면</button>    
                     </div>
                 </div>
             </div>
             <div className="body" style={{position: "relative", top: "1px"}}>
                 <div className="row" style={{margin: "0px", padding: "0px"}}>
-                    <div className="col-3" style={{backgroundColor: "white", borderRadius: "3px"}}>
+                    {/* <div className="col-3" style={{backgroundColor: "white", borderRadius: "3px"}}>
 
-                    </div>
-                    <div className="list-group col-9" style={{padding: "0px"}}>
+                    </div> */}
+                    <div className="list-group " style={{padding: "0px"}}>
                         {isitbus && busInfo && busRoute && busRoute.map((obj, index)=>{
                             var isit;
                             var bus = undefined;
@@ -103,7 +112,7 @@ function BusRoute(){
                                 }     
                             }
                             return(
-                                <BusRouteList businfo={reallocation[bus]} isit={isit} bstopnm={obj.bstopnm} sbstopid={obj.short_BSTOPID}></BusRouteList>
+                                <BusRouteList businfo={reallocation[bus]} isit={isit} bstopnm={obj.bstopnm} bstopid={obj.bstopid} sbstopid={obj.short_BSTOPID} turn={busInfo.turn_BSTOPID}></BusRouteList>
                             )
                         })}
               
