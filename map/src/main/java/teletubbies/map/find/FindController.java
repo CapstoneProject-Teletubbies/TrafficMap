@@ -50,6 +50,7 @@ public class FindController {
 //    @GetMapping("/find/incheonElevator")
     @RequestMapping(value="/find/incheonElevator", method = {RequestMethod.POST})
     public List<ElevatorDto> ElavatorsByAPI() { // 엘리베이터 위치 가져올 엘리베이터 api
+
         return findService.findElevators();
     }
 }

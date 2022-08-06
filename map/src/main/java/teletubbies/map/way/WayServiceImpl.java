@@ -5,11 +5,18 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
+
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,25 +57,24 @@ public class WayServiceImpl implements WayService {
         JSONArray features = (JSONArray) object.get("features");
 
         List<WayDto> dtos = new ArrayList<>();
-        for(int i=0; i<features.size(); i++) {
-            JSONObject array = (JSONObject)features.get(i);
-            JSONObject geometry = (JSONObject)array.get("geometry");
-            JSONObject properties = (JSONObject)array.get("properties");
+        for (int i = 0; i < features.size(); i++) {
+            JSONObject array = (JSONObject) features.get(i);
+            JSONObject geometry = (JSONObject) array.get("geometry");
+            JSONObject properties = (JSONObject) array.get("properties");
             WayDto wayDto = new WayDto();
 
             // 좌표 배열 자르기
             JSONArray coordinates = (JSONArray) geometry.get("coordinates");
-            for(int j=0; j<coordinates.size(); j++) {
+            for (int j = 0; j < coordinates.size(); j++) {
                 if (geometry.get("type").equals("Point") && coordinates.get(j).getClass().getName() == "java.lang.Double") { // [경도,위도] 이런 경우
                     Double array1 = (Double) coordinates.get(j);
                     wayDto.setPointLongitude(array1);
 //                    System.out.println("PointLongitude() = " + wayDto.getPointLongitude());
                     j += 1;
-                    wayDto.setPointLatitude((Double)coordinates.get(j));
+                    wayDto.setPointLatitude((Double) coordinates.get(j));
 //                    System.out.println("PointLatitude() = " + wayDto.getPointLatitude());
                     continue;
-                }
-                else if (geometry.get("type").equals("LineString") && coordinates.get(j).getClass().getName() == "org.json.simple.JSONArray") { // 배열 안에 배열 있을 경우
+                } else if (geometry.get("type").equals("LineString") && coordinates.get(j).getClass().getName() == "org.json.simple.JSONArray") { // 배열 안에 배열 있을 경우
                     System.out.println("j = " + j);
                     //JSONArray lArray = (JSONArray) coordinates.get(j); // 배열을 다시 자르기 위해 필요
                     System.out.println(coordinates);
@@ -89,8 +95,8 @@ public class WayServiceImpl implements WayService {
             }
 
             // properties 안의 value들 얻기
-            if(geometry.get("type").equals("Point")) { // point(안내지점)
-                if(i==0) {
+            if (geometry.get("type").equals("Point")) { // point(안내지점)
+                if (i == 0) {
                     Number totalDistance = (Number) properties.get("totalDistance"); // 총 거리
                     Number totalTime = (Number) properties.get("totalTime"); // 총 소요시간
                     wayDto.setTotalDistance(totalDistance);
@@ -106,8 +112,7 @@ public class WayServiceImpl implements WayService {
                 wayDto.setTurnType(turnType);
                 wayDto.setPointType(pointType);
                 wayDto.setPointFacilityType(facilityType);
-            }
-            else { // line(구간)
+            } else { // line(구간)
                 Long lineIndex = (Long) properties.get("lineIndex"); // 구간 순번
                 String description = (String) properties.get("description"); // 길 안내 정보
                 Number distance = (Number) properties.get("distance"); // 구간거리
@@ -124,6 +129,26 @@ public class WayServiceImpl implements WayService {
             dtos.add(i, wayDto);
         }
         return dtos;
+    }
+
+    // 테스트 중!!!!
+    @SneakyThrows
+    public String findTransWay(String sName, String eName) { // 카카오 대중교통 길찾기 연결
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders(); //헤더
+        restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 한글깨짐 방지
+
+        String encodedsName = URLEncoder.encode(sName, "UTF-8");
+        String encodedeName = URLEncoder.encode(eName, "UTF-8");
+
+        //URI 생성
+        UriComponents uri = UriComponentsBuilder
+                .fromUriString("https://map.kakao.com/")
+                .queryParam("sName", encodedsName) //시작 경도
+                .queryParam("eName", encodedeName) // 시작 위도
+                .build(true);
+
+        return uri.toUriString();
     }
 }
 
