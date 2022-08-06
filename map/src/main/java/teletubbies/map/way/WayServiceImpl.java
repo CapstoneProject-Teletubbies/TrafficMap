@@ -5,18 +5,14 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +20,11 @@ import java.util.List;
 public class WayServiceImpl implements WayService {
     @Value("${TMAP_URL}")
     private String tmap_way_url; // 티맵 URL
-
     @Value("${TMAP_APPKEY}")
     private String tmap_apikey; // 티맵 API KEY
+
+    @Value("${KAKAO_URL}")
+    private String kakao_url; // 카카오맵 URL
 
     @SneakyThrows
     public List<WayDto> findWay(double startX, double startY, double endX, double endY, String startName, String endName) { // 티맵 도보 길찾기
@@ -134,16 +132,12 @@ public class WayServiceImpl implements WayService {
     // 테스트 중!!!!
     @SneakyThrows
     public String findTransWay(String sName, String eName) { // 카카오 대중교통 길찾기 연결
-        RestTemplate restTemplate = new RestTemplate();
-        HttpHeaders headers = new HttpHeaders(); //헤더
-        restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 한글깨짐 방지
-
         String encodedsName = URLEncoder.encode(sName, "UTF-8");
         String encodedeName = URLEncoder.encode(eName, "UTF-8");
 
         //URI 생성
         UriComponents uri = UriComponentsBuilder
-                .fromUriString("https://map.kakao.com/")
+                .fromUriString(kakao_url)
                 .queryParam("sName", encodedsName) //시작 경도
                 .queryParam("eName", encodedeName) // 시작 위도
                 .build(true);
