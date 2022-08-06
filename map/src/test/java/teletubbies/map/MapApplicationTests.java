@@ -215,7 +215,7 @@ class MapApplicationTests {
 
 		//Client client = new Client("http://openapi.elevator.go.kr/openapi/service/ElevatorOperationService");
 
-		Flux<String> response=fetchElevator(adds);
+		//Flux<String> response=fetchElevator(adds);
 
 
 
@@ -225,7 +225,7 @@ class MapApplicationTests {
 
 		//response.blockLast();
 
-		List<String> result = response.collectList().block();
+		List<String> result = fetchElevator(adds).collectList().block();
 
 		long end = System.currentTimeMillis();
 		System.out.println("걸리는 시간 : " + (end - start)/1000.0);

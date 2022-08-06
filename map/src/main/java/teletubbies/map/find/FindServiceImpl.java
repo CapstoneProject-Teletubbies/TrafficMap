@@ -14,10 +14,15 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.publisher.ParallelFlux;
+import reactor.core.scheduler.Schedulers;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -135,6 +140,9 @@ public class FindServiceImpl implements FindService {
      */
     @SneakyThrows
     public List<FindDto> findAddressByTmapAPI(String FindName, double longitude, double latitude) { // 티맵 api (통합검색(명칭검색))
+
+        long start2 = System.currentTimeMillis();
+        long start0 = System.currentTimeMillis();
         DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(tmap_url);
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
 
@@ -158,7 +166,8 @@ public class FindServiceImpl implements FindService {
                 .toEntity(String.class)
 //                .bodyToMono(String.class);
                 .block();
-
+        long end2 = System.currentTimeMillis();
+        System.out.println("용의자 시간 : "+(end2-start2)/1000.0);
         if (result.getBody() != null) {
             //받아온 JSON 데이터 가공
             //json parser
@@ -173,9 +182,42 @@ public class FindServiceImpl implements FindService {
 
             List<FindDto> dtos = new ArrayList<>(); //리스트에 담을 dtos 선언
 
+            List<ElevatorOrderDto> ele = new ArrayList<>();
+
+            for(int i = 0 ; i<poiArr.size();i++){
+                ElevatorOrderDto elevatorOrderDto = new ElevatorOrderDto();
+                FindDto findDto = new FindDto();
+                object = (JSONObject) poiArr.get(i);
+                String middleAddrName = (String) object.get("middleAddrName"); // 도로명주소 ㅇㅇ로
+                String roadName = (String) object.get("roadName"); // 도로명주소 ㅇㅇ로
+                String firstBuildNo = (String) object.get("firstBuildNo"); //건물번호1
+                findDto.setMiddleAddrName(middleAddrName);
+                findDto.setRoadName(roadName);
+                findDto.setFirstBuildNo(firstBuildNo);
+
+                String addr = middleAddrName + " " + roadName + " " + firstBuildNo;
+
+                String encodedAddr = URLEncoder.encode(addr,"UTF-8");
+
+                elevatorOrderDto.setAddress(encodedAddr);
+                elevatorOrderDto.setOrder(i);
+
+                ele.add(i,elevatorOrderDto);
+            }
+
+
+
+            List<String> elevatorResult = new ArrayList<>();
+            long start1 = System.currentTimeMillis();
+            elevatorResult = findElevatorByAPI(ele);
+            long end1 = System.currentTimeMillis();
+            System.out.println("엘레베이터만 걸리는 시간 : "+(end1-start1)/1000.0);
+
+
+
             //다시 poi의 value를 받아온 배열을 개수만큼 담기 (검색했을 때 출력하는 리스트 최대 10개)
             for (int i = 0; i < poiArr.size(); i++) {
-                long start1 = System.currentTimeMillis();
+
                 FindDto findDto = new FindDto();
                 object = (JSONObject) poiArr.get(i);
 
@@ -212,19 +254,60 @@ public class FindServiceImpl implements FindService {
                  * 엘리베이터 받는 부분
                  */
 //                findDto.setElevatorState(findElevatorByAPI(addr));
+                findDto.setElevatorState(elevatorResult.get(i));
 
                 dtos.add(i, findDto);
-                long end1 = System.currentTimeMillis();
-                System.out.println(i + "번째 하나 생성에 걸리는 시간 : " + (end1 - start1) / 1000.0);
+
             }
+
+            long end0 = System.currentTimeMillis();
+            System.out.println("총 시간 : " + (end0 - start0) / 1000.0);
             return dtos;
         } else {
             return null;
         }
     }
 
+
     @SneakyThrows
-    public String findElevatorByAPI(String address) {
+    public List<String> findElevatorByAPI(List<ElevatorOrderDto> ele){
+
+        long start = System.currentTimeMillis();
+
+        List<String> responseResult = fetchElevator(ele).collectSortedList(Comparator.naturalOrder()).block();
+
+        long end = System.currentTimeMillis();
+
+        List<String> result = new ArrayList<>();
+
+        for(int i = 0; i<ele.size();i++){
+
+            org.json.JSONObject object = XML.toJSONObject(responseResult.get(i));
+            org.json.JSONObject response = (org.json.JSONObject) object.get("response");
+            org.json.JSONObject body = (org.json.JSONObject) response.get("body");
+
+            if (body.get("items").equals("")) { // 엘리베이터가 없으면 body":{"items":"","numOfRows":,"pageNo":,"totalCount":} 이런식으로 반환
+                String elvtrSttsNm = "x";
+                //return elvtrSttsNm;
+                result.add(elvtrSttsNm);
+            } else {
+                org.json.JSONObject items = (org.json.JSONObject) body.get("items");
+                //item value들
+                org.json.JSONObject item = (org.json.JSONObject) items.get("item");
+                //필요한 엘리베이터 정보 받아오기
+                String elvtrSttsNm = (String) item.get("elvtrSttsNm");
+                //return elvtrSttsNm;
+                result.add(elvtrSttsNm);
+            }
+        }
+
+        return result;
+
+    }
+
+/*
+    @SneakyThrows
+    public List<String> findElevatorByAPI(List<ElevatorOrderDto> ele) {
         DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(elevator_url);
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
 
@@ -265,7 +348,7 @@ public class FindServiceImpl implements FindService {
         }
     }
 
-
+*/
     //계단 api
     @SneakyThrows
     public List<StairDto> findStairs() {
@@ -389,6 +472,37 @@ public class FindServiceImpl implements FindService {
             return null;
         }
     }
+
+    public Mono<String> getEle(ElevatorOrderDto ele) {
+
+        DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory("http://openapi.elevator.go.kr/openapi/service/ElevatorOperationService");
+        factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
+        WebClient wc = WebClient.builder().uriBuilderFactory(factory).baseUrl("http://openapi.elevator.go.kr/openapi/service/ElevatorOperationService").build();
+
+        //String encodedName = URLEncoder.encode(address,"UTF-8");
+
+        return wc.get()
+                .uri(uriBuilder -> uriBuilder.path("/getOperationInfoList")
+                        .queryParam("serviceKey",elevator_apikey)
+                        .queryParam("buld_address",ele.getAddress()) //모다 부평점
+                        .queryParam("numOfRows",1) // 1개만 출력
+                        .queryParam("pageNo",1).build())
+                .retrieve().bodyToMono(String.class);
+
+    }
+
+    public ParallelFlux<String> fetchElevator(List<ElevatorOrderDto> adds) throws Exception{
+
+        ParallelFlux<String> result = Flux.fromIterable(adds)
+                .sort((obj1,obj2)-> obj1.getOrder().compareTo(obj2.getOrder()))
+                .parallel()
+                .runOn(Schedulers.parallel())
+                .flatMap(this::getEle)
+                ;
+
+        return result;
+    }
+
 }
 
 /**
