@@ -18,11 +18,11 @@ public class FindController {
     private FindServiceImpl findService;
     //(티맵) 명칭(POI) 통합 검색, 엘리베이터 검색을 위한 API 컨트롤러
 //    @RequestMapping(value="/find/address", method = {RequestMethod.POST})
-//    @GetMapping("/find/address")
-    public List<FindDto> FindByAPI(String keyword, double longitude, double latitude) {
-//        String keyword = "스타벅스 부평";
-//        double longitude = 127.108212;
-//        double latitude = 37.402056;
+    @GetMapping("/find/address")
+    public List<FindDto> FindByAPI(){//String keyword, double longitude, double latitude) {
+        String keyword = "스타벅스 부평";
+        double longitude = 127.108212;
+        double latitude = 37.402056;
 //        String keyword = "모다백화점";
 //        String address = "부평구 부평문화로 35";
 //        String address = "부평구 경원대로 1397";

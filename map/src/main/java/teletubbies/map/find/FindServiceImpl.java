@@ -19,11 +19,10 @@ import reactor.core.publisher.Mono;
 import reactor.core.publisher.ParallelFlux;
 import reactor.core.scheduler.Schedulers;
 
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class FindServiceImpl implements FindService {
@@ -207,7 +206,7 @@ public class FindServiceImpl implements FindService {
 
 
 
-            List<String> elevatorResult = new ArrayList<>();
+            Map<Integer,String> elevatorResult = new HashMap<>();
             long start1 = System.currentTimeMillis();
             elevatorResult = findElevatorByAPI(ele);
             long end1 = System.currentTimeMillis();
@@ -270,16 +269,60 @@ public class FindServiceImpl implements FindService {
 
 
     @SneakyThrows
-    public List<String> findElevatorByAPI(List<ElevatorOrderDto> ele){
+    public Map<Integer,String> findElevatorByAPI(List<ElevatorOrderDto> ele){
 
         long start = System.currentTimeMillis();
 
-        List<String> responseResult = fetchElevator(ele).collectSortedList(Comparator.naturalOrder()).block();
+        List<String> responseResult = fetchElevator(ele).collectSortedList(Comparator.reverseOrder()).block();
 
+//        for (int i=0; i<ele.size();i++) {
+//            System.out.println(responseResult.get(i));
+//        }
         long end = System.currentTimeMillis();
 
-        List<String> result = new ArrayList<>();
+        //List<String> result = new ArrayList<>();
 
+        Map<Integer,String> result= new HashMap<Integer,String>();
+        Map<String,String> map = new HashMap<>();
+
+        for(int i = 0; i<ele.size();i++){
+
+            org.json.JSONObject object = XML.toJSONObject(responseResult.get(i));
+            org.json.JSONObject response = (org.json.JSONObject) object.get("response");
+            org.json.JSONObject body = (org.json.JSONObject) response.get("body");
+
+            if (!(body.get("items").equals(""))) { // 엘리베이터가 없으면 body":{"items":"","numOfRows":,"pageNo":,"totalCount":} 이런식으로 반환
+                org.json.JSONObject items = (org.json.JSONObject) body.get("items");
+                //item value들
+                org.json.JSONObject item = (org.json.JSONObject) items.get("item");
+                //필요한 엘리베이터 정보 받아오기
+                String elvtrSttsNm = (String) item.get("elvtrSttsNm");
+                //return elvtrSttsNm;
+                String addr = (String) item.get("address1");
+                //String encodedAddr = URLEncoder.encode(addr,"UTF-8");
+                map.put(addr,elvtrSttsNm);
+            }
+        }
+
+        //System.out.println(map);
+        //System.out.println(ele);
+
+        for(int i = 0; i<ele.size();i++){
+            String decodedAddr = URLDecoder.decode(ele.get(i).getAddress());
+            String elevator = map.get("인천광역시 "+decodedAddr);
+            System.out.println(decodedAddr);
+            if(elevator==null){
+                result.put(ele.get(i).getOrder(),"x");
+            }else{
+                result.put(ele.get(i).getOrder(),elevator);
+            }
+
+        }
+
+        return result;
+
+
+/*
         for(int i = 0; i<ele.size();i++){
 
             org.json.JSONObject object = XML.toJSONObject(responseResult.get(i));
@@ -302,6 +345,9 @@ public class FindServiceImpl implements FindService {
         }
 
         return result;
+*/
+
+
 
     }
 
@@ -494,7 +540,7 @@ public class FindServiceImpl implements FindService {
     public ParallelFlux<String> fetchElevator(List<ElevatorOrderDto> adds) throws Exception{
 
         ParallelFlux<String> result = Flux.fromIterable(adds)
-                .sort((obj1,obj2)-> obj1.getOrder().compareTo(obj2.getOrder()))
+                //.sort((obj1,obj2)-> obj1.getOrder().compareTo(obj2.getOrder()))
                 .parallel()
                 .runOn(Schedulers.parallel())
                 .flatMap(this::getEle)
