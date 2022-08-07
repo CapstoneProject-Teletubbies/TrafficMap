@@ -27,7 +27,7 @@ public class WayServiceImpl implements WayService {
     private String kakao_url; // 카카오맵 URL
 
     @SneakyThrows
-    public List<WayDto> findWay(double startX, double startY, double endX, double endY, String startName, String endName) { // 티맵 도보 길찾기
+    public List<WayDto> findWay(double startX, double startY, double endX, double endY, String startName, String endName,Number option) { // 티맵 도보 길찾기
         DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(tmap_way_url);
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
 
@@ -44,6 +44,9 @@ public class WayServiceImpl implements WayService {
                         .queryParam("endY", endY) // 끝 위도
                         .queryParam("startName", encodedStartName) // 출발지 이름
                         .queryParam("endName", encodedEndName) // 도착지 이름
+                        .queryParam("searchOption", option) // 경로 탐색 옵션
+                        // 0:추천(기본값) / 4:추천+대로우선 / 10:최단 / 30: 최단거리+계단제외
+                        // -> 10, 30에서 org.springframework.core.io.buffer.DataBufferLimitException: Exceeded limit on max bytes to buffer : 262144 에러 발생, 수정해야함
                         .queryParam("appKey", tmap_apikey) // api appKey
                         .build())
                 .retrieve() //response 불러옴

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.net.URLEncoder;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
@@ -17,7 +18,7 @@ public class WayController {
 
 //    @GetMapping("/way")
     @RequestMapping(value="/way", method = {RequestMethod.POST})
-    public Object FindWay(double startX, double startY, double endX, double endY,String startName, String endName) {
+    public List<WayDto> FindWay(double startX, double startY, double endX, double endY, String startName, String endName, Number option) {
         //테스트용
 //        double startX = 127.108212;
 //        double startY = 37.402056;
@@ -25,7 +26,8 @@ public class WayController {
 //        double endX = 126.72449073;
 //        String startName = "카카오판교오피스";
 //        String endName = "스타벅스부평";
-        return wayService.findWay(startX, startY, endX, endY, startName, endName);
+//        Number option = 0;
+        return wayService.findWay(startX, startY, endX, endY, startName, endName, option);
     }
 
     @RequestMapping(value="way/trans", method = {RequestMethod.POST})
