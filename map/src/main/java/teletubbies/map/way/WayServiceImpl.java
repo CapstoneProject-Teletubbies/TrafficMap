@@ -7,6 +7,7 @@ import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriComponents;
@@ -31,10 +32,18 @@ public class WayServiceImpl implements WayService {
         DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(tmap_way_url);
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
 
-        WebClient wc = WebClient.builder().uriBuilderFactory(factory).baseUrl(tmap_way_url).build();
+
+        ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()
+                .codecs(configurer -> configurer.defaultCodecs().maxInMemorySize(-1)) // memory size를 제한없음으로 바꿈
+                .build();
+
+//        WebClient wc = WebClient.builder().uriBuilderFactory(factory).baseUrl(tmap_way_url).build();
+        WebClient wc = WebClient.builder().uriBuilderFactory(factory).baseUrl(tmap_way_url).exchangeStrategies(exchangeStrategies).build();
+
 
         String encodedStartName = URLEncoder.encode(startName, "UTF-8");
         String encodedEndName = URLEncoder.encode(endName, "UTF-8");
+
 
         ResponseEntity<String> result = wc.get()
                 .uri(uriBuilder -> uriBuilder.path("/tmap/routes/pedestrian")
@@ -46,12 +55,12 @@ public class WayServiceImpl implements WayService {
                         .queryParam("endName", encodedEndName) // 도착지 이름
                         .queryParam("searchOption", option) // 경로 탐색 옵션
                         // 0:추천(기본값) / 4:추천+대로우선 / 10:최단 / 30: 최단거리+계단제외
-                        // -> 10, 30에서 org.springframework.core.io.buffer.DataBufferLimitException: Exceeded limit on max bytes to buffer : 262144 에러 발생, 수정해야함
                         .queryParam("appKey", tmap_apikey) // api appKey
                         .build())
                 .retrieve() //response 불러옴
                 .toEntity(String.class)
                 .block();
+
 
         JSONParser parser = new JSONParser();
         JSONObject object = (JSONObject) parser.parse(result.getBody());
