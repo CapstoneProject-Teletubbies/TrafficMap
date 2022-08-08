@@ -48,6 +48,8 @@ public class BusServiceImpl implements BusService {
             return null;
         }
 
+        name =getBusStopName(name);
+
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders(); //헤더
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 한글깨짐 방지
@@ -629,4 +631,47 @@ public class BusServiceImpl implements BusService {
             return null;
         }
     }
+
+    public String getBusStopName(String str){
+        Pattern regex1 = Pattern.compile(" 버스정류장");
+        Pattern regex2 = Pattern.compile("버스정류장");
+        Pattern regex2_1 = Pattern.compile(" 버스 정류장");
+        Pattern regex3 = Pattern.compile(" 정류장");
+        Pattern regex4 = Pattern.compile("정류장");
+        Pattern regex5 = Pattern.compile(" 정류소");
+        Pattern regex6 = Pattern.compile("정류소");
+
+        Matcher regexMatcher1 = regex1.matcher(str);
+        Matcher regexMatcher2 = regex2.matcher(str);
+        Matcher regexMatcher2_1 = regex2_1.matcher(str);
+        Matcher regexMatcher3 = regex3.matcher(str);
+        Matcher regexMatcher4 = regex4.matcher(str);
+        Matcher regexMatcher5 = regex5.matcher(str);
+        Matcher regexMatcher6 = regex6.matcher(str);
+
+        String result = "";
+
+        if(regexMatcher1.find()){
+            String substring = str.substring(0, str.length() - 6);
+            result = substring;
+        }else if(regexMatcher2.find()){
+            String substring = str.substring(0, str.length() - 5);
+            result = substring;
+        }else if(regexMatcher2_1.find()){
+            String substring = str.substring(0, str.length() - 7);
+            result = substring;
+        }else if(regexMatcher3.find() | regexMatcher5.find()){
+            String substring = str.substring(0, str.length() - 4);
+            result = substring;
+        }else if(regexMatcher4.find() | regexMatcher6.find()){
+            String substring = str.substring(0, str.length() - 3);
+            result = substring;
+        }else{
+            return str;
+        }
+
+        return result;
+
+    }
+
 }

@@ -109,6 +109,68 @@ public class BusTest {
         System.out.println(str_busNum);
     }
 
+    @Test
+    void Str(){
+
+        String str = "테스트정류장";
+
+        //System.out.println(str.substring(0,str.length()-6));
+
+        /*
+        Pattern regex1 = Pattern.compile("버스");
+        Matcher regexMatcher1 = regex1.matcher(str_busNum);
+        if(regexMatcher1.find()){
+            result_count = 10;
+            Pattern regex = Pattern.compile("\\d+");
+            Matcher regexMatcher = regex.matcher(str_busNum);
+            if (regexMatcher.find()) {
+                str_busNum = regexMatcher.group();
+                busNum = str_busNum;
+            }
+        }
+         */
+
+        Pattern regex1 = Pattern.compile(" 버스정류장");
+        Pattern regex2 = Pattern.compile("버스정류장");
+        Pattern regex2_1 = Pattern.compile(" 버스 정류장");
+        Pattern regex3 = Pattern.compile(" 정류장");
+        Pattern regex4 = Pattern.compile("정류장");
+        Pattern regex5 = Pattern.compile(" 정류소");
+        Pattern regex6 = Pattern.compile("정류소");
+
+        Matcher regexMatcher1 = regex1.matcher(str);
+        Matcher regexMatcher2 = regex2.matcher(str);
+        Matcher regexMatcher2_1 = regex2_1.matcher(str);
+        Matcher regexMatcher3 = regex3.matcher(str);
+        Matcher regexMatcher4 = regex4.matcher(str);
+        Matcher regexMatcher5 = regex5.matcher(str);
+        Matcher regexMatcher6 = regex6.matcher(str);
+
+        String result = "";
+
+        if(regexMatcher1.find()){
+            String substring = str.substring(0, str.length() - 6);
+            result = substring;
+        }else if(regexMatcher2.find()){
+            String substring = str.substring(0, str.length() - 5);
+            result = substring;
+        }else if(regexMatcher2_1.find()){
+            String substring = str.substring(0, str.length() - 7);
+            result = substring;
+        }else if(regexMatcher3.find() | regexMatcher5.find()){
+            String substring = str.substring(0, str.length() - 4);
+            result = substring;
+        }else if(regexMatcher4.find() | regexMatcher6.find()){
+            String substring = str.substring(0, str.length() - 3);
+            result = substring;
+        }
+
+        System.out.println(result);
+
+
+    }
+
+
 /*
     @Autowired
     private BusServiceImpl busService;

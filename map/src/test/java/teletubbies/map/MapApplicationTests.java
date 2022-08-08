@@ -1,11 +1,13 @@
 package teletubbies.map;
 
+import ch.qos.logback.core.net.server.Client;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
 import org.junit.jupiter.api.Test;
 import org.junit.rules.Timeout;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.integration.IntegrationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +21,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import reactor.netty.http.client.HttpClient;
@@ -31,6 +34,7 @@ import java.net.URLEncoder;
 import java.time.Duration;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 class MapApplicationTests {
@@ -76,22 +80,57 @@ class MapApplicationTests {
 
 		String encodedName = URLEncoder.encode("인천광역시 부평구 부평문화로 35","UTF-8");
 
-		Mono<String> response = wc.get()
+		Mono<String> response1 = wc.get()
 				.uri(uriBuilder -> uriBuilder.path("/getOperationInfoList")
 						.queryParam("serviceKey",elevator_apikey)
 						.queryParam("buld_address",encodedName) //모다 부평점
 						.queryParam("numOfRows",1) // 1개만 출력
 						.queryParam("pageNo",1).build())
-				.retrieve().bodyToMono(String.class);//.block();
+				.retrieve().bodyToMono(String.class);
+
+
+		Mono<String> response2 = wc.get()
+				.uri(uriBuilder -> uriBuilder.path("/getOperationInfoList")
+						.queryParam("serviceKey",elevator_apikey)
+						.queryParam("buld_address",encodedName) //모다 부평점
+						.queryParam("numOfRows",1) // 1개만 출력
+						.queryParam("pageNo",1).build())
+				.retrieve().bodyToMono(String.class);
+
+		Mono<String> response3 = wc.get()
+				.uri(uriBuilder -> uriBuilder.path("/getOperationInfoList")
+						.queryParam("serviceKey",elevator_apikey)
+						.queryParam("buld_address",encodedName) //모다 부평점
+						.queryParam("numOfRows",1) // 1개만 출력
+						.queryParam("pageNo",1).build())
+				.retrieve().bodyToMono(String.class);
+
+		ArrayList<Mono> res = new ArrayList<>();
+		res.add(response1);
+		res.add(response2);
+		res.add(response3);
+
 		long end = System.currentTimeMillis();
 		System.out.println("걸리는 시간 : " + (end - start)/1000.0);
 
 		long start1 = System.currentTimeMillis();
-		response.subscribe( (data)->{
-			System.out.println(data);
-		});
-		long end1 = System.currentTimeMillis();
+		System.out.println((Mono.zip(response1,response2,response3).block()));
 
+		//Mono.zip
+
+
+
+		//objectArray ->
+		//                Arrays.stream(objectArray)
+		//                        .map(object -> yourMapperFunction(object))
+		//                        .collect(Collectors.toList())
+
+		/*System.out.println((Mono.zip(res, objectArray ->
+				Arrays.stream(objectArray)
+						.map(object -> res.get(i)).block()));
+*/
+
+		long end1 = System.currentTimeMillis();
 		System.out.println("걸리는 시간 : " + (end1 - start1)/1000.0);
 
 		/*
@@ -104,12 +143,153 @@ class MapApplicationTests {
 						.queryParam("pageNo",1)
 						.build()
 				);
-
 		System.out.println(mono);*/
 
 
 
 	}
+
+
+
+	public Mono<String> getEle(String address) {
+
+		DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory("http://openapi.elevator.go.kr/openapi/service/ElevatorOperationService");
+		factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
+		WebClient wc = WebClient.builder().uriBuilderFactory(factory).baseUrl("http://openapi.elevator.go.kr/openapi/service/ElevatorOperationService").build();
+
+		//String encodedName = URLEncoder.encode(address,"UTF-8");
+
+		return wc.get()
+				.uri(uriBuilder -> uriBuilder.path("/getOperationInfoList")
+						.queryParam("serviceKey",elevator_apikey)
+						.queryParam("buld_address",address) //모다 부평점
+						.queryParam("numOfRows",1) // 1개만 출력
+						.queryParam("pageNo",1).build())
+				.retrieve().bodyToMono(String.class);
+
+	}
+
+	public Flux<String> fetchElevator(List<String> adds) throws Exception{
+
+
+
+		Flux<String> result = Flux.fromIterable(adds)
+				.parallel()
+				.runOn(Schedulers.parallel())
+				.flatMap(this::getEle)
+				.ordered((u1,u2)-> u2.compareTo(u1));
+		return result;
+	}
+
+	@Test
+	public void Elevator() throws Exception {
+
+		List<String> adds = new ArrayList<>();
+
+		String encodedName1 = URLEncoder.encode("인천광역시 부평구 부평문화로 35","UTF-8");
+		String encodedName2 = URLEncoder.encode("인천광역시 부평구 부평문화로 35","UTF-8");
+		String encodedName3 = URLEncoder.encode("인천광역시 부평구 부평문화로 35","UTF-8");
+		String encodedName4 = URLEncoder.encode("인천광역시 부평구 부평문화로 35","UTF-8");
+		String encodedName5 = URLEncoder.encode("인천광역시 부평구 부평문화로 35","UTF-8");
+		String encodedName6 = URLEncoder.encode("인천광역시 부평구 부평문화로 35","UTF-8");
+		String encodedName7 = URLEncoder.encode("인천광역시 부평구 부평문화로 35","UTF-8");
+		String encodedName8 = URLEncoder.encode("인천광역시 부평구 부평문화로 35","UTF-8");
+		String encodedName9 = URLEncoder.encode("인천광역시 부평구 부평문화로 35","UTF-8");
+		String encodedName10 = URLEncoder.encode("인천광역시 부평구 부평문화로 35","UTF-8");
+
+		adds.add(encodedName1);
+		adds.add(encodedName2);
+		adds.add(encodedName3);
+		adds.add(encodedName4);
+		adds.add(encodedName5);
+		adds.add(encodedName6);
+		adds.add(encodedName7);
+		adds.add(encodedName8);
+		adds.add(encodedName9);
+		adds.add(encodedName10);
+
+
+		DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory("http://openapi.elevator.go.kr/openapi/service/ElevatorOperationService");
+		factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
+		WebClient wc = WebClient.builder().uriBuilderFactory(factory).baseUrl("http://openapi.elevator.go.kr/openapi/service/ElevatorOperationService").build();
+
+		//Client client = new Client("http://openapi.elevator.go.kr/openapi/service/ElevatorOperationService");
+
+		//Flux<String> response=fetchElevator(adds);
+
+
+
+
+
+		long start = System.currentTimeMillis();
+
+		//response.blockLast();
+
+		List<String> result = fetchElevator(adds).collectList().block();
+
+		long end = System.currentTimeMillis();
+		System.out.println("걸리는 시간 : " + (end - start)/1000.0);
+		//response.subscribe(i -> System.out.println(i));
+
+
+		//System.out.println(fetchElevator(adds).blockFirst());
+		//System.out.println();
+
+	}
+
+
+	@Test
+	public void Elevator2() throws Exception {
+
+		List<String> adds = new ArrayList<>();
+		List<Mono<String>> api = new ArrayList<>();
+
+		String encodedName1 = URLEncoder.encode("인천광역시 부평구 부평문화로 35","UTF-8");
+		String encodedName2 = URLEncoder.encode("인천광역시 부평구 부평문화로 35","UTF-8");
+		String encodedName3 = URLEncoder.encode("인천광역시 부평구 부평문화로 35","UTF-8");
+		String encodedName4 = URLEncoder.encode("인천광역시 부평구 부평문화로 35","UTF-8");
+
+		adds.add(encodedName1);
+		adds.add(encodedName2);
+		adds.add(encodedName3);
+		adds.add(encodedName4);
+
+		DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory("http://openapi.elevator.go.kr/openapi/service/ElevatorOperationService");
+		factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
+		WebClient wc = WebClient.builder().uriBuilderFactory(factory).baseUrl("http://openapi.elevator.go.kr/openapi/service/ElevatorOperationService").build();
+
+		//Client client = new Client("http://openapi.elevator.go.kr/openapi/service/ElevatorOperationService");
+
+		//Flux<String> response=fetchElevator(adds);
+
+		for (int i=0 ; i < 4;i++) {
+			Mono<String> response1 = wc.get()
+					.uri(uriBuilder -> uriBuilder.path("/getOperationInfoList")
+							.queryParam("serviceKey", elevator_apikey)
+							.queryParam("buld_address", encodedName1) //모다 부평점
+							.queryParam("numOfRows", 1) // 1개만 출력
+							.queryParam("pageNo", 1).build())
+					.retrieve().bodyToMono(String.class);
+
+			api.add(response1);
+
+		}
+
+		long start = System.currentTimeMillis();
+
+		Mono.zip(api.get(0),api.get(1),api.get(2),api.get(3)).block();
+
+		long end = System.currentTimeMillis();
+		System.out.println("걸리는 시간 : " + (end - start)/1000.0);
+		//response.subscribe(i -> System.out.println(i));
+
+
+		//System.out.println(fetchElevator(adds).blockFirst());
+		//System.out.println();
+
+	}
+
+
 
 	@Test
 	void apiTestWebClient2() throws UnsupportedEncodingException {
@@ -163,13 +343,10 @@ class MapApplicationTests {
 	/*
         @Test
         void apiTest() throws UnsupportedEncodingException {
-
             //http://openapi.elevator.go.kr/openapi/service/ElevatorOperationService
             String serviceKey="서비스키";
-
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
-
             //String decodeServiceKey = URLDecoder.decode(serviceKey, "UTF-8");
             UriComponents uri = UriComponentsBuilder
                     .fromHttpUrl("http://openapi.elevator.go.kr/openapi/service/ElevatorOperationService/getOperationInfoList")
@@ -179,7 +356,6 @@ class MapApplicationTests {
                     .queryParam("pageNo",1)
                     .build(false);
             //System.out.println(uri);
-
             Object response = restTemplate.exchange(uri.toUriString(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
             System.out.println(response);
         }
@@ -287,7 +463,7 @@ class MapApplicationTests {
 			key = Name[0];
 			value = Name[1];
 			if(key.equals(test)){
-			result.add(value);}
+				result.add(value);}
 		}
 
 		System.out.println(result);
