@@ -6,7 +6,6 @@ import button from 'react-bootstrap/button';
 import Button from 'react-bootstrap/Button';
 
 const BuildingDetailInfo = (props) => {
-
     const [buildingDetailInfo, setBuildingDetailInfo] = useState();
     const [subway, SetSubway] = useState();
     const [subwayUp, SetSubwayUp] = useState([]);

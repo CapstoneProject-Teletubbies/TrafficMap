@@ -29,6 +29,7 @@ function LocationMap() {
 
     useEffect(()=>{
       SetSubway(building.state.subway);
+      console.log(building.state.props);
       console.log("실행");
       console.log(subway);
     })
