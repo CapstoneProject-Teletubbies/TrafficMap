@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
+import teletubbies.map.find.FindDto;
+import teletubbies.map.find.FindServiceImpl;
 
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -98,6 +101,14 @@ public class WayServiceImpl implements WayService {
                         linePointDto.setLineLongitude(array2);
                         linePointDto.setLineLatitude((Double) lArray.get(1));
                         lineArray.add(linePointDto);
+
+                        //테스트
+//                        if ( distanceByMeter(linePointDto.getLineLatitude(), linePointDto.getLineLongitude(), 37.40233438567087, 127.10652234854196) <= 300) {
+//                            System.out.println(" o ");
+//                        }
+//                        else {
+//                            System.out.println(" x ");
+//                        }
                     }
                     wayDto.setLinePointArray(lineArray);
                 }
@@ -156,6 +167,20 @@ public class WayServiceImpl implements WayService {
 
         return uri.toUriString();
     }
+
+    // 두 좌표 간 거리 구하는 함수
+    public double distanceByMeter(double lat1, double lon1, double lat2, double lon2) {
+        double theta = lon1 - lon2;
+        double dist = Math.sin(Math.toRadians(lat1)) * Math.sin(Math.toRadians(lat2)) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.cos(Math.toRadians(theta));
+
+        dist = Math.acos(dist);
+        dist = Math.toDegrees(dist);
+        dist = dist * 60 * 1.1515;
+        dist = dist * 1609.344;
+
+        return Math.round(dist/10)*10;
+    }
+
 }
 
 //    RestTemplate restTemplate = new RestTemplate();

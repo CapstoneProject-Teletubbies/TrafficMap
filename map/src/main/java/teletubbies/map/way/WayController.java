@@ -27,6 +27,8 @@ public class WayController {
 //        String startName = "카카오판교오피스";
 //        String endName = "스타벅스부평";
 //        Number option = 0;
+        double a = wayService.distanceByMeter(startX, startY, endX, endY);
+        System.out.println("a = " + a);
         return wayService.findWay(startX, startY, endX, endY, startName, endName, option);
     }
 
@@ -36,7 +38,7 @@ public class WayController {
     }
 
 //    @GetMapping("way/transTest")
-////    @RequestMapping(value="way/transTest", method = {RequestMethod.POST})
+//    @RequestMapping(value="way/transTest", method = {RequestMethod.POST})
 //    public String FindTransWay(){
 //        //테스트용
 //        String url="https://map.kakao.com/?map_type=TYPE_MAP&target=car&" + "rt=501139,1109250,495285,1129803&rt1=대법원&rt2=서울시청&rtIds=,8430129";
