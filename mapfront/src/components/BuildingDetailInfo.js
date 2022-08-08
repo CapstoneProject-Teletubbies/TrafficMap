@@ -39,7 +39,7 @@ const BuildingDetailInfo = (props) => {
     }
 
     const startbutton =()=>{
-        var sec = document.querySelector('#body');
+        
         console.log('startbutton');
     }
 
