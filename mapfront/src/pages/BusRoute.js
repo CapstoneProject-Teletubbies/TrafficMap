@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react';
-import { useMediaQuery } from 'react-responsive';
 
 import axios from "axios";
 
@@ -25,12 +24,6 @@ function BusRoute(){
         console.log("back");
         navigate(-1);
     }
-
-    const isPc = useMediaQuery({
-        query: "(min-width: 497px)"
-    });
-
-    const size = isPc ? "135px" : "125px";
 
     useEffect(() => {                               //받아온 버스 정보 버스 노선 정보, 버스 실시간 위치 정보
         setBusRoute(location.state.busroute);
@@ -94,7 +87,7 @@ function BusRoute(){
                 </div>
             </nav>
 
-            <div clasName="d-lg-none" style={{height: size}} ></div> {/*더미div*/}
+            <div clasName="d-lg-none" style={{height: "125px"}} ></div> {/*더미div*/}
 
             <div className="brl" style={{overflow: "hidden"}}> {/*버스 루트 리스트*/}
                 <div className="list-group">
