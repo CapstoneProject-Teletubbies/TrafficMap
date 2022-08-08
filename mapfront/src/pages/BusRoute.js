@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { useMediaQuery } from 'react-responsive';
 
 import axios from "axios";
 
@@ -25,6 +26,12 @@ function BusRoute(){
         navigate(-1);
     }
 
+    const isPc = useMediaQuery({
+        query: "(min-width: 497px)"
+    });
+
+    const size = isPc ? "135px" : "125px";
+
     useEffect(() => {                               //받아온 버스 정보 버스 노선 정보, 버스 실시간 위치 정보
         setBusRoute(location.state.busroute);
         setBusInfo(location.state.props);
@@ -36,13 +43,13 @@ function BusRoute(){
     }, [busInfo]);
 
     const handlefbutton = () => {
-        var sec = document.querySelector('#test');
         window.scrollTo({top: 0, behavior: "smooth"});
-        console.log("fbutotn");
     }
 
     const handlebbutton = () => {
-
+        var sec = document.querySelector("#turnaround").offsetTop;
+        // document.querySelector("#turnaround").scrollIntoView({top: "100px", behavior: "smooth"}); //특정 element 위치로
+        window.scrollTo(0, sec);
     }
 
     const realtimeBus = () => {
@@ -67,62 +74,53 @@ function BusRoute(){
     if(busInfo && busRoute){
 
     return(
-        <main>
-            <div className="busname" style={{width: "100%", display: "flex"}} >  
-            <div className="row" style={{width: "100%", height: "100%", display: "flex", margin: "0px"}}>  
-                <div className="col-2 align-middle" style={{position: "absolute", padding: "0px"}}>
+        <div className="" >
+            <nav className="navbar navbar-default" style={{position: "fixed", width: "100%", zIndex: 5, backgroundColor: "white", boxShadow: "0px 1px 5px gray"}}>
+                <div style={{width: "20%"}}>
                     <i
                     class="bi bi-arrow-left-circle"
                     style={{ fontSize: "2.2rem", }}
                     onClick={handlebackButton}
                     ></i>
-                </div> 
-            </div>
-                <div className="col" style={{position: "absolute", width: "100%" ,top: "34%"}}>
-                    <h2>{busInfo.routeno}</h2>
-                </div>   
-            </div>
-            <div className="busdirection" style={{width: "100%"}}>
-                <div className="row" style={{position: "absolute" , width: "100%", height:"100%", margin: "0px", padding: "1px"}}>
-                    <div className="col-6" style={{ position: "relative", padding: "0px", overflow: "hidden", textOverflow: "ellipsis"}}>
-                        <button type="button" class="btn btn-outline-dark" style={{width: "100%", height: "100%", borderRadius: "1px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}} onClick={handlefbutton}>{busInfo.turn_BSTOPNM} 방면</button>                     
-                    </div>                 
-                    <div className="col-6" style={{ position: "relative", padding: "0px", textOverflow: "ellipsis"}}>
-                    <button type="button" class="btn btn-outline-dark" style={{width: "100%", height: "100%", whiteSpace: "nowrap", overflow: "hidden", borderRadius: "1px", overflow: "hidden", textOverflow: "ellipsis"}} onClick={handlebbutton}>{busInfo.origin_BSTOPNM} 방면</button>    
-                    </div>
                 </div>
-            </div>
-            <div id="test" className="bbody">
-                <div className="row" style={{margin: "0px", padding: "0px"}}>
-                    {/* <div className="col-3" style={{backgroundColor: "white", borderRadius: "3px"}}>
+                <div className="" style={{width: "60%", fontSize: "2.0em"}}>
+                    {busInfo.routeno}          
+                </div>
+                <div style={{width: "20%"}}>     
+                </div>
+                <div className="busdirec" style={{width: "100%", height: "100%", marginTop: "3%"}}>
+                    <button type="button" class="btn btn-outline-dark" style={{width: "50%", height: "100%", borderRadius: "2px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}} onClick={handlefbutton}>{busInfo.turn_BSTOPNM} 방면</button>
+                    <button type="button" class="btn btn-outline-dark" style={{width: "50%", height: "100%", borderRadius: "2px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}} onClick={handlebbutton}>{busInfo.origin_BSTOPNM} 방면</button>
+                </div>
+            </nav>
 
-                    </div> */}
-                    <div className="list-group " style={{padding: "0px"}}>
-                        {isitbus && busInfo && busRoute && busRoute.map((obj, index)=>{
-                            var isit;
-                            var bus = undefined;
-                            for(var i = 0; i < reallocation.length; i++){
-                                if(reallocation[i].latest_STOP_ID === obj.bstopid && reallocation[i].dircd === obj.dircd){
-                                    isit = true;  
-                                    bus = i;
-                                    break;
-                                }
-                                else{
-                                    isit = false;
-                                }     
+            <div clasName="d-lg-none" style={{height: size}} ></div> {/*더미div*/}
+
+            <div className="brl" style={{overflow: "hidden"}}> {/*버스 루트 리스트*/}
+                <div className="list-group">
+                    {isitbus && busInfo && busRoute && busRoute.map((obj, index)=>{
+                        var isit;
+                        var bus = undefined;
+                        for(var i = 0; i < reallocation.length; i++){
+                            if(reallocation[i].latest_STOP_ID === obj.bstopid && reallocation[i].dircd === obj.dircd){
+                                isit = true;  
+                                bus = i;
+                                break;
                             }
-                            return(
-                                <BusRouteList businfo={reallocation[bus]} isit={isit} bstopnm={obj.bstopnm} bstopid={obj.bstopid} sbstopid={obj.short_BSTOPID} turn={busInfo.turn_BSTOPID}></BusRouteList>
-                            )
-                        })}
-              
-                    </div>
-                </div>
-                <div className="reload-bus">
-                    <button type="button" class="btn btn-large btn-outline-dark" style={{ width: "50px", height: "50px", textAlign: "center", padding: "0px" }} onClick={realtimeBus}><i class="bi bi-arrow-repeat" style={{ fontSize: "30px",}}></i></button>
+                            else{
+                                isit = false;
+                            }     
+                        }
+                        return(
+                            <BusRouteList businfo={reallocation[bus]} isit={isit} bstopnm={obj.bstopnm} bstopid={obj.bstopid} sbstopid={obj.short_BSTOPID} turn={busInfo.turn_BSTOPID}></BusRouteList>
+                        )
+                    })}
                 </div>
             </div>
-        </main>
+            <div className="reload-bus"> {/*새로고침 버튼*/}
+                    <button type="button" class="btn btn-large btn-outline-dark" style={{ width: "50px", height: "50px", textAlign: "center", padding: "0px" }} onClick={realtimeBus}><i class="bi bi-arrow-repeat" style={{ fontSize: "30px",}}></i></button>
+            </div>
+        </div>
 
     );
                 }
