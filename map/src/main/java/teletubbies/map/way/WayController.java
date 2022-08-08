@@ -27,8 +27,6 @@ public class WayController {
 //        String startName = "카카오판교오피스";
 //        String endName = "스타벅스부평";
 //        Number option = 0;
-        double a = wayService.distanceByMeter(startX, startY, endX, endY);
-        System.out.println("a = " + a);
         return wayService.findWay(startX, startY, endX, endY, startName, endName, option);
     }
 
