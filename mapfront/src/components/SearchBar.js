@@ -34,7 +34,7 @@ const SearchBar = (props) => {
 
     const searchBuilding = (props1, props2) => {
         const building = axios.create({
-            baseURL: 'http://localhost:8080/'
+            baseURL: 'http://localhost:9000/'
         })
         building.post('/api/find/address', null, {params: {keyword: searchValue, latitude: mylocation.latitude, longitude: mylocation.longitude}})
         .then(function(res){
@@ -56,7 +56,7 @@ const SearchBar = (props) => {
 
     const searchBus = (props) => {
         const bus = axios.create({
-            baseURL: 'http://localhost:8080/'
+            baseURL: 'http://localhost:9000/'
         })
         bus.post('api/bus/busInfo/', null, {params: {busName: searchValue}})
         .then(function(res){
@@ -68,7 +68,7 @@ const SearchBar = (props) => {
 
     const searchOnlyBus = () => {           //~번 버스로 서치했을 때
         const bus = axios.create({
-            baseURL: 'http://localhost:8080/'
+            baseURL: 'http://localhost:9000/'
         })
         bus.post('api/bus/busInfo/', null, {params: {busName: searchValue}})
         .then(function(res){
@@ -87,7 +87,7 @@ const SearchBar = (props) => {
 
     const searchBusStop = () => {
         const busstop = axios.create({
-            baseURL: 'http://localhost:8080/'
+            baseURL: 'http://localhost:9000/'
         })
         busstop.post('api/bus/busStop', null, {params: {busStopName: searchValue}})
         .then(function(res){

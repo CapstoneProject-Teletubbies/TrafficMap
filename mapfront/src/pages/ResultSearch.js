@@ -41,7 +41,6 @@ function ResultSearch() {
     const handleLocationButton = () => {
       setLocationButton(true);
     }
-
     const handleSuccess = (pos) => {
       const {latitude, longitude } = pos.coords;
 
@@ -66,7 +65,6 @@ function ResultSearch() {
     var zoomout;
     var movelocation;
     var test;
-
 
     if(buildingList[0] && !plength){
       for(var i = 0; i < buildingList.length; i++){
@@ -160,8 +158,7 @@ function ResultSearch() {
                   
                   ${test = `i`};
                   console.log('test: '+${test});
-                  console.log(i);
-          
+                  console.log(i); 
                 }
               }
             })
@@ -238,8 +235,7 @@ function ResultSearch() {
 
     <NavBar keyword={marker.state.keyword}/>
 
-    <div className="search">
-        
+    <div className="search">   
         <p id="result" />
         <p id="result_mouse" />
     </div>
@@ -248,7 +244,6 @@ function ResultSearch() {
       <div className="mylocation">
         <Button onClick={handleLocationButton} src={target}/>
       </div>
-
     </div>
 
     <div className="test">

@@ -9,7 +9,7 @@ const BuildingInfo = (props) => {
 
     const searchBusRoute = (detail) => {
         const busroute = axios.create({
-         baseURL: 'http://localhost:8080/'
+         baseURL: 'http://localhost:9000/'
         })
         busroute.post('/api/bus/route', null, {params: {routeId: props.obj.routeid}})
         .then(function(res){
@@ -29,7 +29,7 @@ const BuildingInfo = (props) => {
      const searchBusRouteInfo = () => {
         console.log(props.obj.routeid);
         const busrouteinfo = axios.create({
-            baseURL: 'http://localhost:8080/'
+            baseURL: 'http://localhost:9000/'
         })
         busrouteinfo.post('/api/bus/route/detail', null, {params: {routeId: props.obj.routeid}})
         .then(function(res){

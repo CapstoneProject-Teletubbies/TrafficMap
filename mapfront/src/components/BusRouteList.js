@@ -25,7 +25,7 @@ const BusRouteList = (props) => {
         arrow = <i class="bi bi-arrow-down-circle"></i>;
     }
 
-    if(props.turn === props.bstopid){      //회차지인 경우
+    if(props.turn === props.bstopid){     //회차지인 경우
         console.log("회차지");
         turnaround = true;
     }

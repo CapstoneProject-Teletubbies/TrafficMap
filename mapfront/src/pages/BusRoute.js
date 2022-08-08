@@ -54,7 +54,7 @@ function BusRoute(){
 
     const realtimeBus = () => {
         const buslocation = axios.create({
-            baseURL: 'http://localhost:8080/'
+            baseURL: 'http://localhost:9000/'
         })
         buslocation.post('/api/bus/location', null, {params: {routeId: busInfo.routeid}})
             .then(function(res){
