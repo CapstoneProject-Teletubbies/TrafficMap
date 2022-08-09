@@ -1,5 +1,7 @@
 import React from 'react';
+import axios from "axios";
 import '../css/BuildingDetailInfo.css'
+import Modal from './Modal';
 import { useNavigate } from "react-router-dom";
 import {useState, useEffect} from 'react';
 import button from 'react-bootstrap/button';
@@ -11,6 +13,31 @@ const BuildingDetailInfo = (props) => {
     const [subwayUp, SetSubwayUp] = useState([]);
     const [subwayDown, SetSubwayDown] = useState([]);
     const [one, setOne] = useState(false);
+    const [url, Seturl] = useState();
+
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const openMadal = () => {
+        setModalOpen(true);
+    }
+    const closeModal = () => {
+        setModalOpen(false);
+    }
+
+    const handlesubwaymapbutton = () => {
+        const subwayname = (props.props.name.split('역'))[0];
+        const subwaymap = axios.create({
+            baseURL: 'http://localhost:9000/'
+        })
+        subwaymap.post('/api/subway/photo', null, {params: {name: subwayname}})
+        .then(function(res){
+            console.log(res.data);
+            var url = '../../지하철입체지도/인천1호선/간석오거리_5번 출입구 근처 엘리베이터_부평삼거리 방면.png'
+            Seturl(url);
+        }).catch(function(err){
+            console.log("지하철 입체지도 정보 못받아옴");
+        })
+    }
 
     useEffect(()=>{
         console.log("디테일인포다 ㅆ비ㅏㄹ");
@@ -93,14 +120,19 @@ const BuildingDetailInfo = (props) => {
     if(buildingDetailInfo){
         if(subway){
             return(
+                <div>
+                    <Modal open={modalOpen} close={closeModal} header="Modal heading">
+                        팝업창임
+                    </Modal>
                 <footer>
+                    
                 <div id='Info' className="detailInfo" style={{height: "100%"}}>
                         <div id='headInfo' className="row" style={{top: "10px"}}>
                             <div className="col-5" style={{textAlign: "left", paddingLeft: "5%"}}>
                                 <b>{buildingDetailInfo.name}</b> {buildingDetailInfo.bizname}
                             </div><div className="col-4"></div>
                             <div id="subwaymapbutton" className="col-3" style={{float: "right"}}>
-                                <i class="bi bi-map"></i>
+                                <i class="bi bi-map" onClick={openMadal}></i>
                             </div>
                         </div>
                         {/* <div id='elivator' style={styleelivator}>
@@ -160,6 +192,7 @@ const BuildingDetailInfo = (props) => {
                         </div>
                     </div>
                     </footer>
+                    </div>
             );
         }else{
             return(
