@@ -51,21 +51,11 @@ const BuildingDetailInfo = (props) => {
         console.log('arrivebutton');
     }
 
-    const stylehead={
-        float: "left",
-        margin:"12px",
-        left: "5px",
-    
-    };
     const styleaddress={
         position: "fixed",
         float: "left",
         left: "10px",
         margin: "12px"
-    }
-    const stylerealtime={
-        position: "fixed",
-        width: "100%",
     }
     const stylebutton ={
         position: "fixed",
@@ -104,14 +94,20 @@ const BuildingDetailInfo = (props) => {
         if(subway){
             return(
                 <footer>
-                <div id='Info' className="detailInfo">
-                        <div id='headInfo' style={stylehead}>
-                            <b>{buildingDetailInfo.name}</b> {buildingDetailInfo.bizname}</div>
-                        <div id='elivator' style={styleelivator}>
-                            {buildingDetailInfo.elivator}</div>
-                        <div id='realtime' style={stylerealtime}>
-                            <div className="row">
-                            <div className="col-5" style={{top: "47px", textAlign: "left", marginLeft: "20px", fontSize: "0.9em", lineHeight: "1.4em", paddingRight: "0px"}}>
+                <div id='Info' className="detailInfo" style={{height: "100%"}}>
+                        <div id='headInfo' className="row" style={{top: "10px"}}>
+                            <div className="col-5" style={{textAlign: "left", paddingLeft: "5%"}}>
+                                <b>{buildingDetailInfo.name}</b> {buildingDetailInfo.bizname}
+                            </div><div className="col-4"></div>
+                            <div id="subwaymapbutton" className="col-3" style={{float: "right"}}>
+                                <i class="bi bi-map"></i>
+                            </div>
+                        </div>
+                        {/* <div id='elivator' style={styleelivator}>
+                            {buildingDetailInfo.elivator}</div> */}
+                        <div id='realtime' style={{}}>
+                            <div className="row" style={{height: "100%"}}>
+                            <div className="col-5" style={{top: "20px", textAlign: "left", marginLeft: "15px", fontSize: "0.9em", lineHeight: "1.4em", paddingRight: "0px"}}>
                                 {subwayUp && subwayUp.map((obj, index)=>{
                                     var arv = '';
                                     const name =(obj.trainLineNm).split('-');
@@ -133,7 +129,7 @@ const BuildingDetailInfo = (props) => {
                                 })}
                             </div>
                             
-                            <div className="col-5" style={{top: "47px", textAlign: "left", marginLeft: "15px", fontSize: "0.9em", lineHeight: "1.4em", paddingRight: "0px"}}>
+                            <div className="col-5" style={{top: "20px", textAlign: "left", marginLeft: "15px", fontSize: "0.9em", lineHeight: "1.4em", paddingRight: "0px"}}>
                                 {subwayDown && subwayDown.map((obj, index)=>{
                                     var arv = '';
                                     const name =(obj.trainLineNm).split('-');
@@ -169,7 +165,7 @@ const BuildingDetailInfo = (props) => {
             return(
                 <footer>
                 <div id='Info' className="detailInfo">
-                        <div id='headInfo' style={stylehead}>
+                        <div id='headInfo' style={{}}>
                             <b>{buildingDetailInfo.name}</b> {buildingDetailInfo.bizname}</div>
                         <div id='elivator' style={styleelivator}>
                             {buildingDetailInfo.elivator}</div>
