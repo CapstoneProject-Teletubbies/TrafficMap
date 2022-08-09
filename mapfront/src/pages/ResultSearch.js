@@ -18,8 +18,6 @@ import { render } from '@testing-library/react';
 
 let what;
 
-
-
 function ResultSearch() {
     const [keyword, setKeyword] = useState();  //검색 받은 키워드
     const [plusbutton, setPlusButton] = useState();

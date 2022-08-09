@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import '../css/Main.css';
 import SearchBar from "../components/SearchBar";
@@ -21,6 +21,9 @@ function Main() {
  
     const [location, setLocation] = useState();
     const [error, setError] = useState();
+
+    const outsideRef = useRef(null);
+    useOutsideClick(outsideRef);
 
     const handlePlusButton = () => {
       setPlusButton(true);
@@ -45,11 +48,40 @@ function Main() {
     // };
 
     const handleKeyword = (e) => setKeyword(e.target.value);
+
+    function useOutsideClick(ref){      //클릭이벤트
+      useEffect(()=>{
+        console.log(`useEffect()`);
+    
+        function handleClickOutside(event){
+          setTimeout(function(){
+          // console.log(ref);
+
+          if(ref.current && !ref.current.contains(event.target)){
+            const mytest = document.getElementById('test');
+            console.log(`select의 외부 클릭을 감지!`);
+            console.log(mytest.innerText);
+          }
+        }, 100)
+
+        }
+    
+        document.addEventListener("mousedown", handleClickOutside);
+    
+        return () => {
+          document.removeEventListener("mousedown", handleClickOutside);
+        };
+      }, [ref]);
+
+    }
+
     
     function setScreenSize(){
       let vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty("--vh", `${vh}px`);
   }
+
+
      
   useEffect(() => {
     var zoomin;
@@ -83,6 +115,7 @@ function Main() {
     else{
       movelocation = false;
     }
+
 
     const script = document.createElement("script");
     script.innerHTML = ` 
@@ -166,6 +199,8 @@ function Main() {
 
     <div className="search">
         <SearchBar onChange={handleKeyword} placeholder={'장소, 버스, 지하철, 주소 검색'} location={location} />
+    </div>
+    <div id="test">
         <p id="result" />
         <p id="result_mouse" />
     </div>
@@ -184,7 +219,7 @@ function Main() {
         {/* <SideBar /> */}
       </div>
     </div>
-    <div className="Infobar">
+    <div className="Infobar" ref={outsideRef}>
       
     </div>
 
