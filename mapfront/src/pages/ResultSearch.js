@@ -73,12 +73,17 @@ function ResultSearch() {
         function handleClickOutside(event){
           setTimeout(function(){
           // console.log(ref);
-          const mytest = document.getElementById('test');
-          what = mytest.innerText;
-          setChooseMarker(what);
 
           if(ref.current && !ref.current.contains(event.target)){
+            const mytest = document.getElementById('test');
+            what = mytest.innerText;
+            setChooseMarker(what);
+            const notmarker = parseInt(what);
             console.log(`select의 외부 클릭을 감지!`);
+            if(!what){
+              setChooseMarker(null);
+            }
+            mytest.innerHTML="";
           }
         }, 100)
 
@@ -187,8 +192,6 @@ function ResultSearch() {
             markers.push(marker);    //마커 배열에 저장
             markers[i].addListener("dragend", function(evt){
               var latlng = evt.latLng;
-              // console.log(marker.getPosition());
-              console.log(latlng);
               for(var i = 0; i < markers.length; i++){
                 if(latlng === markers[i].getPosition()){          
                   ${test = `i`};
@@ -198,8 +201,15 @@ function ResultSearch() {
                 }
               }
             })
-            marker.addListener("touchstart", function(evt){
-              console.log('test');
+            markers[i].addListener("touchend", function(evt){
+              var latlng = evt.latLng;
+              for(var i = 0; i < markers.length; i++){
+                if(latlng === markers[i].getPosition()){
+                  ${test = `i`};
+                  var element = document.getElementById('test');
+                  element.innerHTML = ${test};
+                }
+              }
             })
           }
         }
@@ -288,9 +298,10 @@ function ResultSearch() {
         <Button onClick={handleMinusButton} src={minus}/>
       </div>
     </div>
-    <div id="test" style={{position: "fixed"}}>
+    <div id="test" style={{position: "fixed", top: "0px", zIndex: "10"}}>
     </div>
-    <div className="Infobar" ref={outsideRef}>
+    <div className="Infobar" ref={outsideRef} style={{position: "fixed", bottom: "0px"}}>
+      <h2></h2>
       {choosemarker && <BuildingDetailInfo props={buildingList[choosemarker]} subway={null}/>}
       {/* <BuildingDetailInfo props={building.state}/> */}
     </div>
