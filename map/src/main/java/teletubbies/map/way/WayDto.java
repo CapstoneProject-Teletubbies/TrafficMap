@@ -28,9 +28,8 @@ public class WayDto {
     private Number roadType; //도로 타입 정보
     private String lineFacilityType; //시설물 정보
 
-
-
-
+    //stair
+    private Boolean isStair;
 
 
 }
