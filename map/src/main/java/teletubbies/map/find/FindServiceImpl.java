@@ -35,12 +35,14 @@ public class FindServiceImpl implements FindService {
     @Value("${TMAP_URL}")
     private String tmap_url;
 
+    @Value("${TMAP_RG_URL}")
+    private String tmap_rg_url;
+
     @Value("${ELEVATOR_URL}")
     private String elevator_url;
 
     @Value("${STAIR_URL}")
     private String stair_url;
-
     /**
      *
      * 방법1
@@ -204,8 +206,6 @@ public class FindServiceImpl implements FindService {
                 ele.add(i,elevatorOrderDto);
             }
 
-
-
             Map<Integer,String> elevatorResult = new HashMap<>();
             long start1 = System.currentTimeMillis();
             elevatorResult = findElevatorByAPI(ele);
@@ -247,12 +247,8 @@ public class FindServiceImpl implements FindService {
                 findDto.setRoadName(roadName);
                 findDto.setFirstBuildNo(firstBuildNo);
 
-                String addr = middleAddrName + " " + roadName + " " + firstBuildNo;
-                /**
-                 *
-                 * 엘리베이터 받는 부분
-                 */
-//                findDto.setElevatorState(findElevatorByAPI(addr));
+//                String addr = middleAddrName + " " + roadName + " " + firstBuildNo;
+
                 findDto.setElevatorState(elevatorResult.get(i));
 
                 dtos.add(i, findDto);
@@ -548,6 +544,35 @@ public class FindServiceImpl implements FindService {
 
         return result;
     }
+
+    @SneakyThrows
+    public String tMapReverseGeoCoding(String lat, String lon) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders(); //헤더
+        restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 한글깨짐 방지
+
+        //URI 생성
+        UriComponents uri = UriComponentsBuilder
+                .fromUriString(tmap_rg_url)
+                .queryParam("lon", lon)
+                .queryParam("lat", lat)
+                .queryParam("version", 1)
+                .queryParam("appKey", tmap_apiKey)
+                .build(true);
+
+        //response
+        ResponseEntity<String> result = restTemplate.exchange(uri.toUri(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
+
+        JSONParser parser = new JSONParser();
+        JSONObject object = (JSONObject) parser.parse(result.getBody());
+        JSONObject addressInfo = (JSONObject) object.get("addressInfo");
+
+        return addressInfo.get("fullAddress").toString();
+
+    }
+
+
+
 
 }
 
