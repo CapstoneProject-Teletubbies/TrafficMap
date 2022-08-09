@@ -28,8 +28,9 @@ function LocationMap() {
     const [error, setError] = useState();
 
     useEffect(()=>{
+      console.log("실행 빌딩 state");
+      console.log(building.state);
       SetSubway(building.state.subway);
-      console.log("실행 빌딩 state.props");
       console.log(building.state.props);
     })
 
@@ -234,7 +235,7 @@ function LocationMap() {
       </div>
     </div>
     <div className="Infobar">
-      <BuildingDetailInfo props={building.state.props.obj}/>
+      <BuildingDetailInfo props={building.state.props.obj} subway={subway}/>
     </div>
 
     </main>

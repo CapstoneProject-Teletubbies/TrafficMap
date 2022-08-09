@@ -87,7 +87,7 @@ import axios from "axios";
                 </nav>
             </div>
 
-            <div className="searchlist">
+            <div className="searchlist" style={{height: "100%"}}>
                 {}
                 <ol className="list-group">
                     {busList && busList.map((obj, index) => <BusInfo obj={obj}></BusInfo>)}

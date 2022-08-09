@@ -10,16 +10,21 @@ const BuildingDetailInfo = (props) => {
     const [subway, SetSubway] = useState();
     const [subwayUp, SetSubwayUp] = useState([]);
     const [subwayDown, SetSubwayDown] = useState([]);
+    const [one, setOne] = useState(false);
 
     useEffect(()=>{
+        console.log("디테일인포다 ㅆ비ㅏㄹ");
+        console.log(props);
         setBuildingDetailInfo(props.props);
         SetSubway(props.subway);
 
-        if(buildingDetailInfo && subway){
+        if(!one && buildingDetailInfo && subway){
+            setOne(true);
             var i= 0, j = 0;
             {subway.map((obj)=>{
                 if((buildingDetailInfo.name).includes(obj.subwayId)){
                     if(obj.updnLine === "상행" && i<2){
+                        console.log("상행ㅇ");
                         console.log(obj);
                         SetSubwayUp(subwayUp => [...subwayUp, obj]);
                         i++;
@@ -121,7 +126,7 @@ const BuildingDetailInfo = (props) => {
                                             <h8>{name[0]}</h8>
                                         </div>
                                         <div className="col-6" style={{textAlign: "left",}}>
-                                            <h8>{arv[0]}</h8>
+                                            <h8>{arv}</h8>
                                         </div>
                                     </div>
                                    );
