@@ -31,6 +31,7 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.*;
 import java.util.function.Consumer;
@@ -289,6 +290,26 @@ class MapApplicationTests {
 
 	}
 
+	@Test
+	void stringSplitTest() {
+
+		String test = "인천광역시 부평구 부평문화로 35";
+		String[] t= test.split(" ");
+		List<String> result = new ArrayList<String>(Arrays.asList(t));
+
+		result.remove(0);
+		String s = result.get(0);
+		String r = String.valueOf((s.charAt(s.length()-1)));
+
+		System.out.println(r.equals("구"));
+
+		String result_str = String.join(" ",result);
+
+		System.out.println(result_str);
+
+
+
+	}
 
 
 	@Test
