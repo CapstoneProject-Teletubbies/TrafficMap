@@ -12,8 +12,8 @@ const BuildingDetailInfo = (props) => {
     const [subwayDown, SetSubwayDown] = useState([]);
 
     useEffect(()=>{
-        setBuildingDetailInfo(props.props.props.obj);
-        SetSubway(props.props.subway);
+        setBuildingDetailInfo(props.props);
+        SetSubway(props.subway);
 
         if(buildingDetailInfo && subway){
             var i= 0, j = 0;
@@ -31,7 +31,7 @@ const BuildingDetailInfo = (props) => {
                 };
             })}
         }
-    }, [subway])
+    }, [props])
 
     if(subwayUp){
         console.log(subwayDown);

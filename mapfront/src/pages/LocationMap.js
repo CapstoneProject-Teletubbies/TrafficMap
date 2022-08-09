@@ -29,9 +29,8 @@ function LocationMap() {
 
     useEffect(()=>{
       SetSubway(building.state.subway);
+      console.log("실행 빌딩 state.props");
       console.log(building.state.props);
-      console.log("실행");
-      console.log(subway);
     })
 
     const handlePlusButton = () => {
@@ -235,7 +234,7 @@ function LocationMap() {
       </div>
     </div>
     <div className="Infobar">
-      <BuildingDetailInfo props={building.state}/>
+      <BuildingDetailInfo props={building.state.props.obj}/>
     </div>
 
     </main>

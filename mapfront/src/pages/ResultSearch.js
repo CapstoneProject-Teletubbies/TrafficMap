@@ -31,6 +31,8 @@ function ResultSearch() {
     const [markerlist, setMarkerList] = useState([]);
     const [choosemarker, setChooseMarker] = useState();
 
+    const [getBuildingInfo, SetGetBuildingInfo] = useState();
+
     const outsideRef = useRef(null);
     useOutsideClick(outsideRef);
 
@@ -79,6 +81,10 @@ function ResultSearch() {
             console.log(`select의 외부 클릭을 감지!`);
           }
         }, 100)
+
+          if(what){
+            SetGetBuildingInfo(buildingList[what]);
+          }
         }
     
         document.addEventListener("mousedown", handleClickOutside);
@@ -95,10 +101,9 @@ function ResultSearch() {
       document.documentElement.style.setProperty("--vh", `${vh}px`);
     }
 
-  useEffect(()=>{
-    console.log("choosmarker");
-    console.log(buildingList[choosemarker]);
-  }, [choosemarker])
+  // useEffect(()=>{
+  //  SetGetBuildingInfo(buildingList[choosemarker]);
+  // }, [choosemarker])
      
   useEffect(() => {
     var zoomin;
@@ -253,7 +258,7 @@ function ResultSearch() {
    }, []);
 
   return (
-    <main ref={outsideRef}>
+    <main>
     <div
       id="TMapApp"
       style={{
@@ -285,8 +290,8 @@ function ResultSearch() {
     </div>
     <div id="test" style={{position: "fixed"}}>
     </div>
-    <div className="Infobar">
-      {/* {choosemarker && <BuildingDetailInfo obj={buildingList[choosemarker]}/>} */}
+    <div className="Infobar" ref={outsideRef}>
+      {choosemarker && <BuildingDetailInfo props={buildingList[choosemarker]} subway={null}/>}
       {/* <BuildingDetailInfo props={building.state}/> */}
     </div>
     </main>
