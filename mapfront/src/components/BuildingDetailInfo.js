@@ -4,8 +4,6 @@ import '../css/BuildingDetailInfo.css'
 import Modal from './Modal';
 import { useNavigate } from "react-router-dom";
 import {useState, useEffect} from 'react';
-import button from 'react-bootstrap/button';
-import Button from 'react-bootstrap/Button';
 
 const BuildingDetailInfo = (props) => {
     const [buildingDetailInfo, setBuildingDetailInfo] = useState();
