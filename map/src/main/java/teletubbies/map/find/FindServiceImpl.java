@@ -296,7 +296,25 @@ public class FindServiceImpl implements FindService {
                 //return elvtrSttsNm;
                 String addr = (String) item.get("address1");
                 //String encodedAddr = URLEncoder.encode(addr,"UTF-8");
-                map.put(addr,elvtrSttsNm);
+
+                String[] t= addr.split(" ");
+                List<String> str_list = new ArrayList<String>(Arrays.asList(t));
+
+                //System.out.println(str_list);
+                str_list.remove(0);
+                String s = str_list.get(0);
+                //System.out.println(s);
+                //System.out.println(s.length()-1);
+                String r = String.valueOf((s.charAt(s.length()-1)));
+
+                if(r.equals("시") | r.equals("군")){
+                    str_list.remove(0);
+                }
+
+                String result_str = String.join(" ",str_list);
+                //System.out.println(result_str);
+
+                map.put(result_str,elvtrSttsNm);
             }
         }
 
@@ -305,8 +323,8 @@ public class FindServiceImpl implements FindService {
 
         for(int i = 0; i<ele.size();i++){
             String decodedAddr = URLDecoder.decode(ele.get(i).getAddress());
-            String elevator = map.get("인천광역시 "+decodedAddr);
-            System.out.println(decodedAddr);
+            String elevator = map.get(decodedAddr);
+            //System.out.println(decodedAddr);
             if(elevator==null){
                 result.put(ele.get(i).getOrder(),"x");
             }else{
