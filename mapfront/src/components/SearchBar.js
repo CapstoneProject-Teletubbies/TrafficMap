@@ -28,7 +28,7 @@ const SearchBar = (props) => {
     }
     useEffect(()=>{
         setMylocation(props.location);
-        console.log(props.location);
+        // console.log(props.location);
     })
 
 

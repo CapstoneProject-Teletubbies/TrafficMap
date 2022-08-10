@@ -8,8 +8,6 @@ const NavBar = (props)=>{
         navigate(-1);
     }
 
-    console.log(props);
-
     return(
         <nav class="navbar bg-light" style={{height: "80px", boxShadow: "1px 1px 1px 1px gray"}}>
             <i

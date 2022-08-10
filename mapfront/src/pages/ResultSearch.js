@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {useLocation} from 'react-router';
 import axios from 'axios';
 import '../css/Main.css';
 import SearchBar from "../components/SearchBar";
 import NavBar from "../components/NavBar";
 import Button from "../components/Button";
+import BuildingDetailInfo from "../components/BuildingDetailInfo";
 import ReactDOM from "react-dom";
 import getLocation from '../getLocation';
 import plus from "../images/plus.png";
@@ -13,6 +14,9 @@ import target from "../images/location.png"
 import ph from "../images/placeholder.png"
 
 import mylocation from "../images/mylocation.png"
+import { render } from '@testing-library/react';
+
+let what;
 
 function ResultSearch() {
     const [keyword, setKeyword] = useState();  //검색 받은 키워드
@@ -25,9 +29,14 @@ function ResultSearch() {
     const [markerlist, setMarkerList] = useState([]);
     const [choosemarker, setChooseMarker] = useState();
 
+    const [getBuildingInfo, SetGetBuildingInfo] = useState();
+
+    const outsideRef = useRef(null);
+    useOutsideClick(outsideRef);
+
     const [buildingList, setBuildingList] = useState([]);
     const marker = useLocation();
-    console.log(marker.state.keyword);  //test
+    // console.log(marker.state.keyword);  //test
  
     const [location, setLocation] = useState();
     const [error, setError] = useState();
@@ -54,11 +63,50 @@ function ResultSearch() {
     // };
 
     const handleKeyword = (e) => setKeyword(e.target.value);
+
+    function useOutsideClick(ref){      //클릭이벤트
+      useEffect(()=>{
+        console.log(`useEffect()`);
+    
+        function handleClickOutside(event){
+          setTimeout(function(){
+          // console.log(ref);
+
+          if(ref.current && !ref.current.contains(event.target)){
+            const mytest = document.getElementById('test');
+            what = mytest.innerText;
+            setChooseMarker(what);
+            const notmarker = parseInt(what);
+            console.log(`select의 외부 클릭을 감지!`);
+            if(!what){
+              setChooseMarker(null);
+            }
+            mytest.innerHTML="";
+          }
+        }, 100)
+
+          if(what){
+            SetGetBuildingInfo(buildingList[what]);
+          }
+        }
+    
+        document.addEventListener("mousedown", handleClickOutside);
+    
+        return () => {
+          document.removeEventListener("mousedown", handleClickOutside);
+        };
+      }, [ref]);
+
+    }
     
     function setScreenSize(){
       let vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty("--vh", `${vh}px`);
-  }
+    }
+
+  // useEffect(()=>{
+  //  SetGetBuildingInfo(buildingList[choosemarker]);
+  // }, [choosemarker])
      
   useEffect(() => {
     var zoomin;
@@ -105,15 +153,8 @@ function ResultSearch() {
     else{
       movelocation = false;
     }
-
-    console.log('choosemarker: '+choosemarker);
-    console.log('test out: ' + test);
-
     const script = document.createElement("script");
     script.innerHTML = `
-        // var test1 = 4; 
-        // ${test = 'test1'};
-        // console.log(${test});
         var locationmap;
         var zoomIn;
         
@@ -149,21 +190,24 @@ function ResultSearch() {
             markers.push(marker);    //마커 배열에 저장
             markers[i].addListener("dragend", function(evt){
               var latlng = evt.latLng;
-              console.log(marker.getPosition());
-              console.log(latlng);
               for(var i = 0; i < markers.length; i++){
-                console.log(i);
-                var t = i;
-                if(latlng === markers[i].getPosition()){
-                  
+                if(latlng === markers[i].getPosition()){          
                   ${test = `i`};
                   console.log('test: '+${test});
-                  console.log(i); 
+                  var element = document.getElementById('test');
+                  element.innerHTML = ${test};                       
                 }
               }
             })
-            marker.addListener("touchstart", function(evt){
-              console.log('test');
+            markers[i].addListener("touchend", function(evt){
+              var latlng = evt.latLng;
+              for(var i = 0; i < markers.length; i++){
+                if(latlng === markers[i].getPosition()){
+                  ${test = `i`};
+                  var element = document.getElementById('test');
+                  element.innerHTML = ${test};
+                }
+              }
             })
           }
         }
@@ -252,10 +296,13 @@ function ResultSearch() {
         <Button onClick={handleMinusButton} src={minus}/>
       </div>
     </div>
-    <div>
-
+    <div id="test" style={{position: "fixed", top: "0px", zIndex: "10"}}>
     </div>
-
+    <div className="Infobar" ref={outsideRef} style={{position: "fixed", bottom: "0px"}}>
+      <h2></h2>
+      {choosemarker && <BuildingDetailInfo props={buildingList[choosemarker]} subway={null}/>}
+      {/* <BuildingDetailInfo props={building.state}/> */}
+    </div>
     </main>
   );
 }

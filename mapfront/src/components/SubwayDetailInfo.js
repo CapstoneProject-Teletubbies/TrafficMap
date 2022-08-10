@@ -68,6 +68,9 @@ const SubwayDetailInfo = (props) => {
         <div id='Info' className="detailInfo">
                 <div id='headInfo' style={stylehead}>
                     <b>{buildingDetailInfo.name}</b> {buildingDetailInfo.bizname}</div>
+                <div id="mapbutton">
+                    <i class="bi bi-map"></i>
+                </div>
                 <div id='elivator' style={styleelivator}>
                     {buildingDetailInfo.elivator}</div>
                 <div id='address' style={styleaddress}>

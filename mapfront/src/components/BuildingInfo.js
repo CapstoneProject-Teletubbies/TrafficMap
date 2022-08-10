@@ -9,6 +9,9 @@ const BuildingInfo = (props) => {
     const navigate = useNavigate();
     const [selectSubway, SetSelectSubway] = useState();
 
+    console.log("빌딩인포시봘")
+    console.log(props.obj.upperBizName);
+
     const searchsubwayinfo = (subwaynm) => {
         const subwayinfo = axios.create({
             baseURL: 'http://localhost:9000/'
