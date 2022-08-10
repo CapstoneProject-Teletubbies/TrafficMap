@@ -121,7 +121,7 @@ const BuildingDetailInfo = (props) => {
         if(subway){
             return(
                 <div>
-                    <Modal open={modalOpen} close={closeModal} header="Modal heading">
+                    <Modal open={modalOpen} close={closeModal}>
                         팝업창임
                     </Modal>
                 <footer>
