@@ -227,7 +227,7 @@ function LocationMap() {
 
     </div>
 
-    <div className="test">
+    <div className="rightbarbutton">
       <div className="zoom">
         <Button onClick={handlePlusButton} src={plus}/>
         <Button onClick={handleMinusButton} src={minus}/>

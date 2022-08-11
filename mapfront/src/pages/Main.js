@@ -56,7 +56,7 @@ function Main() {
         function handleClickOutside(event){
           setTimeout(function(){
           // console.log(ref);
-
+          
           if(ref.current && !ref.current.contains(event.target)){
             const mytest = document.getElementById('test');
             console.log(`select의 외부 클릭을 감지!`);
@@ -65,7 +65,6 @@ function Main() {
         }, 100)
 
         }
-    
         document.addEventListener("mousedown", handleClickOutside);
     
         return () => {
@@ -190,6 +189,7 @@ function Main() {
     <div
       id="TMapApp"
       style={{
+        overflowY: "hidden",
         height: "100%",
         width: "100%",
         position: "fixed",
@@ -212,7 +212,7 @@ function Main() {
 
     </div>
 
-    <div className="test">
+    <div className="rightbarbutton">
       <div className="zoom">
         <Button onClick={handlePlusButton} src={plus}/>
         <Button onClick={handleMinusButton} src={minus}/>
