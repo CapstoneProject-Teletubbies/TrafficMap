@@ -34,6 +34,7 @@ const BusStopInfo = (props) => {
 
 
     const handleClick = () => {
+        console.log("props");
         console.log(props);
         searchbusstopinfo();
     };

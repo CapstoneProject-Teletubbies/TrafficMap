@@ -18,20 +18,21 @@ div{
     top: 15px;
 }
 .left{
-    position: absolute;
-    width: 55px;
-    height: 50%;
-    left: 1px;
+    position: fixed;
+    width: 50px;
+    bottom: 10px;
+    left: 5px;
     text-align: left;
 }
 .mylocation{
     position: relative;
-    top: 90%;
+
+
 }
 .rightbarbutton{
     position: absolute;
     width: 55px;
-    height: 50%;
+    top: 40%;
     right: 1px;
     text-align: right;
 }

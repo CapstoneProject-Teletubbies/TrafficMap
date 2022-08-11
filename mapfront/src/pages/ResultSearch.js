@@ -29,8 +29,6 @@ function ResultSearch() {
     const [markerlist, setMarkerList] = useState([]);
     const [choosemarker, setChooseMarker] = useState();
 
-    const [getBuildingInfo, SetGetBuildingInfo] = useState();
-
     const outsideRef = useRef(null);
     useOutsideClick(outsideRef);
 
@@ -73,13 +71,16 @@ function ResultSearch() {
           var markerindex = parseInt(element.innerText);
           console.log(markerindex);
           setChooseMarker(markerindex);
+          if(buildingList){
+            console.log(buildingList);
+          }
         }
         else{
           console.log("업거든!");
         }
       });
     }, [])
-    
+
     ////////////////////////////////////////////////////////////////////////
     function useOutsideClick(ref){      //클릭이벤트
       useEffect(()=>{
@@ -104,10 +105,6 @@ function ResultSearch() {
             console.log("먼가 클릭함?");
           }
         }, 100)
-
-          if(what){
-            SetGetBuildingInfo(buildingList[what]);
-          }
         }
 
         document.addEventListener("mousedown", handleClickOutside);
@@ -125,10 +122,7 @@ function ResultSearch() {
       document.documentElement.style.setProperty("--vh", `${vh}px`);
     }
 
-  // useEffect(()=>{
-  //  SetGetBuildingInfo(buildingList[choosemarker]);
-  // }, [choosemarker])
-     
+
   useEffect(() => {
     var zoomin;
     var zoomout;
@@ -319,12 +313,11 @@ function ResultSearch() {
         <Button onClick={handleMinusButton} src={minus}/>
       </div>
     </div>
-    <div id = "ptest">
-    <div id="test" style={{position: "fixed", top: "0px", zIndex: "10"}}>
-    </div>
+
+    <div id="test" style={{position: "fixed", top: "0px", zIndex: "10", zIndex: "0"}}>
     </div>
     <div className="Infobar" ref={outsideRef} style={{position: "fixed", bottom: "0px"}}>
-      <h2></h2>
+      
       {choosemarker && <BuildingDetailInfo props={buildingList[choosemarker]} subway={null}/>}
       {/* <BuildingDetailInfo props={building.state}/> */}
     </div>
