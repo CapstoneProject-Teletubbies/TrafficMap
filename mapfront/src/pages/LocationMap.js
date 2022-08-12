@@ -45,8 +45,18 @@ function LocationMap() {
     }
 
     const handleSuccess = (pos) => {
-      var buildinglatitude = building.state.props.obj.latitude;
-      var buildinglongitude = building.state.props.obj.longitude;
+      var buildinglatitude;
+      var buildinglongitude
+      if(building.state.props.address !== '버스정류장'){
+        buildinglatitude = building.state.props.obj.latitude;
+        buildinglongitude = building.state.props.obj.longitude;
+      }
+      else{
+        console.log(building.state.props.obj.posx);
+        buildinglatitude = building.state.props.obj.posx;
+        buildinglongitude = building.state.props.obj.posy;
+      }
+    
       const {latitude, longitude } = pos.coords;
       setLocation({
         latitude, longitude
@@ -119,8 +129,19 @@ function LocationMap() {
         var locationmap;
         var zoomIn;
         function initTmap(pos) {
+          var wgs84;
+          if(parseInt(pos.lat) > 1000){
+            var epsg3857 = new Tmapv2.Point(pos.lat, pos.lng);
+            console.log(epsg3857);
+            wgs84 = Tmapv2.Projection.convertBesselTMToWGS84GEO(epsg3857);
+            console.log("좌표변환실행");
+            console.log(wgs84);
+          }
+          else{
+            wgs84 = new Tmapv2.LatLng(pos.lat, pos.lng);
+          }
             var map = new Tmapv2.Map("TMapApp", {
-                center: new Tmapv2.LatLng(pos.lat, pos.lng),
+                center: wgs84,
                 width: "100%",
                 height: "100%",
                 httpsMode: true,
@@ -137,8 +158,19 @@ function LocationMap() {
         }
 
         function createmarker(lat, lng){
+          var wgs84;
+          if(parseInt(lat) > 1000){
+            var epsg3857 = new Tmapv2.Point(lat, lng);
+            console.log(epsg3857);
+            wgs84 = Tmapv2.Projection.convertBesselTMToWGS84GEO(epsg3857);
+            console.log("좌표변환실행");
+            console.log(wgs84);
+          }
+          else{
+            wgs84 = new Tmapv2.LatLng(lat, lng);
+          }
           var marker = new Tmapv2.Marker({
-            position: new Tmapv2.LatLng(lat, lng),
+            position: wgs84,
             icon: "${mylocation}",
             map: locationmap
           })
@@ -235,7 +267,7 @@ function LocationMap() {
       </div>
     </div>
     <div className="Infobar">
-      <BuildingDetailInfo props={building.state.props.obj} subway={subway}/>
+      {/* <BuildingDetailInfo props={building.state.props.obj} subway={subway}/> */}
     </div>
 
     </main>
