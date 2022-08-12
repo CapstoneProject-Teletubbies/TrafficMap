@@ -9,10 +9,14 @@ import plus from "../images/plus.png";
 import minus from "../images/minus.png"
 import target from "../images/location.png"
 import BuildingDetailInfo from "../components/BuildingDetailInfo"
+import BusStopDetailInfo from '../components/BusStopDetailInfo';
 
-import mylocation from "../images/placeholderred.png"
+import placeholderred from "../images/placeholderred.png"
+import mylocation from "../images/mylocation.png"
+
 
 function LocationMap() {
+    const [sid, setSid] = useState();
     const [keyword, setKeyword] = useState();  //검색 받은 키워드
     const [plusbutton, setPlusButton] = useState();
     const [minusbutton, setMinusButton] = useState();
@@ -30,7 +34,10 @@ function LocationMap() {
     useEffect(()=>{
       console.log("실행 빌딩 state");
       console.log(building.state);
-      SetSubway(building.state.subway);
+      if(building.state.subway){
+        SetSubway(building.state.subway);
+        setSid(1);
+      }
       console.log(building.state.props);
     })
 
@@ -50,8 +57,12 @@ function LocationMap() {
       if(building.state.props.address !== '버스정류장'){
         buildinglatitude = building.state.props.obj.latitude;
         buildinglongitude = building.state.props.obj.longitude;
+        if(building.state.subway === null){
+          setSid(0);
+        }
       }
       else{
+        setSid(2);
         console.log(building.state.props.obj.posx);
         buildinglatitude = building.state.props.obj.posx;
         buildinglongitude = building.state.props.obj.posy;
@@ -75,7 +86,6 @@ function LocationMap() {
     }
 
   
-
     const handleKeyword = (e) => setKeyword(e.target.value);
     
     function setScreenSize(){
@@ -157,7 +167,7 @@ function LocationMap() {
             return map;
         }
 
-        function createmarker(lat, lng){
+        function createmarker(lat, lng, img){
           var wgs84;
           if(parseInt(lat) > 1000){
             var epsg3857 = new Tmapv2.Point(lat, lng);
@@ -171,7 +181,7 @@ function LocationMap() {
           }
           var marker = new Tmapv2.Marker({
             position: wgs84,
-            icon: "${mylocation}",
+            icon: img,
             map: locationmap
           })
         }
@@ -192,7 +202,8 @@ function LocationMap() {
         if(!locationmap && ${lat} && ${blat}){
           var mylocation = {lat: ${blat}, lng: ${blng}};
           locationmap = initTmap(mylocation);
-          createmarker(${blat}, ${blng});  
+          createmarker(${lat}, ${lng}, "${mylocation}");
+          createmarker(${blat}, ${blng}, "${placeholderred}");  
         }
         else{
           console.log(locationmap);
@@ -267,7 +278,9 @@ function LocationMap() {
       </div>
     </div>
     <div className="Infobar">
-      {/* <BuildingDetailInfo props={building.state.props.obj} subway={subway}/> */}
+      {sid !== 2 && <BuildingDetailInfo props={building.state.props.obj} subway={subway}/>}
+      {sid === 2 && <BusStopDetailInfo></BusStopDetailInfo>}
+      
     </div>
 
     </main>
