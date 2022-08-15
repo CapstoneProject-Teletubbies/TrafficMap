@@ -282,7 +282,7 @@ function LocationMap() {
     <div className="Infobar" style={{position: "fixed", width: "100%", height: "10%", bottom: "0px" }}>
         <BuildingDetailInfo props={building.state.props.obj} subway={subway}/>
     </div>}
-    {sid === 2 && <BusStopDetailInfo></BusStopDetailInfo>}
+    {sid === 2 && <BusStopDetailInfo obj={building.state.props.obj} ></BusStopDetailInfo>}
 
     </main>
   );
