@@ -227,13 +227,14 @@ function LocationMap() {
   }, [handleSuccess]);
 
   return (
-    <main>
+    <main style={{overflow: "hidden"}}>
     <div
       id="TMapApp"
       style={{
         height: "100%",
         width: "100%",
         position: "fixed",
+        overflow: "hidden",
       }}
     >
     </div>
@@ -277,11 +278,11 @@ function LocationMap() {
         {/* <SideBar /> */}
       </div>
     </div>
-    <div className="Infobar">
-      {sid !== 2 && <BuildingDetailInfo props={building.state.props.obj} subway={subway}/>}
-      {sid === 2 && <BusStopDetailInfo></BusStopDetailInfo>}
-      
-    </div>
+    {sid !== 2 && 
+    <div className="Infobar" style={{position: "fixed", width: "100%", height: "10%", bottom: "0px" }}>
+        <BuildingDetailInfo props={building.state.props.obj} subway={subway}/>
+    </div>}
+    {sid === 2 && <BusStopDetailInfo></BusStopDetailInfo>}
 
     </main>
   );
