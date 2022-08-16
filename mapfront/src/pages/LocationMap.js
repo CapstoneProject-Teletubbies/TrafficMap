@@ -32,13 +32,10 @@ function LocationMap() {
     const [error, setError] = useState();
 
     useEffect(()=>{
-      console.log("실행 빌딩 state");
-      console.log(building.state);
       if(building.state.subway){
         SetSubway(building.state.subway);
         setSid(1);
       }
-      console.log(building.state.props);
     })
 
     const handlePlusButton = () => {
@@ -282,7 +279,7 @@ function LocationMap() {
     <div className="Infobar" style={{position: "fixed", width: "100%", height: "10%", bottom: "0px" }}>
         <BuildingDetailInfo props={building.state.props.obj} subway={subway}/>
     </div>}
-    {sid === 2 && <BusStopDetailInfo obj={building.state.props.obj} ></BusStopDetailInfo>}
+    {sid === 2 && <BusStopDetailInfo obj={building.state.props.obj} bustop={building.state.bustop} location={location}></BusStopDetailInfo>}
 
     </main>
   );

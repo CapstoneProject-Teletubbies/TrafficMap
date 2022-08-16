@@ -203,10 +203,10 @@ const BuildingDetailInfo = (props) => {
                             {buildingDetailInfo.elivator}</div>
                         <div id='address' style={styleaddress}>
                             <br></br>{buildingDetailInfo.fullAddressRoad}</div>
-                        <div id='mybutton' style={stylebutton}>
-                        {/* <button type="button" class="btn btn-default btn-sm" onClick={setArrive}>도착</button> */}
-                        <Button variant="outline-success" size="sm" class="startbutton" onClick={setArrive}>도착</Button>
-                        <Button variant="outline-success" size="sm" class="startbutton" onClick={setStart}>출발</Button></div>
+                        <div className="" style={stylebutton}>
+                            <button type="button" class="btn btn-outline-primary btn-sm col-5" style={mybutton}>출발</button>
+                            <button type="button" class="btn btn-primary btn-sm col-5" style={mybutton}>도착</button>
+                        </div>
                 </div>
                 </footer>
             );
