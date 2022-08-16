@@ -60,7 +60,6 @@ function LocationMap() {
       }
       else{
         setSid(2);
-        console.log(building.state.props.obj.posx);
         buildinglatitude = building.state.props.obj.posx;
         buildinglongitude = building.state.props.obj.posy;
       }
@@ -95,7 +94,6 @@ function LocationMap() {
     var zoomout;
     var movelocation;
 
-    console.log("infoWindow : " + infoWindow);
     setScreenSize();
     if(building){
       navigator.geolocation.watchPosition(handleSuccess);
@@ -203,7 +201,6 @@ function LocationMap() {
           createmarker(${blat}, ${blng}, "${placeholderred}");  
         }
         else{
-          console.log(locationmap);
           console.log("Init false");
         }
 
@@ -244,6 +241,7 @@ function LocationMap() {
         display: "flex",
         padding: "0px 10px",
         backgroundColor: "white",
+        boxShadow: "0px 1px 20px 1px #A6A6A6",
       }}>
       <div className="row" style={{ textAlign: "center", width: "100%"}}>
         <div className="col-2" style={{ }}>
@@ -279,7 +277,7 @@ function LocationMap() {
     <div className="Infobar" style={{position: "fixed", width: "100%", height: "10%", bottom: "0px" }}>
         <BuildingDetailInfo props={building.state.props.obj} subway={subway}/>
     </div>}
-    {sid === 2 && <BusStopDetailInfo obj={building.state.props.obj} bustop={building.state.bustop} location={location}></BusStopDetailInfo>}
+    {sid === 2 && <BusStopDetailInfo obj={building.state.props.obj} bustop={building.state.busstop} location={location}></BusStopDetailInfo>}
 
     </main>
   );

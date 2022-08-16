@@ -39,8 +39,6 @@ const BuildingDetailInfo = (props) => {
     }
 
     useEffect(()=>{
-        console.log("디테일인포다 ㅆ비ㅏㄹ");
-        console.log(props);
         setBuildingDetailInfo(props.props);
         SetSubway(props.subway);
 
@@ -50,8 +48,6 @@ const BuildingDetailInfo = (props) => {
             {subway.map((obj)=>{
                 if((buildingDetailInfo.name).includes(obj.subwayId)){
                     if(obj.updnLine === "상행" && i<2){
-                        console.log("상행ㅇ");
-                        console.log(obj);
                         SetSubwayUp(subwayUp => [...subwayUp, obj]);
                         i++;
                     }
@@ -65,7 +61,7 @@ const BuildingDetailInfo = (props) => {
     }, [props])
 
     if(subwayUp){
-        console.log(subwayDown);
+       
     }
 
     const startbutton =()=>{
