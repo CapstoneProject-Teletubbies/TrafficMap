@@ -123,18 +123,19 @@ const BuildingDetailInfo = (props) => {
                     
                 <div id='Info' className="detailInfo" style={{height: "100%"}}>
                         <div id='headInfo' className="row" style={{top: "10px"}}>
-                            <div className="col-5" style={{textAlign: "left", paddingLeft: "5%"}}>
+                            <div className="col-7" style={{textAlign: "left", paddingLeft: "5%"}}>
                                 <b>{buildingDetailInfo.name}</b> {buildingDetailInfo.bizname}
-                            </div><div className="col-4"></div>
-                            <div id="subwaymapbutton" className="col-3" style={{float: "right"}}>
-                                <i class="bi bi-map" onClick={openMadal}></i>
-                            </div>
+                            </div><div className="col-4">
+                                <div id="subwaymapbutton" className="col-3" style={{float: "right"}}>
+                                    <i class="bi bi-map" onClick={openMadal}></i>
+                                </div>
+                            </div>  
                         </div>
                         {/* <div id='elivator' style={styleelivator}>
                             {buildingDetailInfo.elivator}</div> */}
                         <div id='realtime' style={{}}>
                             <div className="row" style={{height: "100%"}}>
-                            <div className="col-5" style={{top: "20px", textAlign: "left", marginLeft: "15px", fontSize: "0.9em", lineHeight: "1.4em", paddingRight: "0px"}}>
+                            <div className="col-6" style={{top: "20px", textAlign: "left", fontSize: "0.9em", paddingLeft: "4%"}}>
                                 {subwayUp && subwayUp.map((obj, index)=>{
                                     var arv = '';
                                     const name =(obj.trainLineNm).split('-');
@@ -156,7 +157,7 @@ const BuildingDetailInfo = (props) => {
                                 })}
                             </div>
                             
-                            <div className="col-5" style={{top: "20px", textAlign: "left", marginLeft: "15px", fontSize: "0.9em", lineHeight: "1.4em", paddingRight: "0px"}}>
+                            <div className="col-6" style={{top: "20px", textAlign: "left", fontSize: "0.9em", paddingRight: "4%"}}>
                                 {subwayDown && subwayDown.map((obj, index)=>{
                                     var arv = '';
                                     const name =(obj.trainLineNm).split('-');
