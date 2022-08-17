@@ -18,8 +18,9 @@ const BusStopDetailInfo = (props)=>{
     const [dist, setDist] = useState();
     const [busnumlist, setBusNumList] = useState([]);
     const [isset, SetIsSet] = useState(false);
+    const [disable, setDisable] = useState(false);
 
-    var bustopinfobar; 
+    var bustopinfobar, rbuslist; 
 
     const searchBusNum = (routeid) => {
         const busnum = axios.create({
@@ -66,9 +67,17 @@ const BusStopDetailInfo = (props)=>{
         setRBus(props.bustop);
         
         setTimeout((bustopinfobar = document.getElementById('bustopinfobar')), 100);
+        // setTimeout(()=>{
+        //     rbuslist = document.querySelector('#rbuslist');
+        //     rbuslist.addEventListener('click', oo());
+        // }, 100);
         var height = -(bustopinfobar.offsetHeight*0.9);
         setTop(height);
     }, [])
+
+    function oo(){
+        console.log("터치요");
+    }
 
     ////////////// 현재 내 위치와 선택한 건물의 거리 계산 (버정 BESSELTM 좌표계라 변환하는거까지)
     useEffect(()=>{
@@ -134,7 +143,7 @@ const BusStopDetailInfo = (props)=>{
     }
  
     return(
-        <Draggable ref={ref} onStart={(e, data) => handleDragStart(data)} onDrag={(e, data) => handleDrag(data)} onStop={(e, data) => handleDragStop(data)} axis='y' bounds={{top: top, bottom: bottom}}>
+        <Draggable ref={ref} disabled={disable} onStart={(e, data) => handleDragStart(data)} onDrag={(e, data) => handleDrag(data)} onStop={(e, data) => handleDragStop(data)} axis='y' bounds={{top: top, bottom: bottom}}>
         <div id="bustopinfobar" style={{position: "fixed", backgroundColor: "white", width: "100%", height: "100%", bottom: "-87%", borderRadius: "7px", textAlign: "-webkit-center",
                 boxShadow: "0px 2px 20px 2px #A6A6A6"}}>
             <div style={{position: "relative", backgroundColor: "#D5D5D5", width: "50%", height: "0.6%",  marginTop: "6px"
@@ -152,16 +161,21 @@ const BusStopDetailInfo = (props)=>{
                                 <button id="button2" onTouchEnd={test} type="button" class="btn btn-primary btn-sm col-5" style={{borderRadius: "20px", height: "35px", marginLeft: "8px"}}>도착</button>
                             </div>
                         </div>
-                        <div style={{position: "fixed", width: "100%", height: "87%", bottom: "0px", boxShadow: "0px 1px 1px 1px gray"}}>
-                            <ol className="list-group">
+                        <div id="rbuslist" style={{position: "fixed", overflowY: "scroll", width: "100%", height: "87%", bottom: "0px", boxShadow: "0px 1px 1px 1px gray"}}>
+                            <ol className="list-group" >
                             {rbus && isset && rbus.map((obj, index)=>{
                                 var test = busnumlist[index];
                                 if(test){
                                 return(
+                                    <div>
                                     <BusInfo obj={test}></BusInfo>
+                                    <div>
+                                        <h2>test</h2>
+                                    </div>
+                                    </div>
                                 );}})}
                             </ol>
-                        </div>       
+                        </div>      
                     </div>
                 }
         </div>
