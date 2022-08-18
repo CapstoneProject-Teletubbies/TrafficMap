@@ -171,7 +171,7 @@ const BusStopDetailInfo = (props)=>{
  
     return(
         <Draggable ref={ref} onMouseDown={(e)=>{test(e)}} disabled={disable} onStart={(e, data) => handleDragStart(data)} onDrag={(e, data) => handleDrag(data)} onStop={(e, data) => handleDragStop(data)} axis='y' bounds={{top: top, bottom: bottom}}>
-        <div id="bustopinfobar" style={{position: "fixed", backgroundColor: "white", width: "100%", height: "100%", bottom: "-87%", borderRadius: "7px", textAlign: "-webkit-center",
+        <div id="bustopinfobar" style={{position: "fixed", backgroundColor: "white", width: "100%", height: "100%", bottom: "-87%", borderRadius: "15px 15px 0px 0px", textAlign: "-webkit-center",
                 boxShadow: "0px 2px 20px 2px #A6A6A6"}}>
             <div style={{position: "relative", backgroundColor: "#D5D5D5", width: "50%", height: "0.6%",  marginTop: "6px"
                         , borderRadius: "6px", }}>
