@@ -19,7 +19,8 @@ const BusStopDetailInfo = (props)=>{
     const [dist, setDist] = useState();
     const [busnumlist, setBusNumList] = useState([]);
     const [isset, SetIsSet] = useState(false);
-    const [disable, setDisable] = useState(false);
+    const [disableout, setDisableOut] = useState(false);
+    const [disablein, setDisableIn] = useState(true);
 
     var bustopinfobar, rbuslist; 
 
@@ -72,16 +73,13 @@ const BusStopDetailInfo = (props)=>{
         setTimeout((bustopinfobar = document.getElementById('bustopinfobar')), 100);
         setTimeout(()=>{
             $('#rbuslist').on('touchstart', function(e){
-                setDisable(true);
                 console.log(e.changedTouches[0].clientX);
                 console.log("먼가시작");
             });
             $('#rbuslist').on('touchmove', function(e){
-                setDisable(true);
                 console.log("먼가ing");
             });
             $('#rbuslist').on('touchend', function(e){
-                setDisable(false);
                 console.log("먼가끝");
             });
         }, 50);
@@ -144,51 +142,84 @@ const BusStopDetailInfo = (props)=>{
 
     const handleDragStop = (evt) => {                           //드래그 끝났을 때 이벤트
         var element = document.getElementById('bustopinfobar');
+        var element1 = document.getElementById('rbuslist');
+        console.log(element1.offsetHeight);   // 확인하기!! overflow됐을때 div 높이 확인 확인 확인 
+        console.log(element.offsetHeight);     //
         var posy;
         posy = startXY.y - evt.y ;
-        if(posy > 0){
+        if(posy > 0){               //위로 드래그
             posy = evt.lastY;
             var height = (element.offsetHeight)*0.87 + evt.lastY;
             $('#bustopinfobar').stop(true).animate({bottom: posy}, 300);
             setTop(evt.lastY);
             setBottom(height);
-            // setDisable(true);
+            setDisableOut(true);
+            setDisableIn(false);
         }
-        else if(posy < 0){   
+        else if(posy < 0){          //아래로 드래그
             var height = -(element.offsetHeight)*0.87 + evt.lastY;
             setTop(height);
             setBottom(evt.lastY + 13);
             $('#bustopinfobar').stop(true).animate({bottom: height}, 300);
-            // setDisable(false);
+            setDisableOut(false);
+            setDisableIn(true);
         }
 
     }
+
+    const handletest = (evt) => {
+        console.log("테스트함");
+        setDisableOut(false);
+    }
+
+    const handleDragStopIn = (evt) => {
+        // var element = document.getElementById('bustopinfobar');
+        // var posy;
+        // posy = startXY.y - evt.y ;
+        // if(posy < 0){
+        //     var height = -(element.offsetHeight)*0.87 + evt.lastY;
+        //     setTop(height);
+        //     // setBottom(evt.lastY + 13);
+        //     $('#bustopinfobar').stop(true).animate({bottom: height}, 300);
+        //     setDisableOut(false);
+        //     setDisableIn(true);
+        // }
+    }
+
 
     const test = (evt) => {            //출발, 도착 터치 이벤트
         console.log("클릭");
         
     }
+    const test1 = (evt) => {
+        console.log("코어코어");
+    }
  
     return(
-        <Draggable ref={ref} onMouseDown={(e)=>{test(e)}} disabled={disable} onStart={(e, data) => handleDragStart(data)} onDrag={(e, data) => handleDrag(data)} onStop={(e, data) => handleDragStop(data)} axis='y' bounds={{top: top, bottom: bottom}}>
-        <div id="bustopinfobar" style={{position: "fixed", backgroundColor: "white", width: "100%", height: "100%", bottom: "-87%", borderRadius: "15px 15px 0px 0px", textAlign: "-webkit-center",
-                boxShadow: "0px 2px 20px 2px #A6A6A6"}}>
-            <div style={{position: "relative", backgroundColor: "#D5D5D5", width: "50%", height: "0.6%",  marginTop: "6px"
-                        , borderRadius: "6px", }}>
-            </div>
-                {bustop &&
+        <Draggable ref={ref} onMouseDown={(e)=>{test(e);}} disabled={disableout} onStart={(e, data) => handleDragStart(data)} onDrag={(e, data) => handleDrag(data)} onStop={(e, data) => handleDragStop(data)} axis='y' bounds={{top: top, bottom: bottom}}>
+        <div id="bustopinfobar" style={{position: "fixed", backgroundColor: "white", width: "100%", height: "100%", bottom: "-87%", borderRadius: "15px 15px 0px 0px", textAlign: "-webkit-center", zIndex: "0",
+                boxShadow: "0px 2px 20px 2px #A6A6A6"}}> 
+                {bustop &&          //봋
                     <div style={{position: "relative", height: "100%"}}>
-                        <div style={{position: "fixed", width:"100%", height: "12%"}}>
-                            <div style={{fontSize: "1.2rem", float: "left", padding: "9px"}}>
-                                {bustop.bstopnm} <br></br>
-                                <div style={{fontSize: "1.0rem", float: "left", paddingLeft: "2px"}}>{dist}m</div>
-                            </div>
-                            <div className="" style={{position: "relative", width: "170px", float: "right", right: "0px", marginTop: "13%"}}>
-                                <button id="button1" onTouchEnd={test} type="button" class="btn btn-outline-primary btn-sm col-5" style={{borderRadius: "20px", height: "35px", marginLeft: "8px"}}>출발</button>
-                                <button id="button2" onTouchEnd={test} type="button" class="btn btn-primary btn-sm col-5" style={{borderRadius: "20px", height: "35px", marginLeft: "8px"}}>도착</button>
+                        <DraggableCore disabled={disablein} onStart={(e, data) => handletest(data)} onDrag={(e, data) => handleDrag(data)} onStop={(e, data) => handleDragStopIn(data)} axis='y' bounds={{top: top, bottom: bottom}} >
+                        <div style={{position: "relative", width: "100%", height: "100%", textAlign: "-webkit-center", zIndex: "9"}}>
+                            <div style={{position: "relative", backgroundColor: "#D5D5D5", width: "30%", height: "0.6%",  marginTop: "6px"
+                            , borderRadius: "6px", }}></div>
+                        
+                            <div style={{position: "fixed", width:"100%", height: "12%"}}>
+                                <div style={{fontSize: "1.2rem", float: "left", padding: "9px"}}>
+                                    {bustop.bstopnm} <br></br>
+                                    <div style={{fontSize: "1.0rem", float: "left", paddingLeft: "2px"}}>{dist}m</div>
+                                </div>
+                                <div className="" style={{position: "relative", width: "170px", float: "right", right: "0px", marginTop: "13%"}}>
+                                    <button id="button1" onTouchEnd={test} type="button" class="btn btn-outline-primary btn-sm col-5" style={{borderRadius: "20px", height: "35px", marginLeft: "8px"}}>출발</button>
+                                    <button id="button2" onTouchEnd={test} type="button" class="btn btn-primary btn-sm col-5" style={{borderRadius: "20px", height: "35px", marginLeft: "8px"}}>도착</button>
+                                </div>
                             </div>
                         </div>
-                        <div id="rbuslist" onTouchStart={touchstart} onTouchMove={touchmove} onTouchEnd={touchend} style={{position: "fixed", overflowY: "scroll", width: "100%", height: "87%", bottom: "0px", boxShadow: "0px 1px 1px 1px gray", zIndex: "6"}}>
+                        </DraggableCore>
+                        <Draggable disabled={true}>
+                        <div id="rbuslist" onTouchStart={touchstart} onTouchMove={touchmove} onTouchEnd={touchend} style={{position: "fixed", overflowY: "scroll", width: "100%", height: "87%", bottom: "0px", boxShadow: "0px 1px 1px 1px gray", zIndex: "10"}}>
                             <ol className="list-group" >
                             {rbus && isset && rbus.map((obj, index)=>{
                                 var test = busnumlist[index];
@@ -203,7 +234,8 @@ const BusStopDetailInfo = (props)=>{
                                     </div>
                                 );}})}
                             </ol>
-                        </div>     
+                        </div> 
+                        </Draggable>    
                     </div>
                 }
         </div>

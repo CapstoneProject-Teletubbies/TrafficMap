@@ -13,11 +13,13 @@ const BuildingDetailInfo = (props) => {
     const [subwayDown, SetSubwayDown] = useState([]);
     const [one, setOne] = useState(false);
     const [url, Seturl] = useState();
+    const [line, setLine] = useState();
 
     const [modalOpen, setModalOpen] = useState(false);
 
     const openMadal = () => {
-        setModalOpen(true);
+        handlesubwaymapbutton();
+        setTimeout(setModalOpen(true), 50);
     }
     const closeModal = () => {
         setModalOpen(false);
@@ -31,14 +33,21 @@ const BuildingDetailInfo = (props) => {
         subwaymap.post('/api/subway/photo', null, {params: {name: subwayname}})
         .then(function(res){
             console.log(res.data);
-            var url = '../../지하철입체지도/인천1호선/간석오거리_5번 출입구 근처 엘리베이터_부평삼거리 방면.png'
-            Seturl(url);
+            if((buildingDetailInfo.name).includes('인천지하철1호선')){
+                setLine('지하철입체지도/인천1호선/');
+                console.log("인천 지하철 1호선임");          
+            }else if((buildingDetailInfo.name).includes('인천지하철2호선')){
+                setLine('지하철입체지도/인천2호선/');
+                console.log("인천 지하철 2호선임");
+            }
+            Seturl(res.data);
         }).catch(function(err){
             console.log("지하철 입체지도 정보 못받아옴");
         })
     }
 
     useEffect(()=>{
+        console.log(props);
         setBuildingDetailInfo(props.props);
         SetSubway(props.subway);
 
@@ -116,7 +125,7 @@ const BuildingDetailInfo = (props) => {
         if(subway){
             return(
                 <div>
-                    <Modal open={modalOpen} close={closeModal}>
+                    <Modal open={modalOpen} close={closeModal} url={url} line={line}>
                         팝업창임
                     </Modal>
                 <footer>
@@ -135,7 +144,7 @@ const BuildingDetailInfo = (props) => {
                             {buildingDetailInfo.elivator}</div> */}
                         <div id='realtime' style={{}}>
                             <div className="row" style={{height: "100%"}}>
-                            <div className="col-6" style={{top: "20px", textAlign: "left", fontSize: "0.9em", paddingLeft: "4%"}}>
+        {/*상행 */}             <div className="col-6" style={{top: "20px", textAlign: "left", fontSize: "0.9em", paddingLeft: "4%", paddingRight: "1%"}}>
                                 {subwayUp && subwayUp.map((obj, index)=>{
                                     var arv = '';
                                     const name =(obj.trainLineNm).split('-');
@@ -146,10 +155,10 @@ const BuildingDetailInfo = (props) => {
                                     }
                                    return(
                                     <div className="row" style={{textAlign: "left"}}>
-                                        <div className="col-6">
+                                        <div className="col-6" style={{padding: "0px"}}>
                                             <h8>{name[0]}</h8>
                                         </div>
-                                        <div className="col-6" style={{textAlign: "left",}}>
+                                        <div className="col-6" style={{textAlign: "left", padding: "0px"}}>
                                             <h8>{arv}</h8>
                                         </div>
                                     </div>
@@ -157,23 +166,21 @@ const BuildingDetailInfo = (props) => {
                                 })}
                             </div>
                             
-                            <div className="col-6" style={{top: "20px", textAlign: "left", fontSize: "0.9em", paddingRight: "4%"}}>
+                            <div className="col-6" style={{top: "20px", textAlign: "left", fontSize: "0.9em", paddingLeft: "1%", paddingRight: "4%"}}>
                                 {subwayDown && subwayDown.map((obj, index)=>{
                                     var arv = '';
                                     const name =(obj.trainLineNm).split('-');
                                     if((obj.arvlMsg2).includes("도착")){
                                         arv = obj.arvlMsg2;
-                                        console.log("도착포함" + arv);
                                     }else{
                                         arv = (obj.arvlMsg2).split('역')[0];
-                                        console.log("미포함" + arv);
                                     }
                                    return(
                                     <div className="row" style={{textAlign: "left",}}>
-                                        <div className="col-6">
+                                        <div className="col-6" style={{padding: "0px"}}>
                                         <h8>{name[0]}</h8>
                                         </div>
-                                        <div className="col-6" style={{textAlign: "left",}}>
+                                        <div className="col-6" style={{textAlign: "left", padding: "0px"}}>
                                             <h8>{arv}</h8>
                                         </div>
                                     </div>
