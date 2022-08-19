@@ -43,11 +43,22 @@ public class SubwayController {
     }
 
 
+    //인천 1.2호선 내부지도
     @RequestMapping(value="/subway/photo",method = {RequestMethod.POST})
     //@RequestMapping(value="subway/photo")
     public List<String> GetSubwayPhoto(String name){
         //String name = "인천시청";
         return subwayService.findSubwayPhotoByStopName().get(name);
     }
+
+    // 1~9호선 내부지도(비상대피안내도로 대체)
+//        @GetMapping("/subway/photo2")
+    @RequestMapping(value="/subway/photo2",method = {RequestMethod.POST})
+    public String GetSubwayPhoto2(String line,String name){
+//        String line = "2";
+//        String name = "홍대입구역";
+        return subwayService.findSubwayPhoto2(line, name);
+    }
+
 
 }

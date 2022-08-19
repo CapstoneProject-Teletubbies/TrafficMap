@@ -128,6 +128,12 @@ public class WayServiceImpl implements WayService {
                 Number turnType = (Number) properties.get("turnType"); //회전정보
                 String pointType = (String) properties.get("pointType"); //안내지점 구분
                 String facilityType = (String) properties.get("facilityType"); //시설물 구분
+                if(facilityType.equals("17")){
+                    wayDto.setIsStair(Boolean.TRUE);
+                }
+                else{
+                    wayDto.setIsStair(Boolean.FALSE);
+                }
                 wayDto.setPointIndex(pointIndex);
                 wayDto.setPointDescription(description);
                 wayDto.setTurnType(turnType);
@@ -140,6 +146,12 @@ public class WayServiceImpl implements WayService {
                 Number time = (Number) properties.get("time");  // 구간 소요시간
                 Number roadType = (Number) properties.get("roadType"); //도로 타입 정보
                 String facilityType = (String) properties.get("facilityType"); //시설물 구분
+                if(facilityType.equals("17")){
+                    wayDto.setIsStair(Boolean.TRUE);
+                }
+                else{
+                    wayDto.setIsStair(Boolean.FALSE);
+                }
                 wayDto.setLineIndex(lineIndex);
                 wayDto.setLineDescription(description);
                 wayDto.setDistance(distance);
