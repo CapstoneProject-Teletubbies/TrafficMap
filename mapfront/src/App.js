@@ -5,6 +5,7 @@ import Search from './pages/Search';
 import ResultSearch from './pages/ResultSearch';
 import BusRoute from './pages/BusRoute';
 import LocationMap from './pages/LocationMap';
+import FindWay from './pages/FindWay';
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path='/resultsearch' element={<ResultSearch />} />
         <Route path='/bus-route' element={<BusRoute />} />
         <Route path='/location-map' element={<LocationMap />} />
+        <Route path='/find-way' element={<FindWay />} />
       </Routes>
     </Router>
   );

@@ -52,8 +52,7 @@ import axios from "axios";
                     justifyContent: "center",
                     display: "flex",
                     padding: "10px 0px",
-                }}
-            >
+                }}>
                 <nav
                     class="navbar navbar-default"
                     style={{
