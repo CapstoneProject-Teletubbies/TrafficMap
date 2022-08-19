@@ -35,10 +35,13 @@ public class SubwayServiceImpl implements SubwayService {
 
     @Value("${SUBWAY_URL}")
     private String subway_url; //지하철 URL 설정
+    @Value("${SUBWAYMAP_URL}")
+    private String suwaymap_url; //지하철 1-9호선 내부지도 URL 설정
     @Value("${WHEELCHAIR_URL}")
     private String wheelchair_url; //휠체어리프트 URL 설정
     @Value("${TOILET_URL}")
     private String toilet_url; // 장애인화장실 URL 설정
+
 
     @SneakyThrows
     public List<SubwayDto> findSubwayByStopName(String name) { //지하철역 이름으로 도착정보 조회
@@ -290,6 +293,7 @@ public class SubwayServiceImpl implements SubwayService {
 //        }
 
 
+    //인천 1.2호선 내부지도
     @SneakyThrows
     public MultiValueMap<String, String> findSubwayPhotoByStopName() {
 
@@ -311,4 +315,43 @@ public class SubwayServiceImpl implements SubwayService {
         return map;
     }
 
+    // 1~9호선
+    @SneakyThrows
+    public String findSubwayPhoto2(String line, String name) {
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders(); //헤더
+        restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 한글깨짐 방지
+
+//        String encodedName = URLEncoder.encode(name, "UTF-8");
+        //URI 생성
+        UriComponents uri = UriComponentsBuilder
+                .fromHttpUrl(suwaymap_url)
+                .path("/" + subway_apikey + "/json/SmrtEmergerncyGuideImg/1/50/" + line + "/")
+                .build(true);
+
+        //response
+        ResponseEntity<String> result = restTemplate.exchange(uri.toUri(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
+
+        JSONParser parser = new JSONParser();
+        JSONObject object = (JSONObject) parser.parse(result.getBody());
+        JSONObject smrtEmergerncyGuideImg = (JSONObject) object.get("SmrtEmergerncyGuideImg");
+        Long totalCount = (Long) smrtEmergerncyGuideImg.get("list_total_count");
+        JSONArray row = (JSONArray) smrtEmergerncyGuideImg.get("row");
+
+        for (int i = 0; i < totalCount; i++) { // 개수만큼 반복
+            JSONObject array = (JSONObject) row.get(i);
+
+            String getName = array.get("STN_NM").toString();
+
+            if (name.equals(getName)) { // 받은 역이름과 같으면
+                String url = array.get("STN_IMG_URL").toString();
+
+                return url; //url 반환
+            }
+            else { // 다르면
+                continue; // 넘어갑시다
+            }
+        }
+        return null; //없으면 null 반환해버렷
+    }
 }
