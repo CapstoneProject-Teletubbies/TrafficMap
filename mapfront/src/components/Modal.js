@@ -13,6 +13,7 @@ const Modal = (props) => {
   const { open, close, url, line } = props;
 
   console.log(props);
+  console.log(Array.isArray(url));
 
   SwiperCore.use([Navigation, Pagination]);
 
@@ -44,6 +45,7 @@ const Modal = (props) => {
             </button>
           </header>
           <div style={{position: "relative", width: "100%", height: "80%"}}>
+          {Array.isArray(url) && 
           <Swiper {...swiperParams} style={swiperStyle}>
             {url && url.map((obj, index)=>{
               console.log(line+obj+'.png');
@@ -54,15 +56,12 @@ const Modal = (props) => {
                 </SwiperSlide>
               );
             })}
-                {/* <SwiperSlide>
-                <img src='지하철입체지도/인천1호선/간석오거리_5번 출입구 근처 엘리베이터_부평삼거리 방면.png'
-                style={{width: "100%", height: "100%"}}></img>
-                </SwiperSlide>
-                <SwiperSlide>
-                <img src='지하철입체지도/인천1호선/간석오거리_5번 출입구 근처 엘리베이터_부평삼거리 방면.png'
-                style={{width: "100%", height: "100%"}}></img>
-                </SwiperSlide> */}
           </Swiper>
+          }
+          {!Array.isArray(url) && 
+          <div style={{swiperStyle}}>
+            <img src={url} style={{position: "relative", width: "100%", height: "100%"}}></img>
+          </div>}
           </div>
           {/* <div>
             <button className="close" onClick={close}>

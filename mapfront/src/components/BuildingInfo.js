@@ -33,7 +33,6 @@ const BuildingInfo = (props) => {
         })
     };
 
-
     const handleClick = () => {
         console.log(props);
         if(props.obj.upperBizName === "교통편의"){

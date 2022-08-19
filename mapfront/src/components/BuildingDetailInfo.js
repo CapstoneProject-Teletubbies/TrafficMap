@@ -27,9 +27,18 @@ const BuildingDetailInfo = (props) => {
 
     const handlesubwaymapbutton = () => {
         const subwayname = (props.props.name.split('역'))[0];
-        const subwaymap = axios.create({
+        const subwaymap = axios.create({                                    //인천지하철 1, 2호선 내부지도
             baseURL: 'http://localhost:9000/'
         })
+        const subwaymap2 = axios.create({                                   //1~9호선 내부지도
+            baseURL: 'http://localhost:9000/'
+        })
+
+        var name = (buildingDetailInfo.name).split(/[\[\]]/)
+        console.log(line);
+        var line = name[1].split('호');
+
+        if((buildingDetailInfo.name).includes('인천지하철')){
         subwaymap.post('/api/subway/photo', null, {params: {name: subwayname}})
         .then(function(res){
             console.log(res.data);
@@ -44,6 +53,15 @@ const BuildingDetailInfo = (props) => {
         }).catch(function(err){
             console.log("지하철 입체지도 정보 못받아옴");
         })
+        }else{
+        subwaymap2.post('api/subway/photo2', null, {params: {line: line[0], name: name[0]}})
+        .then(function(res){
+            console.log(res.data);
+            Seturl(res.data);
+        }).catch(function(err){
+            console.log("1~9호선 내부지도 못받아옴");
+        })
+        }
     }
 
     useEffect(()=>{
@@ -144,7 +162,7 @@ const BuildingDetailInfo = (props) => {
                             {buildingDetailInfo.elivator}</div> */}
                         <div id='realtime' style={{}}>
                             <div className="row" style={{height: "100%"}}>
-        {/*상행 */}             <div className="col-6" style={{top: "20px", textAlign: "left", fontSize: "0.9em", paddingLeft: "4%", paddingRight: "1%"}}>
+        {/*상행 */}             <div className="col-6" style={{top: "20px", textAlign: "left", fontSize: "0.9em", paddingLeft: "6%", paddingRight: "1%"}}>
                                 {subwayUp && subwayUp.map((obj, index)=>{
                                     var arv = '';
                                     const name =(obj.trainLineNm).split('-');
@@ -166,7 +184,7 @@ const BuildingDetailInfo = (props) => {
                                 })}
                             </div>
                             
-                            <div className="col-6" style={{top: "20px", textAlign: "left", fontSize: "0.9em", paddingLeft: "1%", paddingRight: "4%"}}>
+                            <div className="col-6" style={{top: "20px", textAlign: "left", fontSize: "0.9em", paddingLeft: "1%", paddingRight: "6%"}}>
                                 {subwayDown && subwayDown.map((obj, index)=>{
                                     var arv = '';
                                     const name =(obj.trainLineNm).split('-');
