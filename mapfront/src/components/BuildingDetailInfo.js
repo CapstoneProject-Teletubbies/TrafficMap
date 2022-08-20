@@ -25,6 +25,13 @@ const BuildingDetailInfo = (props) => {
         setModalOpen(false);
     }
 
+    const handlestartButton = () => {
+
+    }
+    const handleendButton = () => {
+        
+    }
+
     const handlesubwaymapbutton = () => {
         const subwayname = (props.props.name.split('역'))[0];
         const subwaymap = axios.create({                                    //인천지하철 1, 2호선 내부지도
@@ -208,8 +215,8 @@ const BuildingDetailInfo = (props) => {
                             </div>
                         </div>
                         <div className="" style={stylebutton}>
-                        <button type="button" class="btn btn-outline-primary btn-sm col-5" style={mybutton}>출발</button>
-                        <button type="button" class="btn btn-primary btn-sm col-5" style={mybutton}>도착</button>
+                        <button type="button" class="btn btn-outline-primary btn-sm col-5" onClick={handlestartButton} style={mybutton}>출발</button>
+                        <button type="button" class="btn btn-primary btn-sm col-5" onClick={handleendButton} style={mybutton}>도착</button>
                         </div>
                     </div>
                     </footer>
