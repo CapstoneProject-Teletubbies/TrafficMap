@@ -17,13 +17,14 @@ const BusStopInfo = (props) => {
         .then(function(res){
             console.log(res.data);
 
-            // navigate("/location-map", {
-            //     state: {
-            //         props: props,
-            //         subway: res.data,
-            //     }
-            // });
-            // window.location.href = "/location-map";
+            navigate("/location-map", {
+                state: {
+                    props: props,
+                    subway: null,
+                    busstop: res.data,
+                }
+            });
+            window.location.href = "/location-map";
         }).catch(function(err){
             console.log("버스정류장 실시간 도착정보 못받아옴");
         })
@@ -34,6 +35,7 @@ const BusStopInfo = (props) => {
 
 
     const handleClick = () => {
+        console.log("props");
         console.log(props);
         searchbusstopinfo();
     };

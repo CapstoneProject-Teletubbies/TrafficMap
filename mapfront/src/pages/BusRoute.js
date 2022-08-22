@@ -90,7 +90,7 @@ function BusRoute(){
             <div clasName="d-lg-none" style={{height: "125px"}} ></div> {/*더미div*/}
 
             <div className="brl" style={{overflow: "hidden"}}> {/*버스 루트 리스트*/}
-                <div className="list-group">
+                <div className="list-group" style={{}}>
                     {isitbus && busInfo && busRoute && busRoute.map((obj, index)=>{
                         var isit;
                         var bus = undefined;

@@ -13,33 +13,65 @@ const BuildingDetailInfo = (props) => {
     const [subwayDown, SetSubwayDown] = useState([]);
     const [one, setOne] = useState(false);
     const [url, Seturl] = useState();
+    const [line, setLine] = useState();
 
     const [modalOpen, setModalOpen] = useState(false);
 
     const openMadal = () => {
-        setModalOpen(true);
+        handlesubwaymapbutton();
+        setTimeout(setModalOpen(true), 50);
     }
     const closeModal = () => {
         setModalOpen(false);
     }
 
+    const handlestartButton = () => {
+
+    }
+    const handleendButton = () => {
+        
+    }
+
     const handlesubwaymapbutton = () => {
         const subwayname = (props.props.name.split('역'))[0];
-        const subwaymap = axios.create({
+        const subwaymap = axios.create({                                    //인천지하철 1, 2호선 내부지도
             baseURL: 'http://localhost:9000/'
         })
+        const subwaymap2 = axios.create({                                   //1~9호선 내부지도
+            baseURL: 'http://localhost:9000/'
+        })
+
+        var name = (buildingDetailInfo.name).split(/[\[\]]/)
+        console.log(line);
+        var line = name[1].split('호');
+
+        if((buildingDetailInfo.name).includes('인천지하철')){
         subwaymap.post('/api/subway/photo', null, {params: {name: subwayname}})
         .then(function(res){
             console.log(res.data);
-            var url = '../../지하철입체지도/인천1호선/간석오거리_5번 출입구 근처 엘리베이터_부평삼거리 방면.png'
-            Seturl(url);
+            if((buildingDetailInfo.name).includes('인천지하철1호선')){
+                setLine('지하철입체지도/인천1호선/');
+                console.log("인천 지하철 1호선임");          
+            }else if((buildingDetailInfo.name).includes('인천지하철2호선')){
+                setLine('지하철입체지도/인천2호선/');
+                console.log("인천 지하철 2호선임");
+            }
+            Seturl(res.data);
         }).catch(function(err){
             console.log("지하철 입체지도 정보 못받아옴");
         })
+        }else{
+        subwaymap2.post('api/subway/photo2', null, {params: {line: line[0], name: name[0]}})
+        .then(function(res){
+            console.log(res.data);
+            Seturl(res.data);
+        }).catch(function(err){
+            console.log("1~9호선 내부지도 못받아옴");
+        })
+        }
     }
 
     useEffect(()=>{
-        console.log("디테일인포다 ㅆ비ㅏㄹ");
         console.log(props);
         setBuildingDetailInfo(props.props);
         SetSubway(props.subway);
@@ -50,8 +82,6 @@ const BuildingDetailInfo = (props) => {
             {subway.map((obj)=>{
                 if((buildingDetailInfo.name).includes(obj.subwayId)){
                     if(obj.updnLine === "상행" && i<2){
-                        console.log("상행ㅇ");
-                        console.log(obj);
                         SetSubwayUp(subwayUp => [...subwayUp, obj]);
                         i++;
                     }
@@ -65,7 +95,7 @@ const BuildingDetailInfo = (props) => {
     }, [props])
 
     if(subwayUp){
-        console.log(subwayDown);
+       
     }
 
     const startbutton =()=>{
@@ -120,25 +150,26 @@ const BuildingDetailInfo = (props) => {
         if(subway){
             return(
                 <div>
-                    <Modal open={modalOpen} close={closeModal}>
+                    <Modal open={modalOpen} close={closeModal} url={url} line={line}>
                         팝업창임
                     </Modal>
                 <footer>
                     
                 <div id='Info' className="detailInfo" style={{height: "100%"}}>
                         <div id='headInfo' className="row" style={{top: "10px"}}>
-                            <div className="col-5" style={{textAlign: "left", paddingLeft: "5%"}}>
+                            <div className="col-7" style={{textAlign: "left", paddingLeft: "5%"}}>
                                 <b>{buildingDetailInfo.name}</b> {buildingDetailInfo.bizname}
-                            </div><div className="col-4"></div>
-                            <div id="subwaymapbutton" className="col-3" style={{float: "right"}}>
-                                <i class="bi bi-map" onClick={openMadal}></i>
-                            </div>
+                            </div><div className="col-4">
+                                <div id="subwaymapbutton" className="col-3" style={{float: "right"}}>
+                                    <i class="bi bi-map" onClick={openMadal}></i>
+                                </div>
+                            </div>  
                         </div>
                         {/* <div id='elivator' style={styleelivator}>
                             {buildingDetailInfo.elivator}</div> */}
                         <div id='realtime' style={{}}>
                             <div className="row" style={{height: "100%"}}>
-                            <div className="col-5" style={{top: "20px", textAlign: "left", marginLeft: "15px", fontSize: "0.9em", lineHeight: "1.4em", paddingRight: "0px"}}>
+        {/*상행 */}             <div className="col-6" style={{top: "20px", textAlign: "left", fontSize: "0.9em", paddingLeft: "6%", paddingRight: "1%"}}>
                                 {subwayUp && subwayUp.map((obj, index)=>{
                                     var arv = '';
                                     const name =(obj.trainLineNm).split('-');
@@ -149,10 +180,10 @@ const BuildingDetailInfo = (props) => {
                                     }
                                    return(
                                     <div className="row" style={{textAlign: "left"}}>
-                                        <div className="col-6">
+                                        <div className="col-6" style={{padding: "0px"}}>
                                             <h8>{name[0]}</h8>
                                         </div>
-                                        <div className="col-6" style={{textAlign: "left",}}>
+                                        <div className="col-6" style={{textAlign: "left", padding: "0px"}}>
                                             <h8>{arv}</h8>
                                         </div>
                                     </div>
@@ -160,23 +191,21 @@ const BuildingDetailInfo = (props) => {
                                 })}
                             </div>
                             
-                            <div className="col-5" style={{top: "20px", textAlign: "left", marginLeft: "15px", fontSize: "0.9em", lineHeight: "1.4em", paddingRight: "0px"}}>
+                            <div className="col-6" style={{top: "20px", textAlign: "left", fontSize: "0.9em", paddingLeft: "1%", paddingRight: "6%"}}>
                                 {subwayDown && subwayDown.map((obj, index)=>{
                                     var arv = '';
                                     const name =(obj.trainLineNm).split('-');
                                     if((obj.arvlMsg2).includes("도착")){
                                         arv = obj.arvlMsg2;
-                                        console.log("도착포함" + arv);
                                     }else{
                                         arv = (obj.arvlMsg2).split('역')[0];
-                                        console.log("미포함" + arv);
                                     }
                                    return(
                                     <div className="row" style={{textAlign: "left",}}>
-                                        <div className="col-6">
+                                        <div className="col-6" style={{padding: "0px"}}>
                                         <h8>{name[0]}</h8>
                                         </div>
-                                        <div className="col-6" style={{textAlign: "left",}}>
+                                        <div className="col-6" style={{textAlign: "left", padding: "0px"}}>
                                             <h8>{arv}</h8>
                                         </div>
                                     </div>
@@ -186,8 +215,8 @@ const BuildingDetailInfo = (props) => {
                             </div>
                         </div>
                         <div className="" style={stylebutton}>
-                        <button type="button" class="btn btn-outline-primary btn-sm col-5" style={mybutton}>출발</button>
-                        <button type="button" class="btn btn-primary btn-sm col-5" style={mybutton}>도착</button>
+                        <button type="button" class="btn btn-outline-primary btn-sm col-5" onClick={handlestartButton} style={mybutton}>출발</button>
+                        <button type="button" class="btn btn-primary btn-sm col-5" onClick={handleendButton} style={mybutton}>도착</button>
                         </div>
                     </div>
                     </footer>
@@ -203,10 +232,10 @@ const BuildingDetailInfo = (props) => {
                             {buildingDetailInfo.elivator}</div>
                         <div id='address' style={styleaddress}>
                             <br></br>{buildingDetailInfo.fullAddressRoad}</div>
-                        <div id='mybutton' style={stylebutton}>
-                        {/* <button type="button" class="btn btn-default btn-sm" onClick={setArrive}>도착</button> */}
-                        <Button variant="outline-success" size="sm" class="startbutton" onClick={setArrive}>도착</Button>
-                        <Button variant="outline-success" size="sm" class="startbutton" onClick={setStart}>출발</Button></div>
+                        <div className="" style={stylebutton}>
+                            <button type="button" class="btn btn-outline-primary btn-sm col-5" style={mybutton}>출발</button>
+                            <button type="button" class="btn btn-primary btn-sm col-5" style={mybutton}>도착</button>
+                        </div>
                 </div>
                 </footer>
             );

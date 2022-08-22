@@ -18,7 +18,8 @@
   .modal > section {
     width: 90%;
     height: 35%;
-    max-width: 450px;
+    max-width: 500px;
+    max-height: 700px;
     margin: 0 auto;
     border-radius: 0.3rem;
     background-color: #fff;

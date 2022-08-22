@@ -29,8 +29,6 @@ function ResultSearch() {
     const [markerlist, setMarkerList] = useState([]);
     const [choosemarker, setChooseMarker] = useState();
 
-    const [getBuildingInfo, SetGetBuildingInfo] = useState();
-
     const outsideRef = useRef(null);
     useOutsideClick(outsideRef);
 
@@ -64,6 +62,26 @@ function ResultSearch() {
 
     const handleKeyword = (e) => setKeyword(e.target.value);
 
+    /////////////////////////////////////////////////////////////////////// 
+
+    useEffect(()=>{                                                 //div 변화 감지
+      var element = document.getElementById('test');
+      element.addEventListener("DOMSubtreeModified", function(){      
+        if(element.innerText){
+          var markerindex = parseInt(element.innerText);
+          console.log(markerindex);
+          setChooseMarker(markerindex);
+          if(buildingList){
+            console.log(buildingList);
+          }
+        }
+        else{
+          console.log("업거든!");
+        }
+      });
+    }, [])
+
+    ////////////////////////////////////////////////////////////////////////
     function useOutsideClick(ref){      //클릭이벤트
       useEffect(()=>{
         console.log(`useEffect()`);
@@ -83,17 +101,17 @@ function ResultSearch() {
             }
             mytest.innerHTML="";
           }
-        }, 100)
-
-          if(what){
-            SetGetBuildingInfo(buildingList[what]);
+          else{
+            console.log("먼가 클릭함?");
           }
+        }, 100)
         }
-    
+
         document.addEventListener("mousedown", handleClickOutside);
     
         return () => {
           document.removeEventListener("mousedown", handleClickOutside);
+
         };
       }, [ref]);
 
@@ -104,10 +122,7 @@ function ResultSearch() {
       document.documentElement.style.setProperty("--vh", `${vh}px`);
     }
 
-  // useEffect(()=>{
-  //  SetGetBuildingInfo(buildingList[choosemarker]);
-  // }, [choosemarker])
-     
+
   useEffect(() => {
     var zoomin;
     var zoomout;
@@ -195,7 +210,7 @@ function ResultSearch() {
                   ${test = `i`};
                   console.log('test: '+${test});
                   var element = document.getElementById('test');
-                  element.innerHTML = ${test};                       
+                  element.innerHTML = '<p>'+${test}+'</p>';                       
                 }
               }
             })
@@ -231,6 +246,7 @@ function ResultSearch() {
             var result = e.latLng
             var resultDiv = document.getElementById("result");
             resultDiv.innerHTML = result;
+           
         }
         
         if(!locationmap && ${lat} && ${plength}){     //지도생성, 마커생성
@@ -270,6 +286,7 @@ function ResultSearch() {
     <div
       id="TMapApp"
       style={{
+        overflowY: "hidden",
         height: "100%",
         width: "100%",
         position: "fixed",
@@ -290,16 +307,17 @@ function ResultSearch() {
       </div>
     </div>
 
-    <div className="test">
+    <div className="rightbarbutton">
       <div className="zoom">
         <Button onClick={handlePlusButton} src={plus}/>
         <Button onClick={handleMinusButton} src={minus}/>
       </div>
     </div>
-    <div id="test" style={{position: "fixed", top: "0px", zIndex: "10"}}>
+
+    <div id="test" style={{position: "fixed", top: "0px", zIndex: "10", zIndex: "0"}}>
     </div>
     <div className="Infobar" ref={outsideRef} style={{position: "fixed", bottom: "0px"}}>
-      <h2></h2>
+      
       {choosemarker && <BuildingDetailInfo props={buildingList[choosemarker]} subway={null}/>}
       {/* <BuildingDetailInfo props={building.state}/> */}
     </div>

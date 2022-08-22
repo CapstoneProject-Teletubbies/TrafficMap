@@ -1,17 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+
 import '../css/Main.css';
 import SearchBar from "../components/SearchBar";
 import Button from "../components/Button";
-import SideBar from "../components/SideBar"
+import SideBar from "../components/SideBar";
 import ReactDOM from "react-dom";
 import getLocation from '../getLocation';
 import plus from "../images/plus.png";
-import minus from "../images/minus.png"
-import target from "../images/location.png"
-import BuildingInfo from "../components/BuildingInfo"
+import minus from "../images/minus.png";
+import target from "../images/location.png";
+import nav from "../images/nav.png";
 
-import mylocation from "../images/mylocation.png"
+import mylocation from "../images/mylocation.png";
 
 function Main() {
     const [keyword, setKeyword] = useState();  //검색 받은 키워드
@@ -22,17 +24,27 @@ function Main() {
     const [location, setLocation] = useState();
     const [error, setError] = useState();
 
+    const navigate = useNavigate();
+
     const outsideRef = useRef(null);
     useOutsideClick(outsideRef);
 
-    const handlePlusButton = () => {
+    const handlePlusButton = () => {    //확대버튼
       setPlusButton(true);
     };
-    const handleMinusButton = () => {
-      setMinusButton(true);
+    const handleMinusButton = () => {   //축소버튼
+      setMinusButton(true); 
     };
-    const handleLocationButton = () => {
+    const handleLocationButton = () => {  //내위치이동 버튼
       setLocationButton(true);
+    }
+    const handleNavButton = () =>{      //길찾기 버튼
+      console.log("길찾기 버튼 클릭");
+      navigate('/find-way', {
+        state: {
+          mylocation: location,
+        }
+      });
     }
 
     const handleSuccess = (pos) => {
@@ -56,16 +68,14 @@ function Main() {
         function handleClickOutside(event){
           setTimeout(function(){
           // console.log(ref);
-
+          
           if(ref.current && !ref.current.contains(event.target)){
             const mytest = document.getElementById('test');
             console.log(`select의 외부 클릭을 감지!`);
             console.log(mytest.innerText);
           }
         }, 100)
-
         }
-    
         document.addEventListener("mousedown", handleClickOutside);
     
         return () => {
@@ -80,8 +90,6 @@ function Main() {
       let vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty("--vh", `${vh}px`);
   }
-
-
      
   useEffect(() => {
     var zoomin;
@@ -190,6 +198,7 @@ function Main() {
     <div
       id="TMapApp"
       style={{
+        overflowY: "hidden",
         height: "100%",
         width: "100%",
         position: "fixed",
@@ -198,7 +207,8 @@ function Main() {
     </div>
 
     <div className="search">
-        <SearchBar onChange={handleKeyword} placeholder={'장소, 버스, 지하철, 주소 검색'} location={location} />
+        <SearchBar onChange={handleKeyword} placeholder={'장소, 버스, 지하철, 주소 검색'} location={location} src={'/search'}/>
+        <Button onClick={handleNavButton} src={nav}></Button>
     </div>
     <div id="test">
         <p id="result" />
@@ -212,7 +222,7 @@ function Main() {
 
     </div>
 
-    <div className="test">
+    <div className="rightbarbutton">
       <div className="zoom">
         <Button onClick={handlePlusButton} src={plus}/>
         <Button onClick={handleMinusButton} src={minus}/>

@@ -9,10 +9,14 @@ import plus from "../images/plus.png";
 import minus from "../images/minus.png"
 import target from "../images/location.png"
 import BuildingDetailInfo from "../components/BuildingDetailInfo"
+import BusStopDetailInfo from '../components/BusStopDetailInfo';
 
-import mylocation from "../images/placeholderred.png"
+import placeholderred from "../images/placeholderred.png"
+import mylocation from "../images/mylocation.png"
+
 
 function LocationMap() {
+    const [sid, setSid] = useState();
     const [keyword, setKeyword] = useState();  //검색 받은 키워드
     const [plusbutton, setPlusButton] = useState();
     const [minusbutton, setMinusButton] = useState();
@@ -28,10 +32,10 @@ function LocationMap() {
     const [error, setError] = useState();
 
     useEffect(()=>{
-      console.log("실행 빌딩 state");
-      console.log(building.state);
-      SetSubway(building.state.subway);
-      console.log(building.state.props);
+      if(building.state.subway){
+        SetSubway(building.state.subway);
+        setSid(1);
+      }
     })
 
     const handlePlusButton = () => {
@@ -45,8 +49,21 @@ function LocationMap() {
     }
 
     const handleSuccess = (pos) => {
-      var buildinglatitude = building.state.props.obj.latitude;
-      var buildinglongitude = building.state.props.obj.longitude;
+      var buildinglatitude;
+      var buildinglongitude
+      if(building.state.props.address !== '버스정류장'){
+        buildinglatitude = building.state.props.obj.latitude;
+        buildinglongitude = building.state.props.obj.longitude;
+        if(building.state.subway === null){
+          setSid(0);
+        }
+      }
+      else{
+        setSid(2);
+        buildinglatitude = building.state.props.obj.posx;
+        buildinglongitude = building.state.props.obj.posy;
+      }
+    
       const {latitude, longitude } = pos.coords;
       setLocation({
         latitude, longitude
@@ -65,7 +82,6 @@ function LocationMap() {
     }
 
   
-
     const handleKeyword = (e) => setKeyword(e.target.value);
     
     function setScreenSize(){
@@ -78,7 +94,6 @@ function LocationMap() {
     var zoomout;
     var movelocation;
 
-    console.log("infoWindow : " + infoWindow);
     setScreenSize();
     if(building){
       navigator.geolocation.watchPosition(handleSuccess);
@@ -119,8 +134,19 @@ function LocationMap() {
         var locationmap;
         var zoomIn;
         function initTmap(pos) {
+          var wgs84;
+          if(parseInt(pos.lat) > 1000){
+            var epsg3857 = new Tmapv2.Point(pos.lat, pos.lng);
+            console.log(epsg3857);
+            wgs84 = Tmapv2.Projection.convertBesselTMToWGS84GEO(epsg3857);
+            console.log("좌표변환실행");
+            console.log(wgs84);
+          }
+          else{
+            wgs84 = new Tmapv2.LatLng(pos.lat, pos.lng);
+          }
             var map = new Tmapv2.Map("TMapApp", {
-                center: new Tmapv2.LatLng(pos.lat, pos.lng),
+                center: wgs84,
                 width: "100%",
                 height: "100%",
                 httpsMode: true,
@@ -136,10 +162,21 @@ function LocationMap() {
             return map;
         }
 
-        function createmarker(lat, lng){
+        function createmarker(lat, lng, img){
+          var wgs84;
+          if(parseInt(lat) > 1000){
+            var epsg3857 = new Tmapv2.Point(lat, lng);
+            console.log(epsg3857);
+            wgs84 = Tmapv2.Projection.convertBesselTMToWGS84GEO(epsg3857);
+            console.log("좌표변환실행");
+            console.log(wgs84);
+          }
+          else{
+            wgs84 = new Tmapv2.LatLng(lat, lng);
+          }
           var marker = new Tmapv2.Marker({
-            position: new Tmapv2.LatLng(lat, lng),
-            icon: "${mylocation}",
+            position: wgs84,
+            icon: img,
             map: locationmap
           })
         }
@@ -160,10 +197,10 @@ function LocationMap() {
         if(!locationmap && ${lat} && ${blat}){
           var mylocation = {lat: ${blat}, lng: ${blng}};
           locationmap = initTmap(mylocation);
-          createmarker(${blat}, ${blng});  
+          createmarker(${lat}, ${lng}, "${mylocation}");
+          createmarker(${blat}, ${blng}, "${placeholderred}");  
         }
         else{
-          console.log(locationmap);
           console.log("Init false");
         }
 
@@ -184,13 +221,14 @@ function LocationMap() {
   }, [handleSuccess]);
 
   return (
-    <main>
+    <main style={{overflow: "hidden"}}>
     <div
       id="TMapApp"
       style={{
         height: "100%",
         width: "100%",
         position: "fixed",
+        overflow: "hidden",
       }}
     >
     </div>
@@ -203,6 +241,7 @@ function LocationMap() {
         display: "flex",
         padding: "0px 10px",
         backgroundColor: "white",
+        boxShadow: "0px 1px 20px 1px #A6A6A6",
       }}>
       <div className="row" style={{ textAlign: "center", width: "100%"}}>
         <div className="col-2" style={{ }}>
@@ -227,16 +266,18 @@ function LocationMap() {
 
     </div>
 
-    <div className="test">
+    <div className="rightbarbutton">
       <div className="zoom">
         <Button onClick={handlePlusButton} src={plus}/>
         <Button onClick={handleMinusButton} src={minus}/>
         {/* <SideBar /> */}
       </div>
     </div>
-    <div className="Infobar">
-      <BuildingDetailInfo props={building.state.props.obj} subway={subway}/>
-    </div>
+    {sid !== 2 && 
+    <div className="Infobar" style={{position: "fixed", width: "100%", height: "10%", bottom: "0px" }}>
+        <BuildingDetailInfo props={building.state.props.obj} subway={subway}/>
+    </div>}
+    {sid === 2 && <BusStopDetailInfo obj={building.state.props.obj} bustop={building.state.busstop} location={location}></BusStopDetailInfo>}
 
     </main>
   );
