@@ -4,7 +4,7 @@ import axios from 'axios';
 import '../css/Main.css'
 import '../css/input.css'
 import Search from '../pages/Search'
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 const SearchBar = (props) => {
     const navigate = useNavigate();
@@ -13,6 +13,10 @@ const SearchBar = (props) => {
     const [searchValue, setSearchValue] = useState('');
     const [mylocation, setMylocation] = useState();
     const [buildingList, setBuildingList] = useState([]);
+    const [src, setSrc] = useState();
+
+    const location = useLocation();
+
     const handleValue = (e) => {        //검색어 입력받는 부분
         setSearchValue(e.target.value);
     }
@@ -28,6 +32,15 @@ const SearchBar = (props) => {
     }
     useEffect(()=>{
         setMylocation(props.location);
+        let where = location.pathname;
+
+        if(where == '/' || where == '/search'){
+            console.log("메인");
+            setSrc('/search')
+        }
+        else if(where == '/find-way' || where == '/find-search'){
+            setSrc('/find-search')
+        }
         // console.log(props.location);
     })
 
@@ -40,7 +53,7 @@ const SearchBar = (props) => {
         .then(function(res){
             console.log(res.data);
             setBuildingList(res.data);
-            navigate('/search', {
+            navigate(src, {
                 state: {
                     keyword: searchValue,
                     building: res.data,
