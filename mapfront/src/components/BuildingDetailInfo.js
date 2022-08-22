@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 import {useState, useEffect} from 'react';
 import Button from 'react-bootstrap/Button';
 
+const baseurl = 'http://localhost:9000/'         //베이스 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
 const BuildingDetailInfo = (props) => {
     const [buildingDetailInfo, setBuildingDetailInfo] = useState();
     const [subway, SetSubway] = useState();
@@ -35,10 +38,10 @@ const BuildingDetailInfo = (props) => {
     const handlesubwaymapbutton = () => {
         const subwayname = (props.props.name.split('역'))[0];
         const subwaymap = axios.create({                                    //인천지하철 1, 2호선 내부지도
-            baseURL: 'http://localhost:9000/'
+            baseURL: baseurl
         })
         const subwaymap2 = axios.create({                                   //1~9호선 내부지도
-            baseURL: 'http://localhost:9000/'
+            baseURL: baseurl
         })
 
         var name = (buildingDetailInfo.name).split(/[\[\]]/)

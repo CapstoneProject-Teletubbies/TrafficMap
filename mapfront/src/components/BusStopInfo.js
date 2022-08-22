@@ -4,6 +4,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react';
 
+const baseurl = 'http://localhost:9000/'
+
 
 const BusStopInfo = (props) => {
     const navigate = useNavigate();
@@ -11,7 +13,7 @@ const BusStopInfo = (props) => {
 
     const searchbusstopinfo = () => {
         const busstopinfo = axios.create({
-            baseURL: 'http://localhost:9000/'
+            baseURL: baseurl
         })
         busstopinfo.post('/api/bus/busArrival', null, {params: {busStopId: props.obj.bstopid}})
         .then(function(res){

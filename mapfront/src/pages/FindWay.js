@@ -4,15 +4,24 @@ import { useLocation } from 'react-router';
 
 import SearchBar from '../components/SearchBar';
 
-function FindWay(){
+function FindWay(props){
     const [startplaceholder, setStartPlaceHolder] = useState('출발지 입력');
     const [endplaceholder, setEndPlaceHolder] = useState('도착지 입력');
+
+    const [startPlace, setStartPlace] = useState();
+    const [endPlace, setEndPlace] = useState();
 
     const location = useLocation();
 
     const mylocation = location.state.mylocation;
 
     console.log(mylocation);
+
+    useEffect(()=>{
+        if(location.state){
+            console.log(location.state);
+        }
+    }, [])
 
     const handleXButton =   () => {
         console.log("클릭");
@@ -31,8 +40,8 @@ function FindWay(){
             <div className= "row align-items-center" id="findwayheader" style={{position: "relative", width: "100%", margin: "0px", display: "flex"
                 , backgroundColor: "white", boxShadow: "1px 1px 10px 0.8px gray"}}>
                 <div className='col-11' style={{position: "relative", textAlign: "-webkit-left"}}>
-                    <SearchBar style={{border: "1px solid gray", borderRadius: "6px", margin: "5px", marginTop: "12px", width: "100%", }} placeholder={startplaceholder} location={mylocation} src={'/find-search'}></SearchBar>
-                    <SearchBar style={{border: "1px solid gray", borderRadius: "6px", margin: "5px", marginBottom: "12px",  width: "100%", }} placeholder={endplaceholder} location={mylocation} src={'/find-search'}></SearchBar>
+                    <SearchBar style={{border: "1px solid gray", borderRadius: "6px", margin: "5px", marginTop: "12px", width: "100%", }} placeholder={startplaceholder} location={mylocation} src={'/find-search'} id={'start'}></SearchBar>
+                    <SearchBar style={{border: "1px solid gray", borderRadius: "6px", margin: "5px", marginBottom: "12px",  width: "100%", }} placeholder={endplaceholder} location={mylocation} src={'/find-search'} id={'end'}></SearchBar>
                 </div>
                 <div className="col-1" style={{alignSelf: "flex-start", marginTop: "5px", padding: "0px"}}>
                     <div style={{display: "flex", left: "-3px"}}>
