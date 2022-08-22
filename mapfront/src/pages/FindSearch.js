@@ -17,6 +17,10 @@ import { useNavigate } from "react-router-dom";
     const [mylocation, setMylocation] = useState();
     const navigate = useNavigate();
     const location = useLocation();
+
+    const [startName, setStartName] = useState();
+    const [endName, setEndName] = useState();
+
     const keyword = location.state.keyword;
     const onChange = (e) => {
         setText(e.target.value);
