@@ -87,6 +87,7 @@ import { useNavigate } from "react-router-dom";
                                         name={obj.name}
                                         address={obj.fullAddressRoad}
                                         id={location.state.id}
+                                        mylocation={mylocation}
                                     ></BuildingInfo>);
                                 }
                             }
@@ -97,6 +98,7 @@ import { useNavigate } from "react-router-dom";
                                         name={obj.name}
                                         address={obj.fullAddressRoad}
                                         id={location.state.id}
+                                        mylocation={mylocation}
                                     ></BuildingInfo>
                                     );
                             }

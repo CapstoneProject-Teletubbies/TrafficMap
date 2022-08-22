@@ -19,7 +19,6 @@ const BuildingInfo = (props) => {
     
 
     useEffect(()=>{
-        console.log(props);
         if(props.obj.elevatorState === '운행중'){
             setIsElevator(true);
         }else{
@@ -73,6 +72,7 @@ const BuildingInfo = (props) => {
             navigate('/find-way', {
                 state: {
                     props: props,
+                    mylocation: props.mylocation,
                 }
             });
         }
@@ -94,7 +94,6 @@ const BuildingInfo = (props) => {
             window.location.href = "/location-map";
         }
     };
-
 
     return (
         <li className="list-group-item" onClick={handleClick} style={{}}>
