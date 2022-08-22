@@ -14,6 +14,9 @@ import target from "../images/location.png"
 import ph from "../images/placeholder.png"
 
 import mylocation from "../images/mylocation.png"
+import eletrue from "../images/placeholder_ee.png"
+import elefalse from "../images/placeholder_ex.png"
+
 import { render } from '@testing-library/react';
 
 let what;
@@ -26,6 +29,7 @@ function ResultSearch() {
     const [plength, setPlength] = useState();
     const [markerlat, setMarkerLat] = useState([]);
     const [markerlng, setMarkerLng] = useState([]);
+    const [iselevator, setIsElevator] = useState([]);
     const [markerlist, setMarkerList] = useState([]);
     const [choosemarker, setChooseMarker] = useState();
 
@@ -135,6 +139,11 @@ function ResultSearch() {
         markerlng.push(buildingList[i].longitude);     
         setMarkerLat(markerlat => [...markerlat]);
         setMarkerLng(markerlng => [...markerlng]);
+        if(buildingList[i].elevatorState === '운행중'){
+          iselevator.push(true);
+        }else{
+          iselevator.push(false);
+        }
       }
       setPlength(buildingList.length);
       console.log(buildingList);
@@ -197,9 +206,18 @@ function ResultSearch() {
           var markers = [];
           var arrlat = new Array(${markerlat});
           var arrlng = new Array(${markerlng});
+          var elevator = new Array(${iselevator});
+          var icon;
           for(var i = 0; i < ${plength}; i++){
+            if(elevator[i] == true){
+              icon = "${eletrue}";
+            }else{
+              icon = "${elefalse}";
+            }
             marker = new Tmapv2.Marker({
-              position: new Tmapv2.LatLng(arrlat[i], arrlng[i]),       
+              position: new Tmapv2.LatLng(arrlat[i], arrlng[i]),   
+              icon: icon,    
+              iconSize: new Tmapv2.Size(50, 50),       
               map: locationmap,
             })
             markers.push(marker);    //마커 배열에 저장

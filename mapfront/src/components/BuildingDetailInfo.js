@@ -226,7 +226,7 @@ const BuildingDetailInfo = (props) => {
             );
         }else{
             return(
-                <footer>
+                <footer style={{boxShadow: "1px 1px 10px 1px gray"}}>
                 <div style={{padding: "2%"}}>
                         <div style={{width: "100%", textAlign: "-webkit-left"}}>
                             <b>{buildingDetailInfo.name}</b> {buildingDetailInfo.upperBizName}
