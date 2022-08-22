@@ -27,6 +27,7 @@ import { useNavigate } from "react-router-dom";
     }
 
     useEffect(()=>{
+        console.log(location);
         setBusList(location.state.bus);
         setBuildingList(location.state.building);
         setBusStopList(location.state.busstop);
@@ -37,13 +38,7 @@ import { useNavigate } from "react-router-dom";
     const handlebackButton = () => {            //뒤로가기 버튼 클릭
         window.location.href = "/";
     }
-    const handlemapButton = () => {             //지도 버튼 클릭
-        navigate('/resultsearch', { state: {
-            building: buildingList,
-            keyword: keyword,
-        }});
-        window.location.href = "/resultsearch";  
-    }
+
 
     return (
         <div className="searchjs">
@@ -73,16 +68,6 @@ import { useNavigate } from "react-router-dom";
                         <SearchBar keyword={keyword} onChange={onChange} placeholder={keyword} location={mylocation} />
                     </div>
 
-                    <div className="">
-                        {buildingList && (
-                            <i
-                                class="bi bi-pin-map-fill"
-                                style={{ fontSize: "2rem" }}
-                                onClick={handlemapButton}
-                            ></i>
-                        )}{" "}
-                        {/*버스만 받아올때는 안뜸 */}
-                    </div>
                 </nav>
             </div>
 
@@ -96,10 +81,12 @@ import { useNavigate } from "react-router-dom";
                             if(obj.upperBizName === "교통편의"){
                                 if(!(obj.name).includes("출구") && !(obj.name).includes("방향") && !(obj.name).includes("방면")
                                     && !(obj.name).includes("버스정류장")){
-                                    return(<BuildingInfo
+                                    return(
+                                        <BuildingInfo
                                         obj={obj}
                                         name={obj.name}
                                         address={obj.fullAddressRoad}
+                                        id={location.state.id}
                                     ></BuildingInfo>);
                                 }
                             }
@@ -109,6 +96,7 @@ import { useNavigate } from "react-router-dom";
                                         obj={obj}
                                         name={obj.name}
                                         address={obj.fullAddressRoad}
+                                        id={location.state.id}
                                     ></BuildingInfo>
                                     );
                             }

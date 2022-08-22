@@ -6,6 +6,9 @@ import '../css/input.css'
 import Search from '../pages/Search'
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
+const baseurl = 'http://localhost:9000/'         //베이스 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
 const SearchBar = (props) => {
     const navigate = useNavigate();
     const [name, setName] = useState('');
@@ -47,7 +50,7 @@ const SearchBar = (props) => {
 
     const searchBuilding = (props1, props2) => {
         const building = axios.create({
-            baseURL: 'http://localhost:9000/'
+            baseURL: baseurl
         })
         building.post('/api/find/address', null, {params: {keyword: searchValue, latitude: mylocation.latitude, longitude: mylocation.longitude}})
         .then(function(res){
@@ -60,6 +63,7 @@ const SearchBar = (props) => {
                     bus: props1,
                     busstop: props2,
                     mylocation: mylocation,
+                    id: props.id,
                 }
             });
         }).catch(function(error){
@@ -69,7 +73,7 @@ const SearchBar = (props) => {
 
     const searchBus = (props) => {
         const bus = axios.create({
-            baseURL: 'http://localhost:9000/'
+            baseURL: baseurl
         })
         bus.post('api/bus/busInfo/', null, {params: {busName: searchValue}})
         .then(function(res){
@@ -81,7 +85,7 @@ const SearchBar = (props) => {
 
     const searchOnlyBus = () => {           //~번 버스로 서치했을 때
         const bus = axios.create({
-            baseURL: 'http://localhost:9000/'
+            baseURL: baseurl
         })
         bus.post('api/bus/busInfo/', null, {params: {busName: searchValue}})
         .then(function(res){
@@ -100,7 +104,7 @@ const SearchBar = (props) => {
 
     const searchBusStop = () => {
         const busstop = axios.create({
-            baseURL: 'http://localhost:9000/'
+            baseURL: baseurl
         })
         busstop.post('api/bus/busStop', null, {params: {busStopName: searchValue}})
         .then(function(res){

@@ -3,13 +3,16 @@ import '../css/BuildingInfo.css'
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+const baseurl = 'http://localhost:9000/'
+
+
 const BuildingInfo = (props) => {
     const navigate = useNavigate();
     const arrow = "<->";
 
     const searchBusRoute = (detail) => {
         const busroute = axios.create({
-         baseURL: 'http://localhost:9000/'
+         baseURL: baseurl
         })
         busroute.post('/api/bus/route', null, {params: {routeId: props.obj.routeid}})
         .then(function(res){
@@ -29,7 +32,7 @@ const BuildingInfo = (props) => {
      const searchBusRouteInfo = () => {
         console.log(props.obj.routeid);
         const busrouteinfo = axios.create({
-            baseURL: 'http://localhost:9000/'
+            baseURL: baseurl
         })
         busrouteinfo.post('/api/bus/route/detail', null, {params: {routeId: props.obj.routeid}})
         .then(function(res){
