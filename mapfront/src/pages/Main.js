@@ -207,7 +207,7 @@ function Main() {
     </div>
 
     <div className="search">
-        <SearchBar onChange={handleKeyword} placeholder={'장소, 버스, 지하철, 주소 검색'} location={location} />
+        <SearchBar onChange={handleKeyword} placeholder={'장소, 버스, 지하철, 주소 검색'} location={location} src={'/search'}/>
         <Button onClick={handleNavButton} src={nav}></Button>
     </div>
     <div id="test">
