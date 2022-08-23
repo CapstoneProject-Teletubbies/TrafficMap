@@ -18,6 +18,8 @@ function FindWay(props){
     console.log(mylocation);
 
     useEffect(()=>{
+        console.log(props);
+        console.log(location);
         if(location.state){
             console.log(location.state);
         }

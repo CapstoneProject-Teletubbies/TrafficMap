@@ -9,14 +9,15 @@ const NavBar = (props)=>{
     }
 
     return(
-        <nav class="navbar bg-light" style={{height: "80px", boxShadow: "1px 1px 1px 1px gray", zIndex: "1"}}>
+        <nav class="navbar bg-light" style={{height: "80px", boxShadow: "1px 1px 1px 1px gray", zIndex: "1", justifyContent: "left"}}>
             <i
                 class="bi bi-arrow-left-circle"
                 style={{ fontSize: "2rem", marginLeft: "10px", }}
                 onClick={handlebackButton}
             ></i>
-            <SearchBar /*onChange={handleKeyword}*/ placeholder={props.keyword}
-            style={{width: "86%", backgroundColor: "#f8f9fa"}}/>
+            <div style={{padding: "5%"}}>
+                {props.keyword}
+            </div>
         </nav>
     );
 }
