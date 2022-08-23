@@ -116,10 +116,7 @@ function BusRoute(){
                     <button type="button" class="btn btn-large btn-outline-dark" style={{ width: "50px", height: "50px", textAlign: "center", padding: "0px" }} onClick={realtimeBus}><i class="bi bi-arrow-repeat" style={{ fontSize: "30px",}}></i></button>
             </div>
         </div>
-
-    );
-                }
-
+    );}
 }
 
 

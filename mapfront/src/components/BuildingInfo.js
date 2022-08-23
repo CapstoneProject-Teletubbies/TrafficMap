@@ -119,14 +119,19 @@ const BuildingInfo = (props) => {
             });
             window.location.href = "/location-map";
         }
-    };
+    }
 
     return (
         <li className="list-group-item" onClick={handleClick} style={{}}>
             <div className="row">
             <div className="col-9" style={{ textAlign: "left", paddingRight: "0px" }}>
-                <div className="fw-bold" style={{ textAlign: "left" }}>
-                    {props.name} {distance}
+                <div style={{ textAlign: "left", display: "flex" }}>
+                    <div className="fw-bold" style={{ textAlign: "left", display: "flex", }}>
+                            {props.name}
+                    </div>
+                    <div style={{ paddingLeft: "2%"}}>
+                        {distance}
+                    </div>
                 </div>
                 {props.address}
             </div>

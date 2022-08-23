@@ -154,16 +154,16 @@ const BusStopDetailInfo = (props)=>{
             $('#bustopinfobar').stop(true).animate({bottom: posy}, 300);
             setTop(evt.lastY);
             setBottom(height);
-            setDisableOut(true);
-            setDisableIn(false);
+            // setDisableOut(true);
+            // setDisableIn(false);
         }
         else if(posy < 0){          //아래로 드래그
             var height = -(element.offsetHeight)*0.87 + evt.lastY;
             setTop(height);
             setBottom(evt.lastY + 13);
             $('#bustopinfobar').stop(true).animate({bottom: height}, 300);
-            setDisableOut(false);
-            setDisableIn(true);
+            // setDisableOut(false);
+            // setDisableIn(true);
         }
 
     }
@@ -202,12 +202,11 @@ const BusStopDetailInfo = (props)=>{
                 boxShadow: "0px 2px 20px 2px #A6A6A6"}}> 
                 {bustop &&          //봋
                     <div style={{position: "relative", height: "100%"}}>
-                        <DraggableCore disabled={disablein} onStart={(e, data) => handletest(data)} onDrag={(e, data) => handleDrag(data)} onStop={(e, data) => handleDragStopIn(data)} axis='y' bounds={{top: top, bottom: bottom}} >
-                        <div style={{position: "relative", width: "100%", height: "100%", textAlign: "-webkit-center", zIndex: "9"}}>
-                            <div style={{position: "relative", backgroundColor: "#D5D5D5", width: "30%", height: "0.6%",  marginTop: "6px"
+                        <div style={{position: "relative", width: "100%", height: "13%", textAlign: "-webkit-center", zIndex: "9"}}>
+                            <div style={{position: "relative", backgroundColor: "#D5D5D5", width: "30%", height: "4%",  marginTop: "6px"
                             , borderRadius: "6px", }}></div>
                         
-                            <div style={{position: "fixed", width:"100%", height: "12%"}}>
+                            <div style={{position: "relative", width:"100%"}}>
                                 <div style={{fontSize: "1.2rem", float: "left", padding: "9px"}}>
                                     {bustop.bstopnm} <br></br>
                                     <div style={{fontSize: "1.0rem", float: "left", paddingLeft: "2px"}}>{dist}m</div>
@@ -218,9 +217,8 @@ const BusStopDetailInfo = (props)=>{
                                 </div>
                             </div>
                         </div>
-                        </DraggableCore>
-                        <Draggable disabled={true}>
-                        <div id="rbuslist" onTouchStart={touchstart} onTouchMove={touchmove} onTouchEnd={touchend} style={{position: "fixed", overflowY: "scroll", width: "100%", height: "87%", bottom: "0px", boxShadow: "0px 1px 1px 1px gray", zIndex: "10"}}>
+
+                        <div id="rbuslist" onTouchStart={touchstart} onTouchMove={touchmove} onTouchEnd={touchend} style={{position: "relative", overflowY: "scroll", width: "100%", height: "87%", bottom: "0px", boxShadow: "0px 1px 1px 1px gray", zIndex: "10"}}>
                             <ol className="list-group" >
                             {rbus && isset && rbus.map((obj, index)=>{
                                 var test = busnumlist[index];
@@ -229,14 +227,14 @@ const BusStopDetailInfo = (props)=>{
                                 return(
                                     <div>
                                     <BusInfo obj={test}></BusInfo>
-                                    <div style={{float: "left", textAlign: "-webkit-left" ,width: "100%", paddingLeft: "5%", boxShadow: "inset 0px 0px 1px 0.1px gray"}}>
+                                    <div style={{float: "left", textAlign: "-webkit-left" ,width: "100%", paddingLeft: "5%", }}>
                                         남은시간: {time}분
                                     </div>
                                     </div>
                                 );}})}
                             </ol>
                         </div> 
-                        </Draggable>    
+ 
                     </div>
                 }
         </div>
