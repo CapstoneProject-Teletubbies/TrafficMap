@@ -86,6 +86,7 @@ const BuildingDetailInfo = (props) => {
         }
 
         if(!one && buildingDetailInfo && subway){
+            console.log(buildingDetailInfo);
             setOne(true);
             var i= 0, j = 0;
             {subway.map((obj)=>{
@@ -185,7 +186,7 @@ const BuildingDetailInfo = (props) => {
                                         <div className="col-6" style={{padding: "0px"}}>
                                             <h8>{name[0]}</h8>
                                         </div>
-                                        <div className="col-6" style={{textAlign: "left", padding: "0px"}}>
+                                        <div className="col-6" style={{textAlign: "left", padding: "0px", color: "red"}}>
                                             <h8>{arv}</h8>
                                         </div>
                                     </div>
@@ -193,7 +194,7 @@ const BuildingDetailInfo = (props) => {
                                 })}
                             </div>
                             
-                            <div className="col-6" style={{top: "20px", textAlign: "left", fontSize: "0.9em", paddingLeft: "1%", paddingRight: "6%"}}>
+       {/*하행 */}          <div className="col-6" style={{top: "20px", textAlign: "left", fontSize: "0.9em", paddingLeft: "1%", paddingRight: "6%"}}>
                                 {subwayDown && subwayDown.map((obj, index)=>{
                                     var arv = '';
                                     const name =(obj.trainLineNm).split('-');
@@ -207,7 +208,7 @@ const BuildingDetailInfo = (props) => {
                                         <div className="col-6" style={{padding: "0px"}}>
                                         <h8>{name[0]}</h8>
                                         </div>
-                                        <div className="col-6" style={{textAlign: "left", padding: "0px"}}>
+                                        <div className="col-6" style={{textAlign: "left", padding: "0px", color: "red"}}>
                                             <h8>{arv}</h8>
                                         </div>
                                     </div>

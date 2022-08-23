@@ -58,10 +58,14 @@ const Modal = (props) => {
             })}
           </Swiper>
           }
-          {!Array.isArray(url) && 
+          {!Array.isArray(url) && url &&
           <div style={{swiperStyle}}>
             <img src={url} style={{position: "relative", width: "100%", height: "100%"}}></img>
           </div>}
+          {!url && 
+            <div style={{position: "relative", top: "40%"}}>
+              내부 지도가 없습니다.
+            </div>}
           </div>
           {/* <div>
             <button className="close" onClick={close}>

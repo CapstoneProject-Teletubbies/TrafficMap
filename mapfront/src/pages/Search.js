@@ -100,6 +100,7 @@ import axios from "axios";
                                         obj={obj}
                                         name={obj.name}
                                         address={obj.fullAddressRoad}
+                                        mylocation={mylocation}
                                     ></BuildingInfo>);
                                 }
                             }
@@ -109,6 +110,7 @@ import axios from "axios";
                                         obj={obj}
                                         name={obj.name}
                                         address={obj.fullAddressRoad}
+                                        mylocation={mylocation}
                                     ></BuildingInfo>
                                     );
                             }

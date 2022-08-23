@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from 'react';
 
+
 import elevator from '../images/elevator.png'
 
 const baseurl = 'http://localhost:9000/'
@@ -15,10 +16,36 @@ const BuildingInfo = (props) => {
     const [selectSubway, SetSelectSubway] = useState();
     const [iselevator, setIsElevator] = useState();
     const [fun, setFun] = useState();
-
+    const [distance, setDistance] = useState(); // 내위치와 건물 사이의 거리
     
 
-    useEffect(()=>{
+    useEffect(()=>{      
+        console.log(props);
+        var mylat = props.mylocation.latitude;
+        var mylng = props.mylocation.longitude;
+        var lat = props.obj.latitude;
+        var lng = props.obj.longitude;
+
+        function deg2rad(deg){
+            return deg * (Math.PI/180);
+        }
+
+        var r = 6371;
+        var dLat = deg2rad(lat-mylat);
+        var dLon = deg2rad(lng-mylng);
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(deg2rad(mylat)) * Math.cos(deg2rad(lat)) * Math.sin(dLon/2) * Math.sin(dLon/2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+        var d = r* c;
+
+        var dis = Math.round(d*1000);
+
+        if(dis > 1000){
+            dis = d.toFixed(2);
+            setDistance(dis+'km');
+        }else{
+            setDistance(Math.round(d*1000)+'m');
+        }
+
         if(props.obj.elevatorState === '운행중'){
             setIsElevator(true);
         }else{
@@ -57,7 +84,6 @@ const BuildingInfo = (props) => {
         if(location.pathname == '/search'){
         if(props.obj.upperBizName === "교통편의"){
             var subwayname = (props.obj.name).split('역');
-            console.log(subwayname[0]);
             searchsubwayinfo(subwayname[0]);       
         }
         else{
@@ -98,9 +124,9 @@ const BuildingInfo = (props) => {
     return (
         <li className="list-group-item" onClick={handleClick} style={{}}>
             <div className="row">
-            <div className="col-9" style={{ textAlign: "left" }}>
+            <div className="col-9" style={{ textAlign: "left", paddingRight: "0px" }}>
                 <div className="fw-bold" style={{ textAlign: "left" }}>
-                    {props.name}
+                    {props.name} {distance}
                 </div>
                 {props.address}
             </div>

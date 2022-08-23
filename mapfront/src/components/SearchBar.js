@@ -38,7 +38,6 @@ const SearchBar = (props) => {
         let where = location.pathname;
 
         if(where == '/' || where == '/search'){
-            console.log("메인");
             setSrc('/search')
         }
         else if(where == '/find-way' || where == '/find-search'){
