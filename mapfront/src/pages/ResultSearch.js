@@ -97,8 +97,8 @@ function ResultSearch() {
           if(ref.current && !ref.current.contains(event.target)){
             const mytest = document.getElementById('test');
             what = mytest.innerText;
-            setChooseMarker(what);
             const notmarker = parseInt(what);
+            setChooseMarker(notmarker);
             console.log(`select의 외부 클릭을 감지!`);
             if(!what){
               setChooseMarker(null);
@@ -191,9 +191,13 @@ function ResultSearch() {
                 zoomControl: false,
                 zoom:15
             });
+
+            
             map.addListener("click", onClick); //웹에서 지도 클릭
             map.addListener("touchstart", onTouchstart); // 모바일에서 지도 터치
-
+            map.addListener("touchend", onTouchend); // 모바일에서 지도 터치 end
+            map.addListener("drag", onDrag); // 모바일에서 지도 드래그 ing
+            
             //map.zoomIn();
             //map["zoomIn"]();
         
@@ -262,10 +266,25 @@ function ResultSearch() {
         function onTouchstart(e) {
             var result = e.latLng
             var resultDiv = document.getElementById("result");
-            resultDiv.innerHTML = result;
-           
+            resultDiv.innerHTML = result;       
+        }
+
+        function onTouchend(e) {
+          var element = document.getElementById('test');
+          var element1 = document.getElementById('test1');
+          console.log(element1.innerText);
+          if(element1.innerText == 'false'){
+            element.innerHTML = 'x';     
+          }else if(element1.innerText == 'true'){
+            element1.innerHTML = 'false';
+          }   
         }
         
+        function onDrag(e) {
+          var element = document.getElementById('test1');
+          element.innerHTML = 'true';         
+        }
+
         if(!locationmap && ${lat} && ${plength}){     //지도생성, 마커생성
           var mylocation = {lat: ${lat}, lng: ${lng}};
           locationmap = initTmap(mylocation);
@@ -296,6 +315,7 @@ function ResultSearch() {
   useEffect(()=>{
     console.log('setBuildingList');
     setBuildingList(marker.state.building);
+    console.log(buildingList);
    }, []);
 
   return (
@@ -332,6 +352,8 @@ function ResultSearch() {
     </div>
 
     <div id="test" style={{position: "fixed", top: "0px", zIndex: "10", zIndex: "0"}}>
+    </div>
+    <div id="test1" style={{position: "fixed", top: "0px", zIndex: "10", zIndex: "0"}}>
     </div>
     <div className="Infobar" ref={outsideRef} style={{position: "fixed", bottom: "0px"}}>
       
