@@ -21,12 +21,8 @@ const BusStopDetailInfo = (props)=>{
     const [dist, setDist] = useState();
     const [busnumlist, setBusNumList] = useState([]);
     const [isset, SetIsSet] = useState(false);
-    const [disableout, setDisableOut] = useState(false);
-    const [disablein, setDisableIn] = useState(true);
 
     const [y, setY] = useState();
-    const [offsetY, setOffsetY] = useState();
-    const [rheight, setRHeight] = useState(0);
 
     var bustopinfobar, rbuslist; 
 
@@ -137,127 +133,73 @@ const BusStopDetailInfo = (props)=>{
     }, [])
     //////////////
 
-    const handleDragStart = (evt) => {          //드래그 시작 이벤트
-        console.log("드래그 시작");
-        setStartXY(evt);    
-    }
-
-    const handleDrag = (evt, position) => {   //드래그 중 이벤트     
-        console.log("드래긎우입니다");
-        console.log(position.y);
-
-    }
-
-    const handleDragStop = (evt) => {                           //드래그 끝났을 때 이벤트
-        var element = document.getElementById('bustopinfobar');
-        var element1 = document.getElementById('rbuslist');
-        console.log(element1.offsetHeight);   // 확인하기!! overflow됐을때 div 높이 확인 확인 확인 
-        console.log(element.offsetHeight);     //
-        var posy;
-        posy = startXY.y - evt.y ;
-        if(posy > 0){               //위로 드래그
-            posy = evt.lastY;
-            var height = (element.offsetHeight)*0.87 + evt.lastY;
-            $('#bustopinfobar').stop(true).animate({bottom: posy}, 300);
-            setTop(evt.lastY);
-            setBottom(height);
-            setDisableOut(true);
-            setDisableIn(false);
-            setOffsetY(evt.y);
-        }
-        else if(posy < 0){          //아래로 드래그
-            var height = -(element.offsetHeight)*0.87 + evt.lastY;
-            setTop(height);
-            setBottom(evt.lastY + 13);
-            $('#bustopinfobar').stop(true).animate({bottom: height}, 300);
-            // setDisableOut(false);
-            // setDisableIn(true);
-        }
-
-    }
-
-    const handletest = (evt) => {
-        console.log("테스트함");
-        setDisableOut(false);
-    }
-
-    const handleDragStopIn = (evt) => {
-        // var element = document.getElementById('bustopinfobar');
-        // var posy;
-        // posy = startXY.y - evt.y ;
-        // if(posy < 0){
-        //     var height = -(element.offsetHeight)*0.87 + evt.lastY;
-        //     setTop(height);
-        //     // setBottom(evt.lastY + 13);
-        //     $('#bustopinfobar').stop(true).animate({bottom: height}, 300);
-        //     setDisableOut(false);
-        //     setDisableIn(true);
-        // }
-    }
-
-    const moveBar = {
-        
-    }
-
     const test = (evt) => {            //출발, 도착 터치 이벤트
         console.log("클릭"); 
     }
     const test1 = (evt, data) => {
-        console.log("드래그 시작");
         setStartXY(data);
-        console.log(data);
-
+        console.log("드래스 시작좌표" + data.y);
     }
     const test2 = (evt, position) => {
         const {x, y} = position;
-        console.log("he확인");
-        console.log(y);
         setY({x:0, y: y});
+        console.log("드래그중");
+        console.log(position.y);
 
     }
     const test3 = (evt, data) => {
         var element = document.getElementById('bustopinfobar');
         var element1 = document.getElementById('bustopinfo');
         var bstoph = element1.offsetHeight;
-        console.log(evt);
-        console.log(data);
+        console.log("드래그 끝났" + data.y);
         var posy;
         posy = startXY.y - data.y ;
         if(posy > 0){               //위로 드래그
-            posy = data.lastY;
+            posy = data.lastY - data.y;
             var height = (element.offsetHeight)*0.87 + data.lastY;
-            $('#bustopinfo').stop(true).animate({bottom: height}, 300);
-            $('#rbuslist').stop(true).animate({bottom: element.offsetHeight-bstoph}, 300);
-            // setTop(data.lastY);
-            // setBottom(height);
-            // setDisableOut(true);
-            // setDisableIn(false);
+            if(posy > 0){       //위로 드래그
+                $('#bustopinfo').stop(true).animate({bottom: height}, 300);
+                $('#rbuslist').stop(true).animate({bottom: element.offsetHeight-bstoph}, 300);
+                setTop(data.lastY);
+                setBottom(height);
+            } else{             //드래그 방향을 바꿨기 때문에 아래로 드래그
+                //반이상 넘어갔으면 그냥 위로 드래그 하자 아직 구현 x
+                $('#bustopinfo').stop(true).animate({bottom: data.lastY}, 300);
+                $('#rbuslist').stop(true).animate({bottom: -element.offsetHeight+bstoph}, 300);
+                setTop(data.lastY-(element.offsetHeight)*0.87);
+                setBottom(data.lastY);
+            }
         }
         else if(posy < 0){          //아래로 드래그
+            posy = data.lastY - data.y;
             var height = (element.offsetHeight)*0.87 - data.lastY;
-            setTop(height);
-            // setBottom(data.lastY + 13);
-            $('#bustopinfo').stop(true).animate({bottom: data.lastY}, 300);
-            $('#rbuslist').stop(true).animate({bottom: -element.offsetHeight+bstoph}, 300);
-            setDisableOut(false);
-            setDisableIn(true);
+            var heightup = (element.offsetHeight)*0.87 + data.lastY;
+            if(posy < 0){       //아래로 드래그
+                $('#bustopinfo').stop(true).animate({bottom: data.lastY}, 300);
+                $('#rbuslist').stop(true).animate({bottom: -element.offsetHeight+bstoph}, 300);
+                setTop(data.lastY-(element.offsetHeight)*0.87);
+                setBottom(data.lastY);
+            }else{              //드래그 방향을 바꿨기 때문에 위로 드래그
+                //반이상 넘어갔으면 그냥 아래로 드래그하자 아직 구현 x
+                $('#bustopinfo').stop(true).animate({bottom: heightup}, 300);
+                $('#rbuslist').stop(true).animate({bottom: element.offsetHeight-bstoph}, 300);
+                setTop(data.lastY);
+                setBottom(heightup);
+            }
         }
     }
 
-
-
  
     return(
-        <div id="bustopinfobar" style={{position: "fixed", backgroundColor: "white", width: "100%", height: "100%", bottom: "-87%", borderRadius: "15px 15px 0px 0px", textAlign: "-webkit-center", zIndex: "0",
-                boxShadow: "0px 2px 20px 2px #A6A6A6"}}> 
+        <div id="bustopinfobar" style={{position: "fixed", width: "100%", height: "100%", bottom: "-87%", textAlign: "-webkit-center", zIndex: "0",}}> 
                 {bustop &&          //봋
                     <div id="bustopinfo" style={{position: "relative", height: "100%",}}>
-                        <Draggable positionOffset={0} position={y} axis='y' disabled={false} onStart={(e, data)=>{test1(e, data);}} onDrag={(e, position)=>{test2(e, position);}} onStop={(e, data)=>{test3(e, data);}}>
+                        <Draggable bounds={{top: top, bottom: bottom}} positionOffset={0} position={y} axis='y' disabled={false} onStart={(e, data)=>{test1(e, data);}} onDrag={(e, position)=>{test2(e, position);}} onStop={(e, data)=>{test3(e, data);}} >
                         <div style={{position: "relative", width: "100%", height: "13%", textAlign: "-webkit-center", zIndex: "9",
-                                    backgroundColor: "white"}}>
-                            <div style={{position: "relative", backgroundColor: "#D5D5D5", width: "30%", height: "4%",  marginTop: "6px"
-                            , borderRadius: "6px", }}></div>
-                        
+                                    backgroundColor: "white", borderRadius: "15px 15px 0px 0px", boxShadow: "0px 2px 20px 2px #A6A6A6"}}>      
+                            <div style={{position: "relative", width: "30%", height: "4%", top: "5px", backgroundColor: "#D5D5D5", borderRadius: "6px",}}>
+
+                            </div>
                             <div style={{position: "relative", width:"100%"}}>
                                 <div style={{fontSize: "1.2rem", float: "left", padding: "9px"}}>
                                     {bustop.bstopnm} <br></br>
@@ -271,7 +213,8 @@ const BusStopDetailInfo = (props)=>{
                         </div>
                         </Draggable>
                         <Draggable positionOffset={0} position={y} axis='y' disabled={true}>
-                        <div id="rbuslist" onTouchStart={touchstart} onTouchMove={touchmove} onTouchEnd={touchend} style={{position: "relative", overflowY: "scroll", width: "100%", height: "86%", bottom: "0px", zIndex: "10"}}>
+                        <div id="rbuslist" onTouchStart={touchstart} onTouchMove={touchmove} onTouchEnd={touchend} style={{position: "relative", overflowY: "scroll", width: "100%", height: "87%", bottom: "0px", zIndex: "10",
+                                                    backgroundColor: "white"}}>
                             <ol className="list-group" >
                             {rbus && isset && rbus.map((obj, index)=>{
                                 var test = busnumlist[index];
