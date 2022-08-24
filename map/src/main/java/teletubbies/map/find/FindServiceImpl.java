@@ -286,7 +286,7 @@ public class FindServiceImpl implements FindService {
             org.json.JSONObject object = XML.toJSONObject(responseResult.get(i));
             org.json.JSONObject response = (org.json.JSONObject) object.get("response");
             org.json.JSONObject body = (org.json.JSONObject) response.get("body");
-
+            //System.out.println(body);
             if (!(body.get("items").equals(""))) { // 엘리베이터가 없으면 body":{"items":"","numOfRows":,"pageNo":,"totalCount":} 이런식으로 반환
                 org.json.JSONObject items = (org.json.JSONObject) body.get("items");
                 //item value들
@@ -307,9 +307,9 @@ public class FindServiceImpl implements FindService {
                 //System.out.println(s.length()-1);
                 String r = String.valueOf((s.charAt(s.length()-1)));
 
-                if(r.equals("시") | r.equals("군")){
+                /*if(r.equals("시") | r.equals("군")){
                     str_list.remove(0);
-                }
+                }*/
 
                 String result_str = String.join(" ",str_list);
                 //System.out.println(result_str);
