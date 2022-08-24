@@ -26,3 +26,7 @@ yarn-error.log*
 # ssl
 .cert.pem
 key.pem
+
+#임시
+package.json
+package-lock.json

@@ -7,6 +7,7 @@ import {DraggableCore} from 'react-draggable';
 import proj4 from 'proj4';
 import axios from 'axios';
 import BusInfo from '../components/BusInfo'
+import { TabContent } from 'react-bootstrap';
 
 const baseurl = 'http://localhost:9000/'
 
@@ -22,6 +23,10 @@ const BusStopDetailInfo = (props)=>{
     const [isset, SetIsSet] = useState(false);
     const [disableout, setDisableOut] = useState(false);
     const [disablein, setDisableIn] = useState(true);
+
+    const [y, setY] = useState();
+    const [offsetY, setOffsetY] = useState();
+    const [rheight, setRHeight] = useState(0);
 
     var bustopinfobar, rbuslist; 
 
@@ -132,12 +137,14 @@ const BusStopDetailInfo = (props)=>{
     }, [])
     //////////////
 
-    const handleDragStart = (evt) => {          //드래그 시작 이벤트  
+    const handleDragStart = (evt) => {          //드래그 시작 이벤트
+        console.log("드래그 시작");
         setStartXY(evt);    
     }
 
-    const handleDrag = (evt) => {   //드래그 중 이벤트           
-        console.log("드래그중~");
+    const handleDrag = (evt, position) => {   //드래그 중 이벤트     
+        console.log("드래긎우입니다");
+        console.log(position.y);
 
     }
 
@@ -154,8 +161,9 @@ const BusStopDetailInfo = (props)=>{
             $('#bustopinfobar').stop(true).animate({bottom: posy}, 300);
             setTop(evt.lastY);
             setBottom(height);
-            // setDisableOut(true);
-            // setDisableIn(false);
+            setDisableOut(true);
+            setDisableIn(false);
+            setOffsetY(evt.y);
         }
         else if(posy < 0){          //아래로 드래그
             var height = -(element.offsetHeight)*0.87 + evt.lastY;
@@ -187,22 +195,66 @@ const BusStopDetailInfo = (props)=>{
         // }
     }
 
-
-    const test = (evt) => {            //출발, 도착 터치 이벤트
-        console.log("클릭");
+    const moveBar = {
         
     }
-    const test1 = (evt) => {
-        console.log("코어코어");
+
+    const test = (evt) => {            //출발, 도착 터치 이벤트
+        console.log("클릭"); 
     }
+    const test1 = (evt, data) => {
+        console.log("드래그 시작");
+        setStartXY(data);
+        console.log(data);
+
+    }
+    const test2 = (evt, position) => {
+        const {x, y} = position;
+        console.log("he확인");
+        console.log(y);
+        setY({x:0, y: y});
+
+    }
+    const test3 = (evt, data) => {
+        var element = document.getElementById('bustopinfobar');
+        var element1 = document.getElementById('bustopinfo');
+        var bstoph = element1.offsetHeight;
+        console.log(evt);
+        console.log(data);
+        var posy;
+        posy = startXY.y - data.y ;
+        if(posy > 0){               //위로 드래그
+            posy = data.lastY;
+            var height = (element.offsetHeight)*0.87 + data.lastY;
+            $('#bustopinfo').stop(true).animate({bottom: height}, 300);
+            $('#rbuslist').stop(true).animate({bottom: element.offsetHeight-bstoph}, 300);
+            // setTop(data.lastY);
+            // setBottom(height);
+            // setDisableOut(true);
+            // setDisableIn(false);
+        }
+        else if(posy < 0){          //아래로 드래그
+            var height = (element.offsetHeight)*0.87 - data.lastY;
+            setTop(height);
+            // setBottom(data.lastY + 13);
+            $('#bustopinfo').stop(true).animate({bottom: data.lastY}, 300);
+            $('#rbuslist').stop(true).animate({bottom: -element.offsetHeight+bstoph}, 300);
+            setDisableOut(false);
+            setDisableIn(true);
+        }
+    }
+
+
+
  
     return(
-        <Draggable ref={ref} onMouseDown={(e)=>{test(e);}} disabled={disableout} onStart={(e, data) => handleDragStart(data)} onDrag={(e, data) => handleDrag(data)} onStop={(e, data) => handleDragStop(data)} axis='y' bounds={{top: top, bottom: bottom}}>
         <div id="bustopinfobar" style={{position: "fixed", backgroundColor: "white", width: "100%", height: "100%", bottom: "-87%", borderRadius: "15px 15px 0px 0px", textAlign: "-webkit-center", zIndex: "0",
                 boxShadow: "0px 2px 20px 2px #A6A6A6"}}> 
                 {bustop &&          //봋
-                    <div style={{position: "relative", height: "100%"}}>
-                        <div style={{position: "relative", width: "100%", height: "13%", textAlign: "-webkit-center", zIndex: "9"}}>
+                    <div id="bustopinfo" style={{position: "relative", height: "100%",}}>
+                        <Draggable positionOffset={0} position={y} axis='y' disabled={false} onStart={(e, data)=>{test1(e, data);}} onDrag={(e, position)=>{test2(e, position);}} onStop={(e, data)=>{test3(e, data);}}>
+                        <div style={{position: "relative", width: "100%", height: "13%", textAlign: "-webkit-center", zIndex: "9",
+                                    backgroundColor: "white"}}>
                             <div style={{position: "relative", backgroundColor: "#D5D5D5", width: "30%", height: "4%",  marginTop: "6px"
                             , borderRadius: "6px", }}></div>
                         
@@ -217,8 +269,9 @@ const BusStopDetailInfo = (props)=>{
                                 </div>
                             </div>
                         </div>
-
-                        <div id="rbuslist" onTouchStart={touchstart} onTouchMove={touchmove} onTouchEnd={touchend} style={{position: "relative", overflowY: "scroll", width: "100%", height: "87%", bottom: "0px", boxShadow: "0px 1px 1px 1px gray", zIndex: "10"}}>
+                        </Draggable>
+                        <Draggable positionOffset={0} position={y} axis='y' disabled={true}>
+                        <div id="rbuslist" onTouchStart={touchstart} onTouchMove={touchmove} onTouchEnd={touchend} style={{position: "relative", overflowY: "scroll", width: "100%", height: "86%", bottom: "0px", zIndex: "10"}}>
                             <ol className="list-group" >
                             {rbus && isset && rbus.map((obj, index)=>{
                                 var test = busnumlist[index];
@@ -234,11 +287,10 @@ const BusStopDetailInfo = (props)=>{
                                 );}})}
                             </ol>
                         </div> 
- 
+                        </Draggable>
                     </div>
                 }
         </div>
-        </Draggable>
     );
 }
 
