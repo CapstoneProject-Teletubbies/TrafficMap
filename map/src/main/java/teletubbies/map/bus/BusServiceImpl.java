@@ -370,6 +370,8 @@ public class BusServiceImpl implements BusService {
     @SneakyThrows
     public List<BusInfoDto> findBusInfoByBusNum(Object busNum) { // 버스 번호로 버스 정보 조회
 
+        long start2 = System.currentTimeMillis();
+
         String str_busNum = String.valueOf(busNum);
         int result_count = 3;
 
@@ -466,6 +468,8 @@ public class BusServiceImpl implements BusService {
                     }
                     j += 1;
                 }
+                long end2 = System.currentTimeMillis();
+                System.out.println("버스 시간 : "+(end2-start2)/1000.0);
                 return dtos;
             }
 
@@ -509,6 +513,7 @@ public class BusServiceImpl implements BusService {
         else { // 결과가 없다면
             return null;
         }
+
     }
 
     @SneakyThrows

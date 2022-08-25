@@ -155,7 +155,7 @@ public class FindServiceImpl implements FindService {
                 .uri(uriBuilder -> uriBuilder.path("/tmap/pois")
                         .queryParam("version", 1) //버전
                         .queryParam("searchKeyword", encodedName) // 검색 키워드
-                        .queryParam("count", 15) // 개수
+                        .queryParam("count", 10) // 개수
                         .queryParam("appKey", tmap_apiKey) // 서비스키
                         .queryParam("searchtypCd", "A") // 거리순, 정확도순 검색(거리순 : R, 정확도순 : A)
                         .queryParam("radius", 0) // 반경( 0: 전국반경)
@@ -365,50 +365,50 @@ public class FindServiceImpl implements FindService {
 
     }
 
-/*
-    @SneakyThrows
-    public List<String> findElevatorByAPI(List<ElevatorOrderDto> ele) {
-        DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(elevator_url);
-        factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
+    /*
+        @SneakyThrows
+        public List<String> findElevatorByAPI(List<ElevatorOrderDto> ele) {
+            DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(elevator_url);
+            factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
 
-        WebClient wc = WebClient.builder().uriBuilderFactory(factory).baseUrl(elevator_url).build();
+            WebClient wc = WebClient.builder().uriBuilderFactory(factory).baseUrl(elevator_url).build();
 
-        String encodedName = URLEncoder.encode(address, "UTF-8");
+            String encodedName = URLEncoder.encode(address, "UTF-8");
 
-        long start = System.currentTimeMillis();
+            long start = System.currentTimeMillis();
 
-        ResponseEntity<String> result = wc.get()
-                .uri(uriBuilder -> uriBuilder.path("/getOperationInfoList")
-                        .queryParam("serviceKey", elevator_apikey)
-                        .queryParam("buld_address", encodedName) //주소
-                        .queryParam("numOfRows", 1) // 1개만 출력
-                        .queryParam("pageNo", 1).build())
-                .retrieve() //response 불러옴
-                .toEntity(String.class)
-//                .bodyToMono(String.class);
-                .block();
+            ResponseEntity<String> result = wc.get()
+                    .uri(uriBuilder -> uriBuilder.path("/getOperationInfoList")
+                            .queryParam("serviceKey", elevator_apikey)
+                            .queryParam("buld_address", encodedName) //주소
+                            .queryParam("numOfRows", 1) // 1개만 출력
+                            .queryParam("pageNo", 1).build())
+                    .retrieve() //response 불러옴
+                    .toEntity(String.class)
+    //                .bodyToMono(String.class);
+                    .block();
 
-        long end = System.currentTimeMillis();
-        System.out.println(address + " 엘레베이터 호출 하나 생성에 걸리는 시간 : " + (end - start) / 1000.0);
+            long end = System.currentTimeMillis();
+            System.out.println(address + " 엘레베이터 호출 하나 생성에 걸리는 시간 : " + (end - start) / 1000.0);
 
-        org.json.JSONObject object = XML.toJSONObject(result.getBody());
-        org.json.JSONObject response = (org.json.JSONObject) object.get("response");
-        org.json.JSONObject body = (org.json.JSONObject) response.get("body");
+            org.json.JSONObject object = XML.toJSONObject(result.getBody());
+            org.json.JSONObject response = (org.json.JSONObject) object.get("response");
+            org.json.JSONObject body = (org.json.JSONObject) response.get("body");
 
-        if (body.get("items").equals("")) { // 엘리베이터가 없으면 body":{"items":"","numOfRows":,"pageNo":,"totalCount":} 이런식으로 반환
-            String elvtrSttsNm = "x";
-            return elvtrSttsNm;
-        } else {
-            org.json.JSONObject items = (org.json.JSONObject) body.get("items");
-            //item value들
-            org.json.JSONObject item = (org.json.JSONObject) items.get("item");
-            //필요한 엘리베이터 정보 받아오기
-            String elvtrSttsNm = (String) item.get("elvtrSttsNm");
-            return elvtrSttsNm;
+            if (body.get("items").equals("")) { // 엘리베이터가 없으면 body":{"items":"","numOfRows":,"pageNo":,"totalCount":} 이런식으로 반환
+                String elvtrSttsNm = "x";
+                return elvtrSttsNm;
+            } else {
+                org.json.JSONObject items = (org.json.JSONObject) body.get("items");
+                //item value들
+                org.json.JSONObject item = (org.json.JSONObject) items.get("item");
+                //필요한 엘리베이터 정보 받아오기
+                String elvtrSttsNm = (String) item.get("elvtrSttsNm");
+                return elvtrSttsNm;
+            }
         }
-    }
 
-*/
+    */
     //계단 api
     @SneakyThrows
     public List<StairDto> findStairs() {
