@@ -1,7 +1,7 @@
 // `import "../css/BuildingInfo.css";`
 import React from 'react';
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from 'react';
 
 const baseurl = 'http://localhost:9000/'
@@ -9,7 +9,9 @@ const baseurl = 'http://localhost:9000/'
 
 const BusStopInfo = (props) => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [selectBusStop, SetSelectBusStop] = useState();
+    const [preUrl, setPreUrl] = useState();
 
     const searchbusstopinfo = () => {
         const busstopinfo = axios.create({
@@ -32,24 +34,47 @@ const BusStopInfo = (props) => {
         })
     };
 
-
-
-
-
     const handleClick = () => {
         console.log("props");
         console.log(props);
-        searchbusstopinfo();
+        if(preUrl){
+            navigate('/find-way', {
+                state: {
+                    props: props,
+                }
+            });
+        }else{
+            searchbusstopinfo();
+        }
     };
+
+    const handleButtonClick = () => {
+        searchbusstopinfo();
+    }
+
+    useEffect(()=>{
+        if(location.pathname == '/find-search'){
+            setPreUrl(true);
+        }else if(location.pathname == '/search'){
+            setPreUrl(false);
+        }
+    }, [])
 
 
     return (
         <li className="list-group-item" onClick={handleClick}>
-            <div className="ms-2" style={{ textAlign: "left" }}>
-                <div className="fw-bold" style={{ textAlign: "left" }}>
-                    {props.name}
+            <div className="row">
+                <div className="col-10" style={{ textAlign: "left" }}>
+                    <div className="fw-bold" style={{ textAlign: "left" }}>
+                        {props.name}
+                    </div>
+                    {props.address}
                 </div>
-                {props.address}
+                <div className="col-2">
+                    {preUrl && <button type="button" class="btn btn-outline-secondary btn-circle" onClick={handleButtonClick} style={{borderRadius: "50%", }}>
+                        <i class="bi bi-map"></i></button>  
+                    }
+                </div>
             </div>
         </li>
     );

@@ -20,7 +20,6 @@ const BuildingInfo = (props) => {
     
 
     useEffect(()=>{      
-        console.log(props);
         var mylat = props.mylocation.latitude;
         var mylng = props.mylocation.longitude;
         var lat = props.obj.latitude;
@@ -82,23 +81,40 @@ const BuildingInfo = (props) => {
     const handleClick = () => {
         console.log(props);
         if(location.pathname == '/search'){
-        if(props.obj.upperBizName === "교통편의"){
-            var subwayname = (props.obj.name).split('역');
-            searchsubwayinfo(subwayname[0]);       
-        }
-        else{
-            navigate("/location-map", {
-                state: {
-                    props: props,
-                },
+            if(props.obj.upperBizName === "교통편의"){
+                var subwayname = (props.obj.name).split('역');
+                searchsubwayinfo(subwayname[0]);       
+            }
+            else{
+                navigate("/location-map", {
+                    state: {
+                        props: props,
+                    },
             });
             window.location.href = "/location-map";
-        }
+            }
         }else if(location.pathname == '/find-search') {
+            var start = null, end = null;
+            if(props.id == 'start' && props.endBuilding){
+                console.log("이건 진짜 다입력한거임 ");
+                start = props;
+                end = props.endBuilding;
+            }else if(props.id == 'end' && props.startBuilding){
+                console.log("이것도 다 입력한거임");
+                start = props.startBuilding;
+                end = props;
+            }else if(props.id == 'start'){
+                start = props;
+            }else if(props.id == 'end'){
+                end = props;
+            }
             navigate('/find-way', {
                 state: {
                     props: props,
                     mylocation: props.mylocation,
+                    id: props.id,
+                    startBuilding: start,
+                    endBuilding: end,
                 }
             });
         }

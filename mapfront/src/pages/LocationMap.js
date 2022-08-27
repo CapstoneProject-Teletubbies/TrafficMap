@@ -25,11 +25,16 @@ function LocationMap() {
 
     const building = useLocation();
     const navigate = useNavigate();
+
+
+
  
     const [location, setLocation] = useState();
     const [buildinglocation, setBuildingLocation] = useState();
     const [subway, SetSubway] = useState();
     const [error, setError] = useState();
+
+    const [refresh, setRefresh] = useState(true);
 
     useEffect(()=>{
       if(building.state.subway){
@@ -37,6 +42,11 @@ function LocationMap() {
         setSid(1);
       }
     })
+
+    useEffect(()=>{
+      console.log(building);
+      setRefresh(false);
+    }, [building]);
 
     const handlePlusButton = () => {
       setPlusButton(true);
@@ -93,6 +103,9 @@ function LocationMap() {
     var zoomin;
     var zoomout;
     var movelocation;
+
+    var mrefresh = refresh;
+    console.log(mrefresh);
 
     setScreenSize();
     if(building){
@@ -200,8 +213,10 @@ function LocationMap() {
           createmarker(${lat}, ${lng}, "${mylocation}");
           createmarker(${blat}, ${blng}, "${placeholderred}");  
         }
-        else{
-          console.log("Init false");
+        else if(${refresh}){
+          
+        }else{
+          console.log("이미 지도 나와있어");
         }
 
         if(locationmap && ${zoomin}){

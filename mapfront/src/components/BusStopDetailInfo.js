@@ -138,20 +138,20 @@ const BusStopDetailInfo = (props)=>{
     }
     const test1 = (evt, data) => {
         setStartXY(data);
-        console.log("드래스 시작좌표" + data.y);
+        // console.log("드래스 시작좌표" + data.y);
     }
     const test2 = (evt, position) => {
         const {x, y} = position;
         setY({x:0, y: y});
-        console.log("드래그중");
-        console.log(position.y);
+        // console.log("드래그중");
+        // console.log(position.y);
 
     }
     const test3 = (evt, data) => {
         var element = document.getElementById('bustopinfobar');
         var element1 = document.getElementById('bustopinfo');
         var bstoph = element1.offsetHeight;
-        console.log("드래그 끝났" + data.y);
+        // console.log("드래그 끝났" + data.y);
         var posy;
         posy = startXY.y - data.y ;
         if(posy > 0){               //위로 드래그
@@ -220,11 +220,17 @@ const BusStopDetailInfo = (props)=>{
                                 var test = busnumlist[index];
                                 if(test){
                                     let time = parseInt(obj.arrivalestimatetime/60);
+                                    var lowTP;
+                                    if(obj.low_TP_CD == 1){
+                                        lowTP = '저상';
+                                    }else{
+                                        lowTP = null;
+                                    }
                                 return(
                                     <div>
                                     <BusInfo obj={test}></BusInfo>
-                                    <div style={{float: "left", textAlign: "-webkit-left" ,width: "100%", paddingLeft: "5%", }}>
-                                        남은시간: {time}분
+                                    <div style={{float: "left", textAlign: "-webkit-left" ,width: "100%", paddingLeft: "5%", color: "red"}}>
+                                        남은 시간: {time}분   <text style={{color: "blue"}}>{lowTP}</text>
                                     </div>
                                     </div>
                                 );}})}

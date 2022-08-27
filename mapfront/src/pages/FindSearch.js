@@ -28,6 +28,7 @@ import { useNavigate } from "react-router-dom";
 
     useEffect(()=>{
         console.log(location);
+        setStartName(location.state);
         setBusList(location.state.bus);
         setBuildingList(location.state.building);
         setBusStopList(location.state.busstop);
@@ -74,7 +75,7 @@ import { useNavigate } from "react-router-dom";
             <div className="searchlist" style={{ overflowY: "scroll", paddingBottom: "15px"}}>
                 {}
                 <ol className="list-group">
-                    {busList && busList.map((obj, index) => <BusInfo obj={obj}></BusInfo>)}
+                    
                     {busStopList && busStopList.map((obj, index)=><BusStopInfo obj={obj} name={obj.bstopnm} address='버스정류장' />)}
                     {buildingList &&
                         buildingList.map((obj, index) => {
@@ -88,6 +89,8 @@ import { useNavigate } from "react-router-dom";
                                         address={obj.fullAddressRoad}
                                         id={location.state.id}
                                         mylocation={mylocation}
+                                        startBuilding={startName.startBuilding}
+                                        endBuilding={startName.endBuilding}
                                     ></BuildingInfo>);
                                 }
                             }
@@ -99,6 +102,8 @@ import { useNavigate } from "react-router-dom";
                                         address={obj.fullAddressRoad}
                                         id={location.state.id}
                                         mylocation={mylocation}
+                                        startBuilding={startName.startBuilding}
+                                        endBuilding={startName.endBuilding}
                                     ></BuildingInfo>
                                     );
                             }

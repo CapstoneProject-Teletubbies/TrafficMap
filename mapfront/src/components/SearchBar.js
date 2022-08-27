@@ -17,6 +17,9 @@ const SearchBar = (props) => {
     const [mylocation, setMylocation] = useState();
     const [buildingList, setBuildingList] = useState([]);
     const [src, setSrc] = useState();
+    const [value, setValue] = useState();
+    const [startBuilding, setStartBuildingInfo] = useState();
+    const [endBuilding, setEndBuildingInfo] = useState();
 
     const location = useLocation();
 
@@ -25,7 +28,8 @@ const SearchBar = (props) => {
     }
     const handleKeyPress = (e) => { //enter키 추적용 -> 검색 결과창으로 이동시킴
         if(e.key === 'Enter'){
-            if(searchValue.includes('번 버스') || searchValue.includes('번버스')){
+            if(src == '/search' && (searchValue.includes('번 버스') || searchValue.includes('번버스'))){
+                
                 searchOnlyBus();
             }
             else{
@@ -34,18 +38,31 @@ const SearchBar = (props) => {
         }
     }
     useEffect(()=>{
+        console.log(props);
         setMylocation(props.location);
         let where = location.pathname;
 
         if(where == '/' || where == '/search'){
-            setSrc('/search')
+            setSrc('/search');
         }
         else if(where == '/find-way' || where == '/find-search'){
-            setSrc('/find-search')
+            setSrc('/find-search');
+            if(props.startPlace){
+                console.log("지금 출발 지 입력 했음");
+                setStartBuildingInfo(props.startPlace);
+
+            }else if(props.endPlace){
+                console.log("도착지 입력했음 ");
+                setEndBuildingInfo(props.endPlace);
+            }
+            if(props.value){
+                console.log(props.value.name);
+                setValue(props.value.name);
+                
+            }
         }
         // console.log(props.location);
     })
-
 
     const searchBuilding = (props1, props2) => {
         const building = axios.create({
@@ -63,6 +80,8 @@ const SearchBar = (props) => {
                     busstop: props2,
                     mylocation: mylocation,
                     id: props.id,
+                    startBuilding: startBuilding,
+                    endBuilding: endBuilding,
                 }
             });
         }).catch(function(error){
@@ -115,9 +134,12 @@ const SearchBar = (props) => {
         })
     }
 
+
+
     return(
         <>       
-            <input className="gg" type="text" style={props.style} placeholder={props.placeholder} 
+            <input className="gg" type="text" style={props.style} 
+            placeholder={props.placeholder} value={value} 
             onChange={handleValue}
             onKeyDown={handleKeyPress}
             />

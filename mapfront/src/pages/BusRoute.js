@@ -24,7 +24,7 @@ function BusRoute(){
 
     const handlebackButton = () => {
         console.log("back");
-        navigate(-1);
+        navigate(-1);    
     }
 
     useEffect(() => {                               //받아온 버스 정보 버스 노선 정보, 버스 실시간 위치 정보

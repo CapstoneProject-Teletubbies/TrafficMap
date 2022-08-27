@@ -30,10 +30,10 @@ const BuildingDetailInfo = (props) => {
     }
 
     const handlestartButton = () => {
-
+        console.log("출발 버튼 클릭");
     }
     const handleendButton = () => {
-        
+        console.log("도착 버튼 클릭");
     }
 
     const handlesubwaymapbutton = () => {
@@ -236,8 +236,8 @@ const BuildingDetailInfo = (props) => {
                             {buildingDetailInfo.fullAddressRoad}
                         </div>
                         <div className="" style={stylebutton}>
-                            <button type="button" class="btn btn-outline-primary btn-sm col-5" style={mybutton}>출발</button>
-                            <button type="button" class="btn btn-primary btn-sm col-5" style={mybutton}>도착</button>
+                            <button type="button" class="btn btn-outline-primary btn-sm col-5" onClick={handlestartButton} style={mybutton}>출발</button>
+                            <button type="button" class="btn btn-primary btn-sm col-5" onClick={handleendButton} style={mybutton}>도착</button>
                         </div>
                 </div>
                 </footer>
