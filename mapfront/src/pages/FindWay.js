@@ -4,7 +4,11 @@ import { useLocation } from 'react-router';
 
 import SearchBar from '../components/SearchBar';
 
+const baseurl = 'http://localhost:9000/'         //베이스 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
 function FindWay(props){
+    const [findLocation, setFindLocation] = useState();
     const [startplaceholder, setStartPlaceHolder] = useState('출발지 입력');
     const [endplaceholder, setEndPlaceHolder] = useState('도착지 입력');
 
@@ -12,19 +16,38 @@ function FindWay(props){
     const [endPlace, setEndPlace] = useState();
 
     const [findway, setFindway] = useState();
+    const [route, setRoute] = useState();
 
     const location = useLocation();
 
     const mylocation = location.state.mylocation;
 
-    console.log(mylocation);
+    const handleSuccess = (pos) => {                //현재 내 위치 받아오기
+        const {latitude, longitude } = pos.coords;
+        
+        setFindLocation({
+          latitude, longitude
+        })
+    };
+
+    const TmapfindWay = () => {
+        const fw = axios.create({
+            baseURL: baseurl
+        })
+        fw.post('/api/way', null, {params: {
+            startX : 127.108212, startY : 37.402056, endX : 126.72449073, endY : 37.49159726, startName : "카카오판교오피스", endName : "스타벅스부평", option : '0'
+        }}).then(function(res){
+            console.log(res.data);
+            setRoute(res.data);
+        }).catch(function(err){
+            console.log("길찾기 실패");
+        })
+    };
+
 
     useEffect(()=>{
-        console.log(props); 
-        console.log(location);
         setFindway(location.state);
         if(location.state){
-            console.log(location.state);
             if(location.state.startBuilding){
                 console.log("출발지 정보 왔어요");
                 setStartPlace(location.state.startBuilding);            //출발지 정보
@@ -37,27 +60,18 @@ function FindWay(props){
             }  
 
             if(location.state.startBuilding && location.state.endBuilding){
-                console.log("출발지, 도착지 둘 다 입력 완료");
+                console.log("출발지, 도착지 둘 다 입력 완료");    
             }
         }
     }, [findway])
 ///////////////////////////////////////////
-    useEffect(()=>{
-        console.log(startPlace);
-        console.log(endPlace);
-    }, [startPlace, endPlace])
 //////////////////////////////////////////
     const handleXButton =   () => {
         console.log("클릭");
-        window.location.href = "/";
+        // window.location.href = "/";
+        TmapfindWay();
     }
 
-    const searchbarstyle={
-        border: "1px solid gray",
-        borderRadius: "6px",
-        margin: "5px",
-        width: "100%",       
-    }
 
     return(
         <div style={{position: "fixed", width: "100%", height: "100%", backgroundColor: "#D5D5D5"}}>
@@ -73,7 +87,8 @@ function FindWay(props){
                     </div>                               
                 </div>
             </div>
-            <div>
+            <div id="map">
+                
             </div>
         </div>     
     );

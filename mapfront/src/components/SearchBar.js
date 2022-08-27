@@ -38,7 +38,6 @@ const SearchBar = (props) => {
         }
     }
     useEffect(()=>{
-        console.log(props);
         setMylocation(props.location);
         let where = location.pathname;
 
