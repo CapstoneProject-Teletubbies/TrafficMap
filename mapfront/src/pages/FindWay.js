@@ -15,6 +15,7 @@ function FindWay(props){
 
     const [startPlace, setStartPlace] = useState();
     const [endPlace, setEndPlace] = useState();
+    const [both, setBoth] = useState(false);
 
     const [findway, setFindway] = useState();
     const [route, setRoute] = useState();
@@ -62,9 +63,11 @@ function FindWay(props){
                 setEndPlace(location.state.endBuilding);              //도착지 정보
                 setEndPlaceHolder(location.state.endBuilding.name);   //도착지 이름
             }  
-
             if(location.state.startBuilding && location.state.endBuilding){
-                console.log("출발지, 도착지 둘 다 입력 완료");    
+                console.log("출발지, 도착지 둘 다 입력 완료");
+                console.log(startPlace);
+                console.log(endPlace);   
+                setBoth(true);
             }
         }
     }, [findway])
@@ -72,18 +75,27 @@ function FindWay(props){
 //////////////////////////////////////////
     const handleXButton =   () => {
         console.log("클릭");
-        // window.location.href = "/";
-        TmapfindWay();
+        window.location.href = "/";
+        // TmapfindWay();
     }
 
     useEffect(()=>{
-        var routeLat = new Array();
-        var routeLng = new Array();
-        if(route){
-            route.map((obj, index)=>{
-                routeLat.push(obj.pointLatitude);
-                routeLng.push(obj.pointLongitude);
-            })
+        var startLat, startLng;
+        var endLat, endLng;
+        var middleLat, middleLng;
+
+
+        if(both){
+            startLat = startPlace.obj.latitude;
+            startLng = startPlace.obj.longitude;
+            endLat = endPlace.obj.latitude;
+            endLng = endPlace.obj.longitude;
+            
+            middleLat = (startLat + endLat) / 2;
+            middleLng = (startLng + endLng) / 2;
+
+            console.log(middleLat, middleLng);
+
         }
 
         const script = document.createElement("script");
@@ -93,28 +105,31 @@ function FindWay(props){
             var totalMarkerArr = [];
             var drawInfoArr = [];
             var resultdrawArr = [];
+
+            console.log(${startLat});
     
             function initTmap() {
                 var map = new Tmapv2.Map("TMapApp", {
-                    center: new Tmapv2.LatLng(37.570028, 126.989072),
+                    center: new Tmapv2.LatLng(${middleLat}, ${middleLng}),
                     width: "100%",
                     height: "100%",
                     httpsMode: true,
                     zoomControl: false,
-                    zoom:15,
+                    zoom:13,
                 });
+                // 출발 마커
                 marker_s = new Tmapv2.Marker(
                     {
-                        position : new Tmapv2.LatLng(37.56689860, 126.97871544),
+                        position : new Tmapv2.LatLng(${startLat}, ${startLng}),
                         icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png",
                         iconSize : new Tmapv2.Size(24, 38),
                         map : map
                     });
     
-                // 도착
+                // 도착 마커
                 marker_e = new Tmapv2.Marker(
                     {
-                        position : new Tmapv2.LatLng(37.57081522, 127.00160213),
+                        position : new Tmapv2.LatLng(${endLat}, ${endLng}),
                         icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png",
                         iconSize : new Tmapv2.Size(24, 38),
                         map : map
@@ -126,10 +141,10 @@ function FindWay(props){
                     async: false,
                     data: {
                         "appKey" : "l7xxafd79b2f4cce4ae6a4f6d1a1f4c31386",
-						"startX" : "126.97871544",
-						"startY" : "37.56689860",
-						"endX" : "127.00160213",
-						"endY" : "37.57081522",
+						"startX" : "${startLng}",
+						"startY" : "${startLat}",
+						"endX" : "${endLng}",
+						"endY" : "${endLat}",
 						"reqCoordType" : "WGS84GEO",
 						"resCoordType" : "EPSG3857",
 						"startName" : "출발지",
@@ -253,7 +268,7 @@ function FindWay(props){
                 resultdrawArr.push(polyline_);
             }
 
-            if('${route}'){
+            if('${startPlace}' && '${endPlace}'){
                 initTmap();
             }
 
@@ -262,7 +277,7 @@ function FindWay(props){
         script.type = "text/javascript";
         script.async = "async";
         document.head.appendChild(script);
-    });
+    }, [both]);
 
 
     return(
@@ -279,7 +294,7 @@ function FindWay(props){
                     </div>                               
                 </div>
             </div>
-            {route &&
+            {both &&
             <body onload="initTmap();">
             <div id="TMapApp" style={{
                 overflowY: "hidden",
