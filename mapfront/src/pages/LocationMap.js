@@ -14,13 +14,13 @@ import BusStopDetailInfo from '../components/BusStopDetailInfo';
 import placeholderred from "../images/placeholderred.png"
 import mylocation from "../images/mylocation.png"
 
-
 function LocationMap() {
     const [sid, setSid] = useState();
     const [keyword, setKeyword] = useState();  //검색 받은 키워드
     const [plusbutton, setPlusButton] = useState();
     const [minusbutton, setMinusButton] = useState();
     const [locationbutton, setLocationButton] = useState();
+    const [findWay, setFindWay] = useState();
     const [infoWindow, setInfoWindow] = useState(true);
 
     const building = useLocation();
@@ -290,9 +290,9 @@ function LocationMap() {
     </div>
     {sid !== 2 && 
     <div className="Infobar" style={{position: "fixed", width: "100%", height: "10%", bottom: "0px" }}>
-        <BuildingDetailInfo props={building.state.props.obj} subway={subway}/>
+        <BuildingDetailInfo props={building.state.props.obj} subway={subway} findway={building.state.props.id} whole={building.state} mylocation={building.state.props.mylocation}/>
     </div>}
-    {sid === 2 && <BusStopDetailInfo obj={building.state.props.obj} bustop={building.state.busstop} location={location}></BusStopDetailInfo>}
+    {sid === 2 && <BusStopDetailInfo obj={building.state.props.obj} bustop={building.state.busstop} location={location} findway={building.state.props.id} whole={building.state} mylocation={building.state.props.mylocation}></BusStopDetailInfo>}
 
     </main>
   );

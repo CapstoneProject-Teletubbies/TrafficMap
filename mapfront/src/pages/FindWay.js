@@ -305,8 +305,8 @@ function FindWay(props){
                 </div>
                 {both && 
                 <div style={{width: "100%", padding: "0px"}}>
-                    <button style={{width: "50%"}}>도보</button>
-                    <button style={{width: "50%"}}>대중교통</button>
+                    <button style={{width: "50%", backgroundColor: "white", border: "none", boxShadow: "1px 1px 1px 1px gray"}}>도보</button>
+                    <button style={{width: "50%", backgroundColor: "white", border: "none", boxShadow: "1px 1px 1px 1px gray"}}>대중교통</button>
                 </div>
                 }
             </div>

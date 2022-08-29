@@ -132,10 +132,27 @@ const BuildingInfo = (props) => {
             searchsubwayinfo(subwayname[0]);       
         }
         else{
+            var start = null, end = null;
+            if(props.id == 'start' && props.endBuilding){
+                console.log("이건 진짜 다입력한거임 ");
+                start = props;
+                end = props.endBuilding;
+            }else if(props.id == 'end' && props.startBuilding){
+                console.log("이것도 다 입력한거임");
+                start = props.startBuilding;
+                end = props;
+            }else if(props.id == 'start'){
+                start = props;
+            }else if(props.id == 'end'){
+                end = props;
+            }
             navigate("/location-map", {
                 state: {
                     props: props,
-                    subway: null,               
+                    subway: null,    
+                    id: props.id,
+                    startBuilding: start,
+                    endBuilding: end,           
                 },
             });
             window.location.href = "/location-map";
@@ -150,9 +167,9 @@ const BuildingInfo = (props) => {
                     <div className="fw-bold" style={{ textAlign: "left", display: "flex", }}>
                             {props.name}
                     </div>
-                    <div style={{ paddingLeft: "2%"}}>
+                </div>
+                <div style={{ textAlign: "-webkit-left" }}>
                         {distance}
-                    </div>
                 </div>
                 {props.address}
             </div>
