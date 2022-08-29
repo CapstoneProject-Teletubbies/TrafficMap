@@ -27,7 +27,7 @@ function LocationMap() {
     const navigate = useNavigate();
 
 
-
+    console.log(building);
  
     const [location, setLocation] = useState();
     const [buildinglocation, setBuildingLocation] = useState();

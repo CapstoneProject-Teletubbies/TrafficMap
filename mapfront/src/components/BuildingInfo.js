@@ -19,7 +19,8 @@ const BuildingInfo = (props) => {
     const [distance, setDistance] = useState(); // 내위치와 건물 사이의 거리
     
 
-    useEffect(()=>{      
+    useEffect(()=>{    
+        console.log(props);  
         var mylat = props.mylocation.latitude;
         var mylng = props.mylocation.longitude;
         var lat = props.obj.latitude;
@@ -78,7 +79,7 @@ const BuildingInfo = (props) => {
         })
     };
 
-    const handleClick = () => {
+    const handleClick = (evt) => {
         console.log(props);
         if(location.pathname == '/search'){
             if(props.obj.upperBizName === "교통편의"){
@@ -89,11 +90,13 @@ const BuildingInfo = (props) => {
                 navigate("/location-map", {
                     state: {
                         props: props,
+                        subway: null,
                     },
             });
             window.location.href = "/location-map";
             }
         }else if(location.pathname == '/find-search') {
+            if(evt.target.className !== 'bi bi-map'){
             var start = null, end = null;
             if(props.id == 'start' && props.endBuilding){
                 console.log("이건 진짜 다입력한거임 ");
@@ -118,6 +121,7 @@ const BuildingInfo = (props) => {
                 }
             });
         }
+    }
     };
 
     const handleButtonClick = () => {
@@ -131,6 +135,7 @@ const BuildingInfo = (props) => {
             navigate("/location-map", {
                 state: {
                     props: props,
+                    subway: null,               
                 },
             });
             window.location.href = "/location-map";

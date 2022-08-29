@@ -35,12 +35,12 @@ function FindWay(props){
         })
     };
 
-    const TmapfindWay = () => {
+    const TmapfindWay = (startlng, startlat, endlng, endlat) => {
         const fw = axios.create({
             baseURL: baseurl
         })
         fw.post('/api/way', null, {params: {
-            startX : 127.108212, startY : 37.402056, endX : 126.72449073, endY : 37.49159726, startName : "카카오판교오피스", endName : "스타벅스부평", option : '0'
+            startX : startlng, startY : startlat, endX : endlng, endY : endlat, startName : "출발지", endName : "도착지", option : '0'
         }}).then(function(res){
             console.log(res.data);
             setRoute(res.data);
@@ -49,6 +49,13 @@ function FindWay(props){
         })
     };
 
+    useEffect(()=>{
+        if(route){
+            route.map((obj)=>{
+                console.log(obj.isStair);
+            })
+        }
+    })
 
     useEffect(()=>{
         setFindway(location.state);
@@ -63,11 +70,17 @@ function FindWay(props){
                 setEndPlace(location.state.endBuilding);              //도착지 정보
                 setEndPlaceHolder(location.state.endBuilding.name);   //도착지 이름
             }  
-            if(location.state.startBuilding && location.state.endBuilding){
+            // if(location.state.startBuilding && location.state.endBuilding){
+            if(startPlace && endPlace){
                 console.log("출발지, 도착지 둘 다 입력 완료");
                 console.log(startPlace);
                 console.log(endPlace);   
                 setBoth(true);
+                var startlat = startPlace.obj.latitude;
+                var startlng = startPlace.obj.longitude;
+                var endlat = endPlace.obj.latitude;
+                var endlng = endPlace.obj.longitude;
+                TmapfindWay(startlng, startlat, endlng, endlat);
             }
         }
     }, [findway])
@@ -105,8 +118,6 @@ function FindWay(props){
             var totalMarkerArr = [];
             var drawInfoArr = [];
             var resultdrawArr = [];
-
-            console.log(${startLat});
     
             function initTmap() {
                 var map = new Tmapv2.Map("TMapApp", {
@@ -151,8 +162,8 @@ function FindWay(props){
 						"endName" : "도착지"
                     },
                     success: function(response){
-                        console.log(response);
                         var resultData = response.features;
+                        console.log(resultData);
 
                         if (resultdrawArr.length > 0) {
 							for ( var i in resultdrawArr) {
@@ -189,8 +200,8 @@ function FindWay(props){
 								var markerImg = "";
 								var pType = "";
 								var size;
-
-								if (properties.pointType == "S") { //출발지 마커
+						
+                                if (properties.pointType == "S") { //출발지 마커
 									markerImg = "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_s.png";
 									pType = "S";
 									size = new Tmapv2.Size(24, 38);
@@ -256,7 +267,6 @@ function FindWay(props){
 
             function drawLine(arrPoint) {
                 console.log("드로우 실행");
-                console.log(arrPoint);
                 var polyline_;
         
                 polyline_ = new Tmapv2.Polyline({
@@ -293,6 +303,12 @@ function FindWay(props){
                         <i class="bi bi-x" onClick={handleXButton} style={{fontSize: "2rem"}}></i>
                     </div>                               
                 </div>
+                {both && 
+                <div style={{width: "100%", padding: "0px"}}>
+                    <button style={{width: "50%"}}>도보</button>
+                    <button style={{width: "50%"}}>대중교통</button>
+                </div>
+                }
             </div>
             {both &&
             <body onload="initTmap();">
