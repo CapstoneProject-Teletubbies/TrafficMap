@@ -1,7 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 import { useRef, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import Draggable from 'react-draggable';
 import {DraggableCore} from 'react-draggable';
 import proj4 from 'proj4';
@@ -23,6 +23,8 @@ const BusStopDetailInfo = (props)=>{
     const [isset, SetIsSet] = useState(false);
 
     const [y, setY] = useState();
+
+    const navigate = useNavigate();
 
     var bustopinfobar, rbuslist; 
 
@@ -57,6 +59,7 @@ const BusStopDetailInfo = (props)=>{
     // }, [])
 
     useEffect(()=>{
+        console.log(props);
         var busarr = props.bustop;
         console.log(busarr);
         console.log("useEffect");
@@ -133,9 +136,29 @@ const BusStopDetailInfo = (props)=>{
     }, [])
     //////////////
 
-    const test = (evt) => {            //출발, 도착 터치 이벤트
-        console.log("클릭"); 
+    const handleStartButton = () => {
+        console.log("출발 버튼~");
+        navigate('/find-way', {
+            state:{
+                startBuilding: {obj: props.obj, address: "버스정류장", name: props.obj.bstopnm},
+                mylocation: props.location,
+                address: '버스정류장',
+                id: 'start',
+            }
+        })
+    }   
+    const handleEndButton = () => {
+        console.log("도착 버튼~");
+        navigate('/find-way', {
+            state:{
+                startBuilding: {obj: props.obj, address: "버스정류장", name: props.obj.bstopnm},
+                mylocation: props.location,
+                address: '버스정류장',
+                id: 'end',
+            }
+        })
     }
+
     const test1 = (evt, data) => {
         setStartXY(data);
         // console.log("드래스 시작좌표" + data.y);
@@ -206,8 +229,8 @@ const BusStopDetailInfo = (props)=>{
                                     <div style={{fontSize: "1.0rem", float: "left", paddingLeft: "2px"}}>{dist}m</div>
                                 </div>
                                 <div className="" style={{position: "relative", width: "170px", float: "right", right: "0px", marginTop: "13%"}}>
-                                    <button id="button1" onTouchEnd={test} type="button" class="btn btn-outline-primary btn-sm col-5" style={{borderRadius: "20px", height: "35px", marginLeft: "8px"}}>출발</button>
-                                    <button id="button2" onTouchEnd={test} type="button" class="btn btn-primary btn-sm col-5" style={{borderRadius: "20px", height: "35px", marginLeft: "8px"}}>도착</button>
+                                    <button id="button1" onTouchEnd={handleStartButton} type="button" class="btn btn-outline-primary btn-sm col-5" style={{borderRadius: "20px", height: "35px", marginLeft: "8px"}}>출발</button>
+                                    <button id="button2" onTouchEnd={handleEndButton} type="button" class="btn btn-primary btn-sm col-5" style={{borderRadius: "20px", height: "35px", marginLeft: "8px"}}>도착</button>
                                 </div>
                             </div>
                         </div>
