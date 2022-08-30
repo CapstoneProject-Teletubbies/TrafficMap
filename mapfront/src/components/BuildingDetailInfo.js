@@ -33,9 +33,23 @@ const BuildingDetailInfo = (props) => {
 
     const handlestartButton = () => {
         console.log("출발 버튼 클릭");
+        navigate('/find-way', {
+            state:{
+                startBuilding: props.whole.props,
+                mylocation: props.whole.props.mylocation,
+                id: 'start',
+            }
+        })
     }
     const handleendButton = () => {
         console.log("도착 버튼 클릭");
+        navigate('/find-way', {
+            state:{
+                endBuilding: props.whole.props,
+                mylocation: props.whole.props.mylocation,
+                id: 'end',
+            }
+        })
     }
 
     const handlecheckButton = () => {
@@ -136,14 +150,6 @@ const BuildingDetailInfo = (props) => {
        
     }
 
-    const startbutton =()=>{
-        
-        console.log('startbutton');
-    }
-
-    const arrivebutton=()=>{
-        console.log('arrivebutton');
-    }
     const stylebutton ={
         position: "fixed",
         width: "170px",
