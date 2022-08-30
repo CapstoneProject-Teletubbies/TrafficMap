@@ -265,6 +265,7 @@ const BuildingDetailInfo = (props) => {
                 <div style={{padding: "2%", height: "100%"}}>
                         <div style={{width: "100%", textAlign: "-webkit-left"}}>
                             <b>{buildingDetailInfo.name}</b> {buildingDetailInfo.upperBizName}
+                            <b>{buildingDetailInfo.bstopnm}</b>
                         </div>
                         <div style={{textAlign: "-webkit-left"}}>
                             {buildingDetailInfo.fullAddressRoad}

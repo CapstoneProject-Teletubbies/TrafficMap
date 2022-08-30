@@ -27,7 +27,6 @@ import { useNavigate } from "react-router-dom";
     }
 
     useEffect(()=>{
-        console.log(location);
         setStartName(location.state);
         setBusList(location.state.bus);
         setBuildingList(location.state.building);
@@ -66,7 +65,7 @@ import { useNavigate } from "react-router-dom";
                     ></i>
 
                     <div className="" style={{ flex: 1, textAlign: "left" }}>
-                        <SearchBar keyword={keyword} onChange={onChange} placeholder={keyword} location={mylocation} />
+                        <SearchBar keyword={keyword} onChange={onChange} placeholder={keyword} location={mylocation} id={location.state.id}/>
                     </div>
 
                 </nav>
@@ -76,7 +75,7 @@ import { useNavigate } from "react-router-dom";
                 {}
                 <ol className="list-group">
                     
-                    {busStopList && busStopList.map((obj, index)=><BusStopInfo obj={obj} name={obj.bstopnm} address='버스정류장' />)}
+                    {busStopList && busStopList.map((obj, index)=><BusStopInfo obj={obj} name={obj.bstopnm} id={location.state.id} mylocation={mylocation} startBuilding={startName.startBuilding} endBuilding={startName.endBuilding} address='버스정류장' />)}
                     {buildingList &&
                         buildingList.map((obj, index) => {
                             if(obj.upperBizName === "교통편의"){

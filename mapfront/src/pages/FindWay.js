@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import $ from 'jquery';
 import { useLocation } from 'react-router';
+import proj4 from 'proj4';
 
 import SearchBar from '../components/SearchBar';
 
@@ -58,6 +59,7 @@ function FindWay(props){
     })
 
     useEffect(()=>{
+        console.log(location.state);
         setFindway(location.state);
         if(location.state){
             if(location.state.startBuilding){
@@ -72,14 +74,38 @@ function FindWay(props){
             }  
             // if(location.state.startBuilding && location.state.endBuilding){
             if(startPlace && endPlace){
+                var startlat, startlng, endlat, endlng;
+                const besseltm = "+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 +y_0=500000 +ellps=bessel +units=m +no_defs +towgs84=-115.80,474.99,674.11,1.16,-2.31,-1.63,6.43"
+                const wgs84 = "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees" 
+                var posx, posy;
                 console.log("출발지, 도착지 둘 다 입력 완료");
                 console.log(startPlace);
                 console.log(endPlace);   
                 setBoth(true);
-                var startlat = startPlace.obj.latitude;
-                var startlng = startPlace.obj.longitude;
-                var endlat = endPlace.obj.latitude;
-                var endlng = endPlace.obj.longitude;
+                if(startPlace.address === '버스정류장'){
+                    posx = startPlace.obj.posx;
+                    posy = startPlace.obj.posy;
+                    var pt = new proj4.Point(posx, posy);
+                    var result = proj4(besseltm, wgs84, pt);
+                    console.log(result);
+                    startlat = result.y;
+                    startlng = result.x;
+                }else{
+                    startlat = startPlace.obj.latitude;
+                    startlng = startPlace.obj.longitude;
+                }
+                if(endPlace.address === '버스정류장'){
+                    posx = endPlace.obj.posx;
+                    posy = endPlace.obj.posy;
+                    var pt = new proj4.Point(posx, posy);
+                    var result = proj4(besseltm, wgs84, pt);
+                    console.log(result);
+                    endlat = result.y;
+                    endlng = result.x;
+                }else{
+                    endlat = endPlace.obj.latitude;
+                    endlng = endPlace.obj.longitude;
+                }
                 TmapfindWay(startlng, startlat, endlng, endlat);
             }
         }
@@ -96,13 +122,36 @@ function FindWay(props){
         var startLat, startLng;
         var endLat, endLng;
         var middleLat, middleLng;
+        var posx, posy;
+        const besseltm = "+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 +y_0=500000 +ellps=bessel +units=m +no_defs +towgs84=-115.80,474.99,674.11,1.16,-2.31,-1.63,6.43"
+        const wgs84 = "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees" 
 
 
         if(both){
-            startLat = startPlace.obj.latitude;
-            startLng = startPlace.obj.longitude;
-            endLat = endPlace.obj.latitude;
-            endLng = endPlace.obj.longitude;
+            if(startPlace.address === '버스정류장'){
+                posx = startPlace.obj.posx;
+                posy = startPlace.obj.posy;
+                var pt = new proj4.Point(posx, posy);
+                var result = proj4(besseltm, wgs84, pt);
+                console.log(result);
+                startLat = result.y;
+                startLng = result.x;
+            }else{
+                startLat = startPlace.obj.latitude;
+                startLng = startPlace.obj.longitude;
+            }
+            if(endPlace.address === '버스정류장'){
+                posx = endPlace.obj.posx;
+                posy = endPlace.obj.posy;
+                var pt = new proj4.Point(posx, posy);
+                var result = proj4(besseltm, wgs84, pt);
+                console.log(result);
+                endLat = result.y;
+                endLng = result.x;
+            }else{
+                endLat = endPlace.obj.latitude;
+                endLng = endPlace.obj.longitude;
+            }
             
             middleLat = (startLat + endLat) / 2;
             middleLng = (startLng + endLng) / 2;

@@ -47,15 +47,12 @@ const SearchBar = (props) => {
         else if(where == '/find-way' || where == '/find-search'){
             setSrc('/find-search');
             if(props.startPlace){
-                console.log("지금 출발 지 입력 했음");
                 setStartBuildingInfo(props.startPlace);
 
             }else if(props.endPlace){
-                console.log("도착지 입력했음 ");
                 setEndBuildingInfo(props.endPlace);
             }
             if(props.value){
-                console.log(props.value.name);
                 setValue(props.value.name);
                 
             }
