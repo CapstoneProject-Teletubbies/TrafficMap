@@ -3,8 +3,14 @@ import axios from 'axios';
 import $ from 'jquery';
 import { useLocation } from 'react-router';
 import proj4 from 'proj4';
+import '../css/FindWay.css'
 
+import UrlModal from '../components/UrlModal';
 import SearchBar from '../components/SearchBar';
+
+import walk from "../images/walkp.png";
+import bus from "../images/bus.png";
+
 
 const baseurl = 'http://localhost:9000/'         //베이스 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -36,6 +42,18 @@ function FindWay(props){
         })
     };
 
+    const [modalOpen, setModalOpen] = useState(false);
+
+    const openMadal = () => {
+        setTimeout(setModalOpen(true), 50);
+    }
+    const closeModal = () => {
+        setModalOpen(false);
+    }
+    const urlModal = () => {
+        TmapfindTrans(startPlace.name, endPlace.name);
+    }
+
     const TmapfindWay = (startlng, startlat, endlng, endlat) => {
         const fw = axios.create({
             baseURL: baseurl
@@ -49,6 +67,20 @@ function FindWay(props){
             console.log("길찾기 실패");
         })
     };
+
+    const TmapfindTrans = (startname, endname) => {
+        const tft = axios.create({
+            baseURL: baseurl
+        })
+        tft.post('/api/way/trans', null, {params: {
+            sName: '스타벅스 파주금릉역점', eName: '스타벅스 파주운정이마트점'
+        }}).then(function(res){
+            console.log(res.data);
+            window.open(res.data, '_blank');
+        }).catch(function(err){
+            console.log("대중교통 길찾기 실패");
+        })
+    }
 
     useEffect(()=>{
         if(route){
@@ -116,6 +148,11 @@ function FindWay(props){
         console.log("클릭");
         window.location.href = "/";
         // TmapfindWay();
+        // TmapfindTrans();
+    }
+
+    const handleTransButton = () => {
+        openMadal();
     }
 
     useEffect(()=>{
@@ -354,8 +391,8 @@ function FindWay(props){
                 </div>
                 {both && 
                 <div style={{width: "100%", padding: "0px"}}>
-                    <button style={{width: "50%", backgroundColor: "white", border: "none", boxShadow: "1px 1px 1px 1px gray"}}>도보</button>
-                    <button style={{width: "50%", backgroundColor: "white", border: "none", boxShadow: "1px 1px 1px 1px gray"}}>대중교통</button>
+                    <button id="walkbtn"><img src={walk} style={{width: "16px", height: "24px", marginRight: "8px", marginBottom: "2px"}}></img>도보</button>
+                    <button id="walkbtn" onClick={handleTransButton}><img src={bus} style={{width: "24px", height: "24px", marginRight: "8px", marginBottom: "2px"}}></img>대중교통</button>
                 </div>
                 }
             </div>
@@ -368,6 +405,9 @@ function FindWay(props){
               }}>
                 
             </div></body>}
+            <UrlModal open={modalOpen} close={closeModal} connect={urlModal}>
+                       
+            </UrlModal>
         </div>     
     );
 }

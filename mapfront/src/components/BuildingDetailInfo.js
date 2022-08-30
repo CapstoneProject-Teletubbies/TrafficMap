@@ -210,8 +210,12 @@ const BuildingDetailInfo = (props) => {
                                 {subwayUp && subwayUp.map((obj, index)=>{
                                     var arv = '';
                                     const name =(obj.trainLineNm).split('-');
-                                    if((obj.arvlMsg2).includes("도착")){
-                                        arv = obj.arvlMsg2;
+                                    if((obj.arvlMsg2).includes("도착")){                          
+                                        if(obj.arvlMsg3 == (obj.arvlMsg2).split(' 도착')[0]){
+                                            arv = '도착';
+                                        }else{
+                                            arv = obj.arvlMsg2;
+                                        }
                                     }else{
                                         arv = (obj.arvlMsg2).split('역')[0];
                                     }
@@ -233,7 +237,11 @@ const BuildingDetailInfo = (props) => {
                                     var arv = '';
                                     const name =(obj.trainLineNm).split('-');
                                     if((obj.arvlMsg2).includes("도착")){
-                                        arv = obj.arvlMsg2;
+                                        if(obj.arvlMsg3 == (obj.arvlMsg2).split(' 도착')[0]){
+                                            arv = '도착';
+                                        }else{
+                                            arv = obj.arvlMsg2;
+                                        }    
                                     }else{
                                         arv = (obj.arvlMsg2).split('역')[0];
                                     }

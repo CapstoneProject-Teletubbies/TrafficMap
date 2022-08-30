@@ -1,0 +1,9 @@
+#walkbtn{
+    width: 50%;
+    background-color: white;
+    border: none;
+    box-shadow: 2px 2px 2px 2px gray;
+}
+#walkbtn:active{
+    box-shadow: none;
+}
