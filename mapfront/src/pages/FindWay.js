@@ -20,6 +20,7 @@ function FindWay(props){
     const [startplaceholder, setStartPlaceHolder] = useState('출발지 입력');
     const [endplaceholder, setEndPlaceHolder] = useState('도착지 입력');
 
+    const [present, setPresent] = useState();
     const [startPlace, setStartPlace] = useState();
     const [endPlace, setEndPlace] = useState();
     const [both, setBoth] = useState(false);
@@ -36,24 +37,13 @@ function FindWay(props){
 
     const handleSuccess = (pos) => {                //현재 내 위치 받아오기
         const {latitude, longitude } = pos.coords;
-        
+
         setFindLocation({
           latitude, longitude
         })
     };
 
-    const reverseGeocoding = (lat, lon) => {
-        const rG = axios.create({
-            baseURL: baseurl
-        })
-        rG.post('/api/find/reverseGeo', null, {params: {
-            lat: lat, lon: lon
-        }}).then(function(res){
-            console.log(res);
-        }).catch(function(err){
-            console.log("지오코딩 실패");
-        })
-    }
+
 
     const [modalOpen, setModalOpen] = useState(false);
 
@@ -108,8 +98,14 @@ function FindWay(props){
     }
 
     useEffect(()=>{
-        navigator.geolocation.watchPosition(handleSuccess);
-        
+        console.log("////////////////////////////////////////");
+        if(location.state.mystartlocation){
+            console.log(location.state.mystartlocation);
+            setStartPlaceHolder(location.state.mystartlocation);
+            setStartPlace({name: location.state.mystartlocation, obj: {latitude: location.state.mylocation.latitude, longitude: location.state.mylocation.longitude}})
+        }else{
+            console.log("없어");
+        }
     }, [])
 
     useEffect(()=>{

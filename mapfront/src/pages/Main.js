@@ -15,6 +15,8 @@ import nav from "../images/nav.png";
 
 import mylocation from "../images/mylocation.png";
 
+const baseurl = 'http://localhost:9000/'         //베이스 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 function Main() {
     const [keyword, setKeyword] = useState();  //검색 받은 키워드
     const [plusbutton, setPlusButton] = useState();
@@ -40,11 +42,7 @@ function Main() {
     }
     const handleNavButton = () =>{      //길찾기 버튼
       console.log("길찾기 버튼 클릭");
-      navigate('/find-way', {
-        state: {
-          mylocation: location,
-        }
-      });
+      reverseGeocoding(location.latitude, location.longitude); 
     }
 
     const handleSuccess = (pos) => {
@@ -54,6 +52,24 @@ function Main() {
         latitude, longitude
       })
     };
+
+    const reverseGeocoding = (lat, lon) => {
+      const rG = axios.create({
+          baseURL: baseurl
+      })
+      rG.post('/api/find/reverseGeo', null, {params: {
+          lat: lat, lon: lon
+      }}).then(function(res){
+          navigate('/find-way', {
+            state: {
+              mylocation: location,
+              mystartlocation: res.data,
+            }
+          });   
+      }).catch(function(err){
+          console.log("지오코딩 실패");
+      })
+  }
 
     // const handleError= (error) -> {
     //   setError(error.message);
