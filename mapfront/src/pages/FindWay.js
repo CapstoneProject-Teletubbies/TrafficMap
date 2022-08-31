@@ -43,8 +43,6 @@ function FindWay(props){
         })
     };
 
-
-
     const [modalOpen, setModalOpen] = useState(false);
 
     const openMadal = () => {
@@ -66,6 +64,7 @@ function FindWay(props){
             end = endPlace.name;
         }
         TmapfindTrans(start, end);
+        closeModal();
     }
 
     const TmapfindWay = (startlng, startlat, endlng, endlat) => {
