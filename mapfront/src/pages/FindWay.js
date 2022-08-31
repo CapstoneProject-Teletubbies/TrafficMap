@@ -7,6 +7,7 @@ import '../css/FindWay.css'
 
 import UrlModal from '../components/UrlModal';
 import SearchBar from '../components/SearchBar';
+import SideBar from '../components/SideBar';
 
 import walk from "../images/walkp.png";
 import bus from "../images/bus.png";
@@ -422,10 +423,12 @@ function FindWay(props){
                 width: "100%",
               }}>
                 
-            </div></body>}
-            <UrlModal open={modalOpen} close={closeModal} connect={urlModal}>
-                       
+            </div>
+            <SideBar></SideBar>
+            </body>}
+            <UrlModal open={modalOpen} close={closeModal} connect={urlModal}>  
             </UrlModal>
+            
         </div>     
     );
 }
