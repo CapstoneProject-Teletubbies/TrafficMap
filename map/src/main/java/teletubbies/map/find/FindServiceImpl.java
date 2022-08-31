@@ -259,7 +259,7 @@ public class FindServiceImpl implements FindService {
                     String name = (String) object.get("name"); // 이름
                     String upperBizName = (String) object.get("upperBizName"); //업종명 대분류
                     String frontLat = (String) object.get("frontLat"); //위도
-                    String frontLon = (String) object.get("frontLat"); //경도
+                    String frontLon = (String) object.get("frontLon"); //경도
 
                     findDto.setName(name);
                     findDto.setUpperBizName(upperBizName);
