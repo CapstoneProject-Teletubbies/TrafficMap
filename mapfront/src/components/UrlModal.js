@@ -6,7 +6,7 @@ const UrlModal = (props) => {
 
   return (
     // 모달이 열릴때 openModal 클래스가 생성된다.
-    <div className={open ? 'openModal modal' : 'modal'}>
+    <div className={open ? 'openModal modal' : 'modal'} style={{width: "100%", height: "100%"}}>
       {open ? (
         <section style={{height: "150px"}}>
           <header>
