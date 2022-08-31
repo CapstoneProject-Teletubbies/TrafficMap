@@ -42,6 +42,19 @@ function FindWay(props){
         })
     };
 
+    const reverseGeocoding = (lat, lon) => {
+        const rG = axios.create({
+            baseURL: baseurl
+        })
+        rG.post('/api/find/reverseGeo', null, {params: {
+            lat: lat, lon: lon
+        }}).then(function(res){
+            console.log(res);
+        }).catch(function(err){
+            console.log("지오코딩 실패");
+        })
+    }
+
     const [modalOpen, setModalOpen] = useState(false);
 
     const openMadal = () => {
@@ -51,7 +64,18 @@ function FindWay(props){
         setModalOpen(false);
     }
     const urlModal = () => {
-        TmapfindTrans(startPlace.name, endPlace.name);
+        var start, end;
+        if((startPlace.name).includes('역') && startPlace.obj.upperBizName === '교통편의'){
+            start = (startPlace.name).split('역')[0] + '역';
+        }else{
+            start = startPlace.name;
+        }
+        if((endPlace.name).includes('역') && endPlace.obj.upperBizName === '교통편의'){
+            end = (endPlace.name).split('역')[0] + '역';
+        }else{
+            end = endPlace.name;
+        }
+        TmapfindTrans(start, end);
     }
 
     const TmapfindWay = (startlng, startlat, endlng, endlat) => {
@@ -73,22 +97,20 @@ function FindWay(props){
             baseURL: baseurl
         })
         tft.post('/api/way/trans', null, {params: {
-            sName: '스타벅스 파주금릉역점', eName: '스타벅스 파주운정이마트점'
+            sName: startname, eName: endname
         }}).then(function(res){
             console.log(res.data);
             window.open(res.data, '_blank');
         }).catch(function(err){
+            window.open('https://map.kakao.com/', '_blank');
             console.log("대중교통 길찾기 실패");
         })
     }
 
     useEffect(()=>{
-        if(route){
-            route.map((obj)=>{
-                console.log(obj.isStair);
-            })
-        }
-    })
+        navigator.geolocation.watchPosition(handleSuccess);
+        
+    }, [])
 
     useEffect(()=>{
         console.log(location.state);
@@ -163,6 +185,7 @@ function FindWay(props){
         const besseltm = "+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 +y_0=500000 +ellps=bessel +units=m +no_defs +towgs84=-115.80,474.99,674.11,1.16,-2.31,-1.63,6.43"
         const wgs84 = "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees" 
 
+        
 
         if(both){
             if(startPlace.address === '버스정류장'){
