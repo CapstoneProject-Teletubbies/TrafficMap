@@ -28,9 +28,8 @@ function FindWay(props){
 
     const [findway, setFindway] = useState();
     const [route, setRoute] = useState();
+    const [routeDetail, setRouteDetail] = useState([]);
 
-    const [routeLat, setRouteLat] = useState();
-    const [routeLng, setRouteLng] = useState();
 
     const location = useLocation();
 
@@ -68,28 +67,26 @@ function FindWay(props){
         closeModal();
     }
 
-    const TmapfindWay = (startlng, startlat, endlng, endlat) => {
+    const TmapfindWay = (startlng, startlat, endlng, endlat) => {   //길찾기
         const fw = axios.create({
             baseURL: baseurl
         })
         fw.post('/api/way', null, {params: {
             startX : startlng, startY : startlat, endX : endlng, endY : endlat, startName : "출발지", endName : "도착지", option : '0'
         }}).then(function(res){
-            console.log(res.data);
             setRoute(res.data);
         }).catch(function(err){
             console.log("길찾기 실패");
         })
     };
 
-    const TmapfindTrans = (startname, endname) => {
+    const TmapfindTrans = (startname, endname) => {     //대중교통 길찾기 url
         const tft = axios.create({
             baseURL: baseurl
         })
         tft.post('/api/way/trans', null, {params: {
             sName: startname, eName: endname
         }}).then(function(res){
-            console.log(res.data);
             window.open(res.data, '_blank');
         }).catch(function(err){
             window.open('https://map.kakao.com/', '_blank');
@@ -107,6 +104,20 @@ function FindWay(props){
             console.log("없어");
         }
     }, [])
+
+    useEffect(()=>{
+        console.log(route);
+        var i = 0;
+        if(route){
+            route.map((obj, index)=>{
+                if(obj.pointIndex == i){
+                    console.log(obj.pointDescription);
+                    setRouteDetail(routeDetail => [...routeDetail, obj.pointDescription]);
+                    i++;
+                }
+            })
+        }
+    }, [route])
 
     useEffect(()=>{
         console.log(location.state);
@@ -268,7 +279,6 @@ function FindWay(props){
                     },
                     success: function(response){
                         var resultData = response.features;
-                        console.log(resultData);
 
                         if (resultdrawArr.length > 0) {
 							for ( var i in resultdrawArr) {
@@ -424,7 +434,7 @@ function FindWay(props){
               }}>
                 
             </div>
-            <SideBar></SideBar>
+            <SideBar>{routeDetail}</SideBar>
             </body>}
             <UrlModal open={modalOpen} close={closeModal} connect={urlModal}>  
             </UrlModal>

@@ -2,7 +2,7 @@ import React from 'react';
 import styles from '../css/SideBar.css'
 import { useState, useEffect, useRef } from 'react';
 
-const SideBar =({width=280, children})=>{
+const SideBar =({width=310, children})=>{
     const [isOpen, setOpen] = useState(false);
     const [xPosition, setX] = useState(width);
     const [boxShadow, setBoxShadow] = useState();
@@ -37,15 +37,29 @@ const SideBar =({width=280, children})=>{
         };
     })
 
+    useEffect(()=>{
+        console.log(children);
+    }, [children])
+
 
     return(
         <div className="sidebarmain">
-            <div ref={side}  className="innersidbar" style={{ width: `${width}px`, height: '100%',  transform: `translatex(${-xPosition}px)`, boxShadow: boxShadow}}>
+            <div ref={side}  className="innersidbar" style={{ width: `${width}px`, height: window.innerHeight,  transform: `translatex(${-xPosition}px)`, boxShadow: boxShadow}}>
                 <button  onClick={() => toggleMenu()}
                 className="sidebarbutton" >
                 상세
                 </button>
-                <div className="sidebarcontent">{children}</div> 
+                <div className="sidebarcontent" style={{position: "relative", height: "90%", overflowY: "scroll"}}>
+                    <div className='list-group' style={{overflowY: "scroll"}}>
+                    {children && children.map((obj, index)=>{
+                        return(
+                            <li className='list-group-item'>
+                                {obj}
+                            </li>
+                        );
+                    })}  
+                    </div>  
+                </div> 
             </div>
       </div>
     );
