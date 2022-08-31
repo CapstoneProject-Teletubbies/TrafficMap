@@ -30,7 +30,7 @@ public class WayController {
         return wayService.findWay(startX, startY, endX, endY, startName, endName, option);
     }
 
-    @RequestMapping(value="way/trans", method = {RequestMethod.POST})
+    @RequestMapping(value="/way/trans", method = {RequestMethod.POST})
     public String FindTransWay4(String sName,String eName){ // 카카오 대중교통 길찾기 연결 -> 출발지, 도착지 이름or 주소 입력하는 방법
         return wayService.findTransWay(sName, eName);
     }
