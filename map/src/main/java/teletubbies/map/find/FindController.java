@@ -58,9 +58,9 @@ public class FindController {
 
 //    @GetMapping("/find/reverseGeo")
     @RequestMapping(value="/find/reverseGeo", method = {RequestMethod.POST})
-    public String reverseGeocoding() { // 엘리베이터 위치 가져올 엘리베이터 api
-        String lat = "37.4007470412071";
-        String lon = "127.108996408808";
+    public String reverseGeocoding(String lat, String lon) { // 엘리베이터 위치 가져올 엘리베이터 api
+//        String lat = "37.4007470412071";
+//        String lon = "127.108996408808";
         return findService.tMapReverseGeoCoding(lat, lon);
     }
 }
