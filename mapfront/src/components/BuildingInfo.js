@@ -83,8 +83,37 @@ const BuildingInfo = (props) => {
         console.log(props);
         if(location.pathname == '/search'){
             if(props.obj.upperBizName === "교통편의"){
-                var subwayname = (props.obj.name).split('역');
-                searchsubwayinfo(subwayname[0]);       
+                var subwayname = ((props.obj.name).split('역'))[0];
+                console.log(subwayname);
+                switch (subwayname){
+                    case '쌍용': subwayname='쌍용(나사렛대)'; break;
+                    case '총신대입구': subwayname = '총신대입구(이수)'; break;
+                    case '신정': subwayname = '신정(은행정)'; break;
+                    case '오목교': subwayname = '오목교(목동운동장앞)'; break;
+                    case '군자': subwayname = '군자(능동)'; break;
+                    case '아차산': subwayname ='아차산(어린이대공원후문)'; break;
+                    case '광나루': subwayname = '광나루(장신대)'; break;
+                    case '천호': subwayname ='천호(풍납토성)'; break;
+                    case '올림픽공원': subwayname = '올림픽공원(한국체대)'; break;
+                    case '굽은다리': subwayname = '굽은다리(강동구민회관앞)'; break;
+                    case '응암순환': subwayname = '응암순환(상선)'; break;
+                    case '새절': subwayname = '새절(신사)'; break;
+                    case '증산': subwayname = '증산(명지대앞)'; break;
+                    case '월드컵경기장': subwayname = '월드컵경기장(성산)'; break;
+                    case '대흥': subwayname = '대흥(서강대앞)'; break;
+                    case '안암': subwayname = '안암(고대병원앞)'; break;
+                    case '월곡': subwayname = '월곡(동덕여대)'; break;
+                    case '상월곡': subwayname = '상월곡(한국과학기술연구원)'; break;
+                    case '화랑대': subwayname = '화랑대(서울여대입구)'; break;
+                    case '공릉': subwayname = '공릉(서울산업대입구)'; break;
+                    case '어린이대공원': subwayname = '어린이대공원(세종대)'; break;
+                    case '숭실대입구': subwayname = '숭실대입구(살피재)'; break;
+                    case '상도': subwayname = '상도(중앙대앞)'; break;
+                    case '몽촌토성': subwayname = '몽촌토성(평화의문)'; break;
+                    case '남한산성입구': subwayname = '남한산성입구(성남법원, 검찰청)'; break;
+                    case '신촌': subwayname = '신촌(경의.중앙선)'; break;
+                }
+                searchsubwayinfo(subwayname);       
             }
             else{
                 navigate("/location-map", {

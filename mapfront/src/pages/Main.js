@@ -106,13 +106,16 @@ function Main() {
       let vh = window.innerHeight * 0.01;
       document.documentElement.style.setProperty("--vh", `${vh}px`);
   }
+
+  useEffect(()=>{
+    navigator.geolocation.watchPosition(handleSuccess);
+  })
      
   useEffect(() => {
     var zoomin;
     var zoomout;
     var movelocation;
     setScreenSize();
-    navigator.geolocation.watchPosition(handleSuccess);
     if(location){
       var lat = location.latitude;
       var lng = location.longitude;
@@ -167,6 +170,7 @@ function Main() {
           var marker = new Tmapv2.Marker({
             position: new Tmapv2.LatLng(${lat}, ${lng}),
             icon: "${mylocation}",
+            iconSize: new Tmapv2.Size(40, 40),       
             map: testmap
           })
         }
