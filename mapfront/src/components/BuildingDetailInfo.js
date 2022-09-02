@@ -226,10 +226,10 @@ const BuildingDetailInfo = (props) => {
                     
                 <div id='Info' className="detailInfo" style={{height: "100%"}}>
                         <div id='headInfo' className="row" style={{position: "relative", paddingTop: "10px"}}>
-                            <div className="col-7" style={{textAlign: "left", paddingLeft: "5%"}}>
+                            <div className="col-8" style={{textAlign: "left", paddingLeft: "5%", paddingRight: "0px"}}>
                                 <b>{buildingDetailInfo.name}</b> {buildingDetailInfo.bizname}
-                            </div><div className="col-5">
-                                <div id="subwaymapbutton" className="" style={{}}>
+                            </div><div className="col-4">
+                                <div id="subwaymapbutton" className="" style={{paddingRight: "5%"}}>
                                     <i class="bi bi-map" onClick={openMadal}></i>
                                     <button style={{backgroundColor: "white", border: "none", padding: "0px", width: "26px", height: "26px"}}>
                                         <img src={arrowsrefresh} style={{width: "26px", height: "26px", padding: "0px", left : "-1px", top: "-2px"}}></img>
@@ -251,14 +251,23 @@ const BuildingDetailInfo = (props) => {
                                         }else{
                                             arv = obj.arvlMsg2;
                                         }
-                                    }else{                  
+                                    }else{  
+                                        var tmp;                
                                         if((obj.arvlMsg2).includes('(')){
                                             console.log("괄호가 있네여");
-                                            arv = (obj.arvlMsg2).split('(')[0];
+                                            tmp = (obj.arvlMsg2).split('(')[0];
                                         }else{
-                                            arv = (obj.arvlMsg2).split('역')[0];
+                                            tmp = (obj.arvlMsg2).split('역')[0];
+                                        }
+                                        if(tmp.includes('[')){
+                                            console.log(tmp);
+                                            arv = tmp.split(/[\[\]'역']/);
+                                            console.log(arv);
+                                        }else{
+                                            arv = tmp;
                                         }
                                     }
+            
                                    return(
                                     <div className="row" style={{textAlign: "left"}}>
                                         <div className="col-6" style={{padding: "0px"}}>
@@ -283,11 +292,19 @@ const BuildingDetailInfo = (props) => {
                                             arv = obj.arvlMsg2;
                                         }    
                                     }else{
+                                        var tmp;
                                         if((obj.arvlMsg2).includes('(')){
                                             console.log("괄호가 있네여");
-                                            arv = (obj.arvlMsg2).split('(')[0];
+                                            tmp = (obj.arvlMsg2).split('(')[0];
                                         }else{
-                                            arv = (obj.arvlMsg2).split('역')[0];
+                                            tmp = (obj.arvlMsg2).split('역')[0];
+                                        }
+                                        if(tmp.includes('[')){
+                                            console.log(tmp);
+                                            arv = tmp.split(/[\[\]'역']/);
+                                            console.log(arv);
+                                        }else{
+                                            arv = tmp;
                                         }
                                     }
                                    return(
