@@ -5,6 +5,8 @@ import Modal from './Modal';
 import { Navigate, useNavigate } from "react-router-dom";
 import {useState, useEffect} from 'react';
 import Button from 'react-bootstrap/Button';
+import arrowsrefresh from "../images/arrows-refresh.png";
+
 
 const baseurl = 'http://localhost:9000/'         //베이스 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -87,9 +89,38 @@ const BuildingDetailInfo = (props) => {
             baseURL: baseurl
         })
 
-        var name = (buildingDetailInfo.name).split(/[\[\]]/)
-        console.log(line);
+        var name = (buildingDetailInfo.name).split(/[\[\]]/);
+        var subname = name[0];
+        console.log(name);
         var line = name[1].split('호');
+
+        switch (subname){
+            case '총신대입구역/이수역': name = '총신대입구(이수)역'; break;
+            case '신정역': name = '신정역(은행정)'; break;
+            case '오목교역': name = '오목교역(목동운동장앞)'; break;
+            case '충정로역' : name = '충정로역(경기대입구)'; break;
+            case '광화문역(' : name = '광화문역(세종문화회관)'; break;
+            case '종로3가역' : name = '종로3가역(탑골공원)'; break;
+            case '군자역': name = '군자(능동)'; break;
+            case '아차산역': name ='아차산역(어린이대공원후문)'; break;
+            case '광나루역': name = '광나루역(장신대)'; break;
+            case '천호역': name ='천호역(풍납토성)'; break;
+            case '올림픽공원역': name = '올림픽공원역(한국체대)'; break;
+            case '굽은다리역': name = '굽은다리역(강동구민회관앞)'; break;  
+            case '새절역': name = '새절역(신사)'; break;
+            case '증산역': name = '증산역(명지대앞)'; break;
+            case '월드컵경기장역': name = '월드컵경기장역(성산)'; break;
+            case '광흥창역' : name = '광흥창역(서강)'; break;       
+            case '대흥역': name = '대흥역(서강대앞)'; break;
+            case '효창공원앞역' : name = '효창공원앞역(용산구청)'; break; 
+            case '안암역': name = '안암역(고대병원앞)'; break;
+            case '고려대역' : name = '고려대역(종암)'; break;    
+            case '월곡역': name = '월곡역(동덕여대)'; break;
+            case '상월곡역': name = '상월곡역(한국과학기술연구원)'; break;
+            case '화랑대역': name = '화랑대역(서울여대입구)'; break;
+            case '공릉역': name = '공릉역(서울산업대입구)'; break;
+        }
+
 
         if((buildingDetailInfo.name).includes('인천지하철')){
         subwaymap.post('/api/subway/photo', null, {params: {name: subwayname}})
@@ -107,7 +138,8 @@ const BuildingDetailInfo = (props) => {
             console.log("지하철 입체지도 정보 못받아옴");
         })
         }else{
-        subwaymap2.post('api/subway/photo2', null, {params: {line: line[0], name: name[0]}})
+            
+        subwaymap2.post('api/subway/photo2', null, {params: {line: line[0], name: name}})
         .then(function(res){
             console.log(res.data);
             Seturl(res.data);
@@ -193,20 +225,23 @@ const BuildingDetailInfo = (props) => {
                 <footer>
                     
                 <div id='Info' className="detailInfo" style={{height: "100%"}}>
-                        <div id='headInfo' className="row" style={{top: "10px"}}>
+                        <div id='headInfo' className="row" style={{position: "relative", paddingTop: "10px"}}>
                             <div className="col-7" style={{textAlign: "left", paddingLeft: "5%"}}>
                                 <b>{buildingDetailInfo.name}</b> {buildingDetailInfo.bizname}
-                            </div><div className="col-4">
-                                <div id="subwaymapbutton" className="col-3" style={{float: "right"}}>
+                            </div><div className="col-5">
+                                <div id="subwaymapbutton" className="" style={{}}>
                                     <i class="bi bi-map" onClick={openMadal}></i>
+                                    <button style={{backgroundColor: "white", border: "none", padding: "0px", width: "26px", height: "26px"}}>
+                                        <img src={arrowsrefresh} style={{width: "26px", height: "26px", padding: "0px", left : "-1px", top: "-2px"}}></img>
+                                        </button>
                                 </div>
                             </div>  
                         </div>
                         {/* <div id='elivator' style={styleelivator}>
                             {buildingDetailInfo.elivator}</div> */}
-                        <div id='realtime' style={{}}>
+                        <div id='realtime' style={{position: "relative", paddingTop: "5px"}}>
                             <div className="row" style={{height: "100%"}}>
-        {/*상행 */}             <div className="col-6" style={{top: "20px", textAlign: "left", fontSize: "0.9em", paddingLeft: "6%", paddingRight: "1%"}}>
+        {/*상행 */}             <div className="col-6" style={{textAlign: "left", fontSize: "0.9em", paddingLeft: "6%", paddingRight: "1%"}}>
                                 {subwayUp && subwayUp.map((obj, index)=>{
                                     var arv = '';
                                     const name =(obj.trainLineNm).split('-');
@@ -216,8 +251,13 @@ const BuildingDetailInfo = (props) => {
                                         }else{
                                             arv = obj.arvlMsg2;
                                         }
-                                    }else{
-                                        arv = (obj.arvlMsg2).split('역')[0];
+                                    }else{                  
+                                        if((obj.arvlMsg2).includes('(')){
+                                            console.log("괄호가 있네여");
+                                            arv = (obj.arvlMsg2).split('(')[0];
+                                        }else{
+                                            arv = (obj.arvlMsg2).split('역')[0];
+                                        }
                                     }
                                    return(
                                     <div className="row" style={{textAlign: "left"}}>
@@ -232,7 +272,7 @@ const BuildingDetailInfo = (props) => {
                                 })}
                             </div>
                             
-       {/*하행 */}          <div className="col-6" style={{top: "20px", textAlign: "left", fontSize: "0.9em", paddingLeft: "1%", paddingRight: "6%"}}>
+       {/*하행 */}          <div className="col-6" style={{ textAlign: "left", fontSize: "0.9em", paddingLeft: "1%", paddingRight: "6%"}}>
                                 {subwayDown && subwayDown.map((obj, index)=>{
                                     var arv = '';
                                     const name =(obj.trainLineNm).split('-');
@@ -243,7 +283,12 @@ const BuildingDetailInfo = (props) => {
                                             arv = obj.arvlMsg2;
                                         }    
                                     }else{
-                                        arv = (obj.arvlMsg2).split('역')[0];
+                                        if((obj.arvlMsg2).includes('(')){
+                                            console.log("괄호가 있네여");
+                                            arv = (obj.arvlMsg2).split('(')[0];
+                                        }else{
+                                            arv = (obj.arvlMsg2).split('역')[0];
+                                        }
                                     }
                                    return(
                                     <div className="row" style={{textAlign: "left",}}>
