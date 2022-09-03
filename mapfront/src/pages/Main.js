@@ -109,11 +109,20 @@ function Main() {
   }
 
   useEffect(()=>{
-    navigator.geolocation.watchPosition(handleSuccess);
-    // setInterval(()=>{ 
-    // }, 3000);
+    navigator.geolocation.watchPosition((pos)=>{
+      const {latitude, longitude } = pos.coords;
+      console.log(latitude, longitude);
+
+      setLocation({
+        latitude, longitude
+      })
+    });
+    setInterval(()=>{
+      // navigator.geolocation.watchPosition(handleSuccess);
+      console.log("3초에 한번~");
+    }, 3000);
     // navigator.geolocation.watchPosition(handleSuccess);
-  })
+  },[])
      
   useEffect(() => {
     var zoomin;
@@ -170,7 +179,7 @@ function Main() {
             //map["zoomIn"]();
         
             return map;
-        }
+      }
 
         function createmarker(){
           var marker = new Tmapv2.Marker({
@@ -226,7 +235,7 @@ function Main() {
     script.type = "text/javascript";
     script.async = "async";
     document.head.appendChild(script);
-  }, [handleSuccess]);
+  }, [handleSuccess, location]);
 
   return (
     <main>

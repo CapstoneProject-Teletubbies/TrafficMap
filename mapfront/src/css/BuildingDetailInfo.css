@@ -38,3 +38,26 @@ footer{
     margin-right:15px;
     padding-block: 30px;
 }
+
+#arrowrefresh{
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-name: bounce;
+    animation-name: bounce;
+    animation-direction: normal;
+}
+
+@keyframes bounce {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg)
+    }
+}
+.clickEffect{
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-name: bounce;
+    animation-name: bounce;
+}

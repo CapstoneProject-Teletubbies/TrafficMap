@@ -1,11 +1,13 @@
 import React from 'react';
 import axios from "axios";
+import $ from 'jquery';
 import '../css/BuildingDetailInfo.css'
 import Modal from './Modal';
 import { Navigate, useNavigate } from "react-router-dom";
 import {useState, useEffect} from 'react';
 import Button from 'react-bootstrap/Button';
 import arrowsrefresh from "../images/arrows-refresh.png";
+import spinner from "../images/spinner.gif";
 
 
 const baseurl = 'http://localhost:9000/'         //베이스 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -149,6 +151,72 @@ const BuildingDetailInfo = (props) => {
         }
     }
 
+    const searchsubwaytime = () => {        //새로고침 눌렀을때 지하철 실시간 정보 받아옴
+        var d = document.getElementById('arrowrefresh');
+        d.style.animationPlayState='running';
+        d.style.animationIterationCount='1';
+
+        const subwayinfo = axios.create({
+            baseURL: baseurl
+        })
+        var subwayname = (buildingDetailInfo.name).split('역')[0];
+        switch (subwayname){
+            case '쌍용': subwayname='쌍용(나사렛대)'; break;
+            case '총신대입구': subwayname = '총신대입구(이수)'; break;
+            case '신정': subwayname = '신정(은행정)'; break;
+            case '오목교': subwayname = '오목교(목동운동장앞)'; break;
+            case '군자': subwayname = '군자(능동)'; break;
+            case '아차산': subwayname ='아차산(어린이대공원후문)'; break;
+            case '광나루': subwayname = '광나루(장신대)'; break;
+            case '천호': subwayname ='천호(풍납토성)'; break;
+            case '올림픽공원': subwayname = '올림픽공원(한국체대)'; break;
+            case '굽은다리': subwayname = '굽은다리(강동구민회관앞)'; break;
+            case '응암순환': subwayname = '응암순환(상선)'; break;
+            case '새절': subwayname = '새절(신사)'; break;
+            case '증산': subwayname = '증산(명지대앞)'; break;
+            case '월드컵경기장': subwayname = '월드컵경기장(성산)'; break;
+            case '대흥': subwayname = '대흥(서강대앞)'; break;
+            case '안암': subwayname = '안암(고대병원앞)'; break;
+            case '월곡': subwayname = '월곡(동덕여대)'; break;
+            case '상월곡': subwayname = '상월곡(한국과학기술연구원)'; break;
+            case '화랑대': subwayname = '화랑대(서울여대입구)'; break;
+            case '공릉': subwayname = '공릉(서울산업대입구)'; break;
+            case '어린이대공원': subwayname = '어린이대공원(세종대)'; break;
+            case '숭실대입구': subwayname = '숭실대입구(살피재)'; break;
+            case '상도': subwayname = '상도(중앙대앞)'; break;
+            case '몽촌토성': subwayname = '몽촌토성(평화의문)'; break;
+            case '남한산성입구': subwayname = '남한산성입구(성남법원, 검찰청)'; break;
+            case '신촌': subwayname = '신촌(경의.중앙선)'; break;
+        }
+        subwayinfo.post('/api/subway', null, {params: {name: subwayname}})
+        .then(function(res){
+            console.log(res.data);    
+            var i= 0, j = 0;
+            var tmp1 = [];
+            var tmp2 = [];
+            {(res.data).map((obj)=>{
+                if((buildingDetailInfo.name).includes(obj.subwayId)){
+                    if(obj.updnLine === "상행" && i<2){
+                        tmp1.push(obj);
+                        // SetSubwayUp(subwayUp => [...subwayUp, obj]);
+                        i++;
+                    }
+                    else if(obj.updnLine === "하행" && j<2){
+                        tmp2.push(obj);
+                        // SetSubwayDown(subwayDown => [...subwayDown, obj]);
+                        j++;
+                    }
+                };
+            })}
+            SetSubwayUp(tmp1);
+            SetSubwayDown(tmp2);
+        }).catch(function(err){
+            console.log("지하철 정보 못받아옴");
+        })
+        
+    };
+
+
     useEffect(()=>{
         console.log(props);
         setBuildingDetailInfo(props.props);
@@ -159,22 +227,28 @@ const BuildingDetailInfo = (props) => {
             setIsElevator(false);
         }
 
+        // if(!one && buildingDetailInfo && subway){
+        //     setOne(true);
+        //     searchsubwaytime();
+        // }
+
         if(!one && buildingDetailInfo && subway){
             console.log(buildingDetailInfo);
             setOne(true);
-            var i= 0, j = 0;
-            {subway.map((obj)=>{
-                if((buildingDetailInfo.name).includes(obj.subwayId)){
-                    if(obj.updnLine === "상행" && i<2){
-                        SetSubwayUp(subwayUp => [...subwayUp, obj]);
-                        i++;
-                    }
-                    else if(obj.updnLine === "하행" && j<2){
-                        SetSubwayDown(subwayDown => [...subwayDown, obj]);
-                        j++
-                    }
-                };
-            })}
+            searchsubwaytime();
+            // var i= 0, j = 0;
+            // {subway.map((obj)=>{
+            //     if((buildingDetailInfo.name).includes(obj.subwayId)){
+            //         if(obj.updnLine === "상행" && i<2){
+            //             SetSubwayUp(subwayUp => [...subwayUp, obj]);
+            //             i++;
+            //         }
+            //         else if(obj.updnLine === "하행" && j<2){
+            //             SetSubwayDown(subwayDown => [...subwayDown, obj]);
+            //             j++
+            //         }
+            //     };
+            // })}
         }
     }, [props])
 
@@ -231,9 +305,9 @@ const BuildingDetailInfo = (props) => {
                             </div><div className="col-4">
                                 <div id="subwaymapbutton" className="" style={{paddingRight: "5%"}}>
                                     <i class="bi bi-map" onClick={openMadal}></i>
-                                    <button style={{backgroundColor: "white", border: "none", padding: "0px", width: "26px", height: "26px"}}>
-                                        <img src={arrowsrefresh} style={{width: "26px", height: "26px", padding: "0px", left : "-1px", top: "-2px"}}></img>
-                                        </button>
+                                    <button id='arrowbutton' onClick={searchsubwaytime} style={{backgroundColor: "white", border: "none", padding: "0px", width: "26px", height: "26px", float: "right"}}>
+                                        <img id='arrowrefresh' src={arrowsrefresh} style={{width: "26px", height: "26px", padding: "0px", left : "-1px", top: "-2px"}}></img>
+                                    </button>
                                 </div>
                             </div>  
                         </div>
@@ -251,23 +325,21 @@ const BuildingDetailInfo = (props) => {
                                         }else{
                                             arv = obj.arvlMsg2;
                                         }
+                                    }else if((obj.arvlMsg2).includes("진입")){
+                                        arv = obj.arvlMsg2;
                                     }else{  
                                         var tmp;                
                                         if((obj.arvlMsg2).includes('(')){
-                                            console.log("괄호가 있네여");
                                             tmp = (obj.arvlMsg2).split('(')[0];
                                         }else{
                                             tmp = (obj.arvlMsg2).split('역')[0];
                                         }
                                         if(tmp.includes('[')){
-                                            console.log(tmp);
                                             arv = tmp.split(/[\[\]'역']/);
-                                            console.log(arv);
                                         }else{
                                             arv = tmp;
                                         }
                                     }
-            
                                    return(
                                     <div className="row" style={{textAlign: "left"}}>
                                         <div className="col-6" style={{padding: "0px"}}>
@@ -291,18 +363,17 @@ const BuildingDetailInfo = (props) => {
                                         }else{
                                             arv = obj.arvlMsg2;
                                         }    
+                                    }else if((obj.arvlMsg2).includes("진입")){
+                                        arv = obj.arvlMsg2;
                                     }else{
                                         var tmp;
                                         if((obj.arvlMsg2).includes('(')){
-                                            console.log("괄호가 있네여");
                                             tmp = (obj.arvlMsg2).split('(')[0];
                                         }else{
                                             tmp = (obj.arvlMsg2).split('역')[0];
                                         }
                                         if(tmp.includes('[')){
-                                            console.log(tmp);
                                             arv = tmp.split(/[\[\]'역']/);
-                                            console.log(arv);
                                         }else{
                                             arv = tmp;
                                         }

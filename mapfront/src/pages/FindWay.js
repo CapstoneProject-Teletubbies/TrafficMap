@@ -11,6 +11,7 @@ import SideBar from '../components/SideBar';
 
 import walk from "../images/walkp.png";
 import bus from "../images/bus.png";
+import mymarker from "../images/mylocation.png";
 
 
 const baseurl = 'http://localhost:9000/'         //베이스 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -36,12 +37,18 @@ function FindWay(props){
     const mylocation = location.state.mylocation;
 
     const handleSuccess = (pos) => {                //현재 내 위치 받아오기
+        console.log("내위치 받아옴");
         const {latitude, longitude } = pos.coords;
 
         setFindLocation({
           latitude, longitude
         })
     };
+
+    useEffect(()=>{
+        navigator.geolocation.watchPosition(handleSuccess)
+
+    })
 
     const [modalOpen, setModalOpen] = useState(false);
 
@@ -111,7 +118,6 @@ function FindWay(props){
         if(route){
             route.map((obj, index)=>{
                 if(obj.pointIndex == i){
-                    console.log(obj.pointDescription);
                     setRouteDetail(routeDetail => [...routeDetail, obj.pointDescription]);
                     i++;
                 }
@@ -122,6 +128,7 @@ function FindWay(props){
     useEffect(()=>{
         console.log(location.state);
         setFindway(location.state);
+        
         if(location.state){
             if(location.state.startBuilding){
                 console.log("출발지 정보 왔어요");
@@ -192,8 +199,11 @@ function FindWay(props){
         const besseltm = "+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 +y_0=500000 +ellps=bessel +units=m +no_defs +towgs84=-115.80,474.99,674.11,1.16,-2.31,-1.63,6.43"
         const wgs84 = "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees" 
 
+        if(findLocation){
+            var lat = findLocation.latitude;
+            var lng = findLocation.longitude;
+        }
         
-
         if(both){
             if(startPlace.address === '버스정류장'){
                 posx = startPlace.obj.posx;
@@ -230,6 +240,7 @@ function FindWay(props){
         const script = document.createElement("script");
         script.innerHTML = `
             var map;
+            var markers = [];
             var marker_s, marker_e, marker_p1, marker_p2;
             var totalMarkerArr = [];
             var drawInfoArr = [];
@@ -393,16 +404,38 @@ function FindWay(props){
                 resultdrawArr.push(polyline_);
             }
 
+            function createmarker(){
+                console.log(${lat});
+                console.log(${lng});
+                var marker = new Tmapv2.Marker({
+                  position: new Tmapv2.LatLng(${lat}, ${lng}),
+                  icon: "${mymarker}",
+                //   iconSize: new Tmapv2.Size(40, 40),       
+                  map: map
+                })
+                console.log(marker);
+                markers.push(marker);
+            }
+            function removeMarkers() {
+                for (var i = 0; i < markers.length; i++) {
+                  markers[i].setMap(null);
+                }
+                markers = [];
+            }
+
             if('${startPlace}' && '${endPlace}'){
                 initTmap();
             }
-
+            if(${lat}){
+                removeMarkers();
+                createmarker();
+            }
         `;
 
         script.type = "text/javascript";
         script.async = "async";
         document.head.appendChild(script);
-    }, [both]);
+    }, [both, findLocation]);
 
 
     return(

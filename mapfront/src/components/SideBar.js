@@ -49,7 +49,7 @@ const SideBar =({width=310, children})=>{
                 className="sidebarbutton" >
                 상세
                 </button>
-                <div className="sidebarcontent" style={{position: "relative", height: "90%", overflowY: "scroll"}}>
+                <div className="sidebarcontent" style={{position: "relative", height: "89%", overflowY: "scroll"}}>
                     <div className='list-group' style={{overflowY: "scroll"}}>
                     {children && children.map((obj, index)=>{
                         return(
