@@ -196,12 +196,14 @@ function FindWay(props){
         var endLat, endLng;
         var middleLat, middleLng;
         var posx, posy;
+        var lat, lng;
         const besseltm = "+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 +y_0=500000 +ellps=bessel +units=m +no_defs +towgs84=-115.80,474.99,674.11,1.16,-2.31,-1.63,6.43"
         const wgs84 = "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees" 
 
         if(findLocation){
-            var lat = findLocation.latitude;
-            var lng = findLocation.longitude;
+            console.log("있다!");
+            lat = findLocation.latitude;
+            lng = findLocation.longitude;
         }
         
         if(both){
@@ -247,7 +249,7 @@ function FindWay(props){
             var resultdrawArr = [];
     
             function initTmap() {
-                var map = new Tmapv2.Map("TMapApp", {
+                map = new Tmapv2.Map("TMapApp", {
                     center: new Tmapv2.LatLng(${middleLat}, ${middleLng}),
                     width: "100%",
                     height: "100%",
@@ -271,7 +273,14 @@ function FindWay(props){
                         icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png",
                         iconSize : new Tmapv2.Size(24, 38),
                         map : map
-                    });
+                });
+                
+                marker_myl = new Tmapv2.Marker({
+                    position : new Tmapv2.LatLng(${lat}, ${lng}),
+                    icon: "${mymarker}",
+                    iconSize: new Tmapv2.Size(40, 40), 
+                    map: map
+                });
                 
                 $.ajax({
                     method: "POST",
@@ -407,10 +416,10 @@ function FindWay(props){
             function createmarker(){
                 console.log(${lat});
                 console.log(${lng});
-                var marker = new Tmapv2.Marker({
+                var marker_ml = new Tmapv2.Marker({
                   position: new Tmapv2.LatLng(${lat}, ${lng}),
                   icon: "${mymarker}",
-                //   iconSize: new Tmapv2.Size(40, 40),       
+                  iconSize: new Tmapv2.Size(40, 40),       
                   map: map
                 })
                 console.log(marker);
@@ -423,13 +432,10 @@ function FindWay(props){
                 markers = [];
             }
 
-            if('${startPlace}' && '${endPlace}'){
+            if('${startPlace}' && '${endPlace}' && ${lat}){
                 initTmap();
             }
-            if(${lat}){
-                removeMarkers();
-                createmarker();
-            }
+           
         `;
 
         script.type = "text/javascript";

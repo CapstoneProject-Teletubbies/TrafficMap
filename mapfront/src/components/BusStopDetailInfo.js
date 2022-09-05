@@ -41,7 +41,6 @@ const BusStopDetailInfo = (props)=>{
         })
     }
     
-
     const ref = useRef(null);
 
     
