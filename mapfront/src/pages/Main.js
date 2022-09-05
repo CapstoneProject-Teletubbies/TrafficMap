@@ -25,6 +25,9 @@ function Main() {
  
     const [location, setLocation] = useState();
     const [error, setError] = useState();
+    const locationWatchId = useRef(null);
+
+    const [mymarker, setMyMarker] = useState();
 
     const navigate = useNavigate();
 
@@ -53,6 +56,16 @@ function Main() {
         latitude, longitude
       })
     };
+    const handleError = (error) => {
+      setError(error.message);
+    };
+    const cancelLocationWatch = () => {
+      const {geolocation} = navigator;
+
+      if(locationWatchId.current && geolocation){
+        geolocation.clearWatch(locationWatchId.current);
+      }
+    }
 
     const reverseGeocoding = (lat, lon) => {
       const rG = axios.create({
@@ -109,25 +122,19 @@ function Main() {
   }
 
   useEffect(()=>{
-    navigator.geolocation.watchPosition((pos)=>{
-      const {latitude, longitude } = pos.coords;
-      console.log(latitude, longitude);
-
-      setLocation({
-        latitude, longitude
-      })
-    });
-    setInterval(()=>{
-      // navigator.geolocation.watchPosition(handleSuccess);
-      console.log("3초에 한번~");
-    }, 3000);
+    navigator.geolocation.watchPosition(handleSuccess);
+    // setInterval(()=>{
+    //   navigator.geolocation.watchPosition(handleSuccess);
+    //   console.log("3초에 한번~");
+    // }, 3000);
     // navigator.geolocation.watchPosition(handleSuccess);
-  },[])
+  }, [])
      
   useEffect(() => {
     var zoomin;
     var zoomout;
     var movelocation;
+    var markers = [];
     setScreenSize();
     if(location){
       var lat = location.latitude;
@@ -162,7 +169,7 @@ function Main() {
         var testmap;
         var zoomIn;
         var marker;
-        var markers=[];
+        var markers = [];
         function initTmap(pos) {
             var map = new Tmapv2.Map("TMapApp", {
                 center: new Tmapv2.LatLng(pos.lat, pos.lng),
@@ -181,56 +188,55 @@ function Main() {
             return map;
       }
 
-        function createmarker(){
-          var marker = new Tmapv2.Marker({
-            position: new Tmapv2.LatLng(${lat}, ${lng}),
-            icon: "${mylocation}",
-            iconSize: new Tmapv2.Size(40, 40),       
-            map: testmap
-          })
-          markers.push(marker);
-        }
 
-        function onClick(e) {
-            var result_mouse = e.latLng
-            var resultDiv = document.getElementById("result_mouse");
-            resultDiv.innerHTML = result_mouse;
-            console.log(result_mouse._lat);     
-        }
+      function onClick(e) {
+          var result_mouse = e.latLng
+          var resultDiv = document.getElementById("result_mouse");
+          resultDiv.innerHTML = result_mouse;
+          console.log(result_mouse._lat);     
+      }
 
-        function onTouchstart(e) {
-            var result = e.latLng
-            var resultDiv = document.getElementById("result");
-            resultDiv.innerHTML = result;
-        }
+      function onTouchstart(e) {
+          var result = e.latLng
+          var resultDiv = document.getElementById("result");
+          resultDiv.innerHTML = result;
+      }
         
-        if(!testmap && ${lat}){
-          var mylocation = {lat: ${lat}, lng: ${lng}};
-          testmap = initTmap(mylocation); 
-        }
-        else{
-          console.log("Init false");
-        }
-        removeMarkers();  //마커 제거
-        createmarker();   //마커 생성
+      if(!testmap && ${lat}){
+        var mylocation = {lat: ${lat}, lng: ${lng}};
+        testmap = initTmap(mylocation); 
+      }
+      else{
+        console.log("Init false");
+      }
+    
+      if(markers){
+        console.log("마커가 있나여");
+        console.log(markers);
+      }
+      
 
-        function removeMarkers() {
-          for (var i = 0; i < markers.length; i++) {
-            markers[i].setMap(null);
-          }
-          markers = [];
-        }
+      if(marker){                       //마커 있으면 지우기
+        marker.setMap(null);
+      }
 
-        if(testmap && ${zoomin}){
-          testmap.zoomIn();
-        }
-        if(testmap && ${zoomout}){
-          testmap.zoomOut();
-        }
-        if(testmap && ${movelocation}){
-          var setmylocation = new Tmapv2.LatLng(${lat}, ${lng});
-          testmap.setCenter(setmylocation);
-        }
+      var marker = new Tmapv2.Marker({  //마커 생성
+        position: new Tmapv2.LatLng(${lat}, ${lng}),
+        icon: "${mylocation}",
+        iconSize: new Tmapv2.Size(40, 40),       
+        map: testmap
+      })
+      
+      if(testmap && ${zoomin}){
+        testmap.zoomIn();
+      }
+      if(testmap && ${zoomout}){
+        testmap.zoomOut();
+      }
+      if(testmap && ${movelocation}){
+        var setmylocation = new Tmapv2.LatLng(${lat}, ${lng});
+        testmap.setCenter(setmylocation);
+      }
    `;
     script.type = "text/javascript";
     script.async = "async";
