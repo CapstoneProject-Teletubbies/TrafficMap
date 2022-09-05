@@ -5,8 +5,6 @@ import { useNavigate } from "react-router-dom";
 import '../css/Main.css';
 import SearchBar from "../components/SearchBar";
 import Button from "../components/Button";
-import SideBar from "../components/SideBar";
-import ReactDOM from "react-dom";
 import getLocation from '../getLocation';
 import plus from "../images/plus.png";
 import minus from "../images/minus.png";
@@ -26,8 +24,6 @@ function Main() {
     const [location, setLocation] = useState();
     const [error, setError] = useState();
     const locationWatchId = useRef(null);
-
-    const [mymarker, setMyMarker] = useState();
 
     const navigate = useNavigate();
 
@@ -59,13 +55,6 @@ function Main() {
     const handleError = (error) => {
       setError(error.message);
     };
-    const cancelLocationWatch = () => {
-      const {geolocation} = navigator;
-
-      if(locationWatchId.current && geolocation){
-        geolocation.clearWatch(locationWatchId.current);
-      }
-    }
 
     const reverseGeocoding = (lat, lon) => {
       const rG = axios.create({
@@ -134,7 +123,6 @@ function Main() {
     var zoomin;
     var zoomout;
     var movelocation;
-    var markers = [];
     setScreenSize();
     if(location){
       var lat = location.latitude;

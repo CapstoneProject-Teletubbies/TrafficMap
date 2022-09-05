@@ -66,6 +66,7 @@ function BusRoute(){
         })
     }
 
+
     if(busInfo && busRoute){
 
     return(
@@ -83,13 +84,13 @@ function BusRoute(){
                 </div>
                 <div style={{width: "20%"}}>     
                 </div>
-                <div className="busdirec" style={{width: "100%", height: "100%", marginTop: "3%"}}>
-                    <button type="button" class="btn btn-outline-dark" style={{width: "50%", height: "100%", borderRadius: "2px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}} onClick={handlefbutton}>{busInfo.turn_BSTOPNM} 방면</button>
-                    <button type="button" class="btn btn-outline-dark" style={{width: "50%", height: "100%", borderRadius: "2px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis"}} onClick={handlebbutton}>{busInfo.origin_BSTOPNM} 방면</button>
+                <div className="busdirec" style={{width: "100%", height: "40px", marginTop: "3%"}}>
+                    <button type="button" id="busdirbutton" className="busdirbutton" onClick={handlefbutton}>{busInfo.turn_BSTOPNM} 방면</button>
+                    <button type="button" id="busdirbutton" className="busdirbutton" onClick={handlebbutton}>{busInfo.origin_BSTOPNM} 방면</button>
                 </div>
             </nav>
 
-            <div clasName="d-lg-none" style={{height: "125px"}} ></div> {/*더미div*/}
+            <div className="d-lg-none" style={{height: "125px"}} ></div> {/*더미div*/}
 
             <div className="brl" style={{overflow: "hidden"}}> {/*버스 루트 리스트*/}
                 <div className="list-group" style={{}}>
@@ -113,7 +114,7 @@ function BusRoute(){
                 </div>
             </div>
             <div className="reload-bus"> {/*새로고침 버튼*/}
-                    <button type="button" class="btn btn-large btn-outline-dark" style={{ width: "50px", height: "50px", textAlign: "center", padding: "0px" }} onClick={realtimeBus}><i class="bi bi-arrow-repeat" style={{ fontSize: "30px",}}></i></button>
+                    <button type="button" id="reloadbutton" className="" onClick={realtimeBus}><i class="bi bi-arrow-repeat" style={{ fontSize: "30px",}}></i></button>
             </div>
         </div>
     );}
