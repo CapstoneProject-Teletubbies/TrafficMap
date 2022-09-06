@@ -39,6 +39,7 @@ function ResultSearch() {
     useOutsideClick(outsideRef);
 
     const [buildingList, setBuildingList] = useState([]);
+    const [sid, setSid] = useState();
     const marker = useLocation();
     // console.log(marker.state.keyword);  //test
  
@@ -76,8 +77,13 @@ function ResultSearch() {
         if(element.innerText){
           var markerindex = parseInt(element.innerText);
           console.log(markerindex);
-          setChooseMarker(markerindex);
-          if(buildingList){
+          if(markerindex == 0){
+            console.log("0인데요!");
+            setChooseMarker(0);
+          }else{
+            setChooseMarker(markerindex);
+          }    
+          if(buildingList[0]){
             console.log(buildingList);
           }
         }
@@ -136,7 +142,7 @@ function ResultSearch() {
     var test;
     var middlelat = 0, middlelng = 0;
 
-    if(buildingList[0] && !plength){
+    if(buildingList[3] && !plength){
       for(var i = 0; i < buildingList.length; i++){
         markerlat.push(buildingList[i].latitude);
         markerlng.push(buildingList[i].longitude);  
@@ -323,9 +329,14 @@ function ResultSearch() {
     document.head.appendChild(script);
   }, [handleSuccess]);
 
-  useEffect(()=>{
+  useEffect(()=>{ //~방향인 애들 없애기
     console.log('setBuildingList');
-    setBuildingList(marker.state.building);
+    var tmp = (marker.state.building).filter(function(data){
+      return !data.name.includes('방향');
+    });
+    console.log(tmp);
+    setBuildingList(tmp);
+    
     console.log(buildingList);
    }, []);
 

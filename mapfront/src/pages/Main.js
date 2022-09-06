@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import '../css/Main.css';
 import SearchBar from "../components/SearchBar";
+import SideBar from "../components/ElevatorAndStair";
 import Button from "../components/Button";
 import getLocation from '../getLocation';
 import plus from "../images/plus.png";
@@ -24,6 +25,11 @@ function Main() {
     const [location, setLocation] = useState();
     const [error, setError] = useState();
     const locationWatchId = useRef(null);
+
+    const LIST = [
+      {id: 0, data: '엘리베이터'},
+      {id: 1, data: '계단'},
+    ];
 
     const navigate = useNavigate();
 
@@ -73,6 +79,12 @@ function Main() {
           console.log("지오코딩 실패");
       })
   }
+    const getStair = () => {
+      
+    }
+    const getElevator = () => {
+      
+    }
 
     // const handleError= (error) -> {
     //   setError(error.message);
@@ -259,7 +271,9 @@ function Main() {
       </div>
 
     </div>
-
+    
+    <SideBar>{LIST}</SideBar>
+    
     <div className="rightbarbutton">
       <div className="zoom">
         <Button onClick={handlePlusButton} src={plus}/>
