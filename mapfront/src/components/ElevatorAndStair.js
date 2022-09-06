@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState, useEffect, useRef } from 'react';
+import { ListGroup } from 'react-bootstrap';
 
 const SideBar =({width=200, children})=>{
     const [isOpen, setOpen] = useState(false);
@@ -52,9 +53,16 @@ const SideBar =({width=200, children})=>{
                 className="sidebarbuttone" style={{left: "-120px"}} >
                 <i class={chevron} style={{border: ""}}></i>
                 </button>
-                <div className="sidebarcontent" style={{position: "relative", height: "89%", overflowY: "scroll"}}>
-                    <div className='list-group' style={{overflowY: "scroll"}}>
-                    
+                <div className="" style={{position: "relative", top: "-100px", height: "100%"}}>
+                    <div className='list-group' style={{}}>
+                        {children.map((obj)=>{
+                            console.log(obj);
+                            return(
+                                <div>
+                                <input type="checkbox" style={{width: "35px", float: "left", marginTop: "10px"}}></input>{obj.data}
+                                </div>
+                            );
+                        })}
                     </div>  
                 </div> 
             </div>

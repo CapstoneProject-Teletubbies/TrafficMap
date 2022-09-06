@@ -11,6 +11,8 @@ import plus from "../images/plus.png";
 import minus from "../images/minus.png";
 import target from "../images/location.png";
 import nav from "../images/nav.png";
+import stairs from "../images/stairs.png";
+
 
 import mylocation from "../images/mylocation.png";
 
@@ -25,6 +27,20 @@ function Main() {
     const [location, setLocation] = useState();
     const [error, setError] = useState();
     const locationWatchId = useRef(null);
+
+    const [checkedList, setCheckedList] = useState([]);
+
+    const onCheckedElement = (checked, item) => {
+      if(checked){
+        setCheckedList([...checkedList, item]);
+      }else if(!checked){
+        setCheckedList(checkedList.filter(el => el !== item));
+      }
+    };
+
+    const onRemove = item => {
+      setCheckedList(checkedList.filter(el => el !== item));
+    };
 
     const LIST = [
       {id: 0, data: '엘리베이터'},
@@ -79,11 +95,19 @@ function Main() {
           console.log("지오코딩 실패");
       })
   }
-    const getStair = () => {
-      
+    const getStair = () => {    //전체 계단 받아옴
+      const getstair = axios.create({
+        baseURL: baseurl
+      })
+      getstair.post('/api/find/stair')
+      .then(function(res){
+        console.log(res);
+      }).catch(function(err){
+        console.log("계단 정보 못받아옴");
+      })
     }
-    const getElevator = () => {
-      
+    const getElevator = () => { //전체 엘리베이터 받아옴
+
     }
 
     // const handleError= (error) -> {
@@ -169,7 +193,7 @@ function Main() {
         var testmap;
         var zoomIn;
         var marker;
-        var markers = [];
+
         function initTmap(pos) {
             var map = new Tmapv2.Map("TMapApp", {
                 center: new Tmapv2.LatLng(pos.lat, pos.lng),
@@ -209,13 +233,7 @@ function Main() {
       else{
         console.log("Init false");
       }
-    
-      if(markers){
-        console.log("마커가 있나여");
-        console.log(markers);
-      }
       
-
       if(marker){                       //마커 있으면 지우기
         marker.setMap(null);
       }
@@ -237,6 +255,54 @@ function Main() {
         var setmylocation = new Tmapv2.LatLng(${lat}, ${lng});
         testmap.setCenter(setmylocation);
       }
+
+      var markers;
+      if(testmap && !markers){
+      $.ajax({                //계단 받아옴
+        method: "POST",
+        url: "http://localhost:9000/api/find/stair",
+        async: false,
+        data: {
+
+        },
+        success: function(res){
+          console.log(res);
+          if(markers){
+            console.log("마커 지워야해");
+            console.log(markers);
+            for(var i = 0; i < markers.length; i++){
+              markers[i].setMap(null);
+            }
+            markers = [];
+          }
+          markers = [];
+          
+          for(var i = 0; i < res.length; i++){
+            console.log("마커생성");
+            var lat = res[i].startlatitude;
+            var lng = res[i].startlongitude;
+
+            var markerone = new Tmapv2.Marker({
+              position: new Tmapv2.LatLng(lat, lng),
+              icon: "${stairs}",
+              iconSize: new Tmapv2.Size(15, 15),
+              map: testmap
+            });
+            
+            markers.push(markerone);
+          }
+        },
+        error: function(err){
+          console.log("계단 못받아옴");
+        }
+      })
+    }else{
+      console.log(markers);
+      
+      console.log(marker);
+      console.log(marker.getOffset());
+
+    }
    `;
     script.type = "text/javascript";
     script.async = "async";
@@ -272,7 +338,7 @@ function Main() {
 
     </div>
     
-    <SideBar>{LIST}</SideBar>
+    <SideBar onCheck={onCheckedElement}>{LIST}</SideBar>
     
     <div className="rightbarbutton">
       <div className="zoom">
