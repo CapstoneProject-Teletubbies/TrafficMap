@@ -88,9 +88,9 @@ public class WayServiceImpl implements WayService {
 //                    System.out.println("PointLatitude() = " + wayDto.getPointLatitude());
                     continue;
                 } else if (geometry.get("type").equals("LineString") && coordinates.get(j).getClass().getName() == "org.json.simple.JSONArray") { // 배열 안에 배열 있을 경우
-                    System.out.println("j = " + j);
+//                    System.out.println("j = " + j);
                     //JSONArray lArray = (JSONArray) coordinates.get(j); // 배열을 다시 자르기 위해 필요
-                    System.out.println(coordinates);
+//                    System.out.println(coordinates);
                     ArrayList<WayLinePointDto> lineArray = new ArrayList<WayLinePointDto>();
                     //WayLinePointDto linePointDto = new WayLinePointDto(); (복사로 인해 같은 값 반복됨 -> 약간 킹받지만 for안에 매번 생성)
                     //System.out.println(lArray);
@@ -102,13 +102,6 @@ public class WayServiceImpl implements WayService {
                         linePointDto.setLineLatitude((Double) lArray.get(1));
                         lineArray.add(linePointDto);
 
-                        //테스트
-//                        if ( distanceByMeter(linePointDto.getLineLatitude(), linePointDto.getLineLongitude(), 37.40233438567087, 127.10652234854196) <= 300) {
-//                            System.out.println(" o ");
-//                        }
-//                        else {
-//                            System.out.println(" x ");
-//                        }
                     }
                     wayDto.setLinePointArray(lineArray);
                 }
@@ -164,7 +157,6 @@ public class WayServiceImpl implements WayService {
         return dtos;
     }
 
-    // 테스트 중!!!!
     @SneakyThrows
     public String findTransWay(String sName, String eName) { // 카카오 대중교통 길찾기 연결
         String encodedsName = URLEncoder.encode(sName, "UTF-8");
@@ -180,43 +172,4 @@ public class WayServiceImpl implements WayService {
         return uri.toUriString();
     }
 
-    // 두 좌표 간 거리 구하는 함수
-    public double distanceByMeter(double lat1, double lon1, double lat2, double lon2) {
-        double theta = lon1 - lon2;
-        double dist = Math.sin(Math.toRadians(lat1)) * Math.sin(Math.toRadians(lat2)) + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) * Math.cos(Math.toRadians(theta));
-
-        dist = Math.acos(dist);
-        dist = Math.toDegrees(dist);
-        dist = dist * 60 * 1.1515;
-        dist = dist * 1609.344;
-
-        return Math.round(dist/10)*10;
-    }
-
 }
-
-//    RestTemplate restTemplate = new RestTemplate();
-//    HttpHeaders headers = new HttpHeaders(); //헤더
-//        restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 한글깨짐 방지
-//
-//    String encodedStartName = URLEncoder.encode(startName, "UTF-8");
-//    String encodedEndName = URLEncoder.encode(endName, "UTF-8");
-//
-//    //URI 생성
-//    UriComponents uri = UriComponentsBuilder
-//            .fromUriString(tmap_way_url)
-//            .path("/tmap/routes/pedestrian")
-//            .queryParam("startX", startX) //시작 경도
-//            .queryParam("startY", startY) // 시작 위도
-//            .queryParam("endX", endX) // 끝 경도
-//            .queryParam("endY", endY) // 끝 위도
-//            .queryParam("startName", encodedStartName) // 출발지 이름
-//            .queryParam("endName", encodedEndName) // 도착지 이름
-//            .queryParam("appKey", tmap_apikey) // api appKey
-//            .build(true);
-//
-//    //response
-//    ResponseEntity<String> result = restTemplate.exchange(uri.toUri(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
-//        System.out.println("result.getBody() = " + result.getBody());
-//        return result.getBody();
-
