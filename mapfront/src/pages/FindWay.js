@@ -46,8 +46,7 @@ function FindWay(props){
     };
 
     useEffect(()=>{
-        navigator.geolocation.watchPosition(handleSuccess)
-
+        navigator.geolocation.watchPosition(handleSuccess);
     })
 
     const [modalOpen, setModalOpen] = useState(false);
@@ -200,6 +199,8 @@ function FindWay(props){
         const besseltm = "+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 +y_0=500000 +ellps=bessel +units=m +no_defs +towgs84=-115.80,474.99,674.11,1.16,-2.31,-1.63,6.43"
         const wgs84 = "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees" 
 
+        navigator.geolocation.watchPosition(handleSuccess);
+
         if(findLocation){
             console.log("있다!");
             lat = findLocation.latitude;
@@ -273,13 +274,6 @@ function FindWay(props){
                         icon : "http://tmapapi.sktelecom.com/upload/tmap/marker/pin_r_m_e.png",
                         iconSize : new Tmapv2.Size(24, 38),
                         map : map
-                });
-                
-                marker_myl = new Tmapv2.Marker({
-                    position : new Tmapv2.LatLng(${lat}, ${lng}),
-                    icon: "${mymarker}",
-                    iconSize: new Tmapv2.Size(40, 40), 
-                    map: map
                 });
                 
                 $.ajax({
@@ -432,16 +426,24 @@ function FindWay(props){
                 markers = [];
             }
 
-            if('${startPlace}' && '${endPlace}' && ${lat}){
-                initTmap();
+            if('${startPlace}' && '${endPlace}'){
+                console.log("이닛맵");
+                initTmap();   
             }
-           
+            if(${lat}){
+                marker_myl = new Tmapv2.Marker({
+                    position : new Tmapv2.LatLng(${lat}, ${lng}),
+                    icon: "${mymarker}",
+                    iconSize: new Tmapv2.Size(40, 40), 
+                    map: map
+                });
+            }
+ 
         `;
-
         script.type = "text/javascript";
         script.async = "async";
         document.head.appendChild(script);
-    }, [both, findLocation]);
+    }, [both]);
 
 
     return(

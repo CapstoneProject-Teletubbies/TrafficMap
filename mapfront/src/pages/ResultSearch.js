@@ -32,7 +32,9 @@ function ResultSearch() {
     const [iselevator, setIsElevator] = useState([]);
     const [markerlist, setMarkerList] = useState([]);
     const [choosemarker, setChooseMarker] = useState();
-
+    const [middleLat, setMiddleLat] = useState();
+    const [middleLng, setMiddleLng] = useState();
+ 
     const outsideRef = useRef(null);
     useOutsideClick(outsideRef);
 
@@ -132,11 +134,14 @@ function ResultSearch() {
     var zoomout;
     var movelocation;
     var test;
+    var middlelat = 0, middlelng = 0;
 
     if(buildingList[0] && !plength){
       for(var i = 0; i < buildingList.length; i++){
         markerlat.push(buildingList[i].latitude);
-        markerlng.push(buildingList[i].longitude);     
+        markerlng.push(buildingList[i].longitude);  
+        middlelat = middlelat + buildingList[i].latitude;
+        middlelng = middlelng + buildingList[i].longitude;   
         setMarkerLat(markerlat => [...markerlat]);
         setMarkerLng(markerlng => [...markerlng]);
         if(buildingList[i].elevatorState === '운행중'){
@@ -145,7 +150,13 @@ function ResultSearch() {
           iselevator.push(false);
         }
       }
+      middlelat = middlelat / buildingList.length;
+      middlelng = middlelng / buildingList.length;
+      setMiddleLat(middlelat);
+      setMiddleLng(middlelng);
       setPlength(buildingList.length);
+
+      console.log(middlelat, middlelng);
       console.log(buildingList);
     }
 
@@ -184,12 +195,12 @@ function ResultSearch() {
         
         function initTmap(pos) {
             var map = new Tmapv2.Map("TMapApp", {
-                center: new Tmapv2.LatLng(pos.lat, pos.lng),
+                center: new Tmapv2.LatLng(${middleLat}, ${middleLng}),
                 width: "100%",
                 height: "100%",
                 httpsMode: true,
                 zoomControl: false,
-                zoom:15
+                zoom:13
             });
 
             

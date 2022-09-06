@@ -7,6 +7,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import {useState, useEffect} from 'react';
 import Button from 'react-bootstrap/Button';
 import arrowsrefresh from "../images/arrows-refresh.png";
+import elevator from "../images/elevator.png";
 import spinner from "../images/spinner.gif";
 
 
@@ -221,7 +222,7 @@ const BuildingDetailInfo = (props) => {
         console.log(props);
         setBuildingDetailInfo(props.props);
         SetSubway(props.subway);
-        if(props.elevatorState === '운행중'){
+        if(props.props.elevatorState === '운행중'){
             setIsElevator(true);
         }else{
             setIsElevator(false);
@@ -405,7 +406,7 @@ const BuildingDetailInfo = (props) => {
                 <footer style={{boxShadow: "1px 1px 10px 1px gray", }}>
                 <div style={{padding: "2%", height: "100%"}}>
                         <div style={{width: "100%", textAlign: "-webkit-left"}}>
-                            <b>{buildingDetailInfo.name}</b> {buildingDetailInfo.upperBizName}
+                            <b>{buildingDetailInfo.name}</b> {buildingDetailInfo.upperBizName} {iselevator && <img src={elevator} style={{width: "25px", height: "25px", top: "-3px"}}></img>}
                             <b>{buildingDetailInfo.bstopnm}</b>
                         </div>
                         <div style={{textAlign: "-webkit-left"}}>
