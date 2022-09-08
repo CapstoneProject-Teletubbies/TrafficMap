@@ -13,6 +13,9 @@ import BusStopDetailInfo from '../components/BusStopDetailInfo';
 
 import placeholderred from "../images/placeholderred.png"
 import mylocation from "../images/mylocation.png"
+import busstop from "../images/busstop.png"
+import train from "../images/train.png"
+
 import proj4 from 'proj4';
 
 function LocationMap() {
@@ -21,6 +24,7 @@ function LocationMap() {
     const [plusbutton, setPlusButton] = useState();
     const [minusbutton, setMinusButton] = useState();
     const [locationbutton, setLocationButton] = useState();
+    const [icon, setIcon] = useState(placeholderred);
     const [findWay, setFindWay] = useState();
     const [infoWindow, setInfoWindow] = useState(true);
 
@@ -67,10 +71,13 @@ function LocationMap() {
         buildinglongitude = building.state.props.obj.longitude;
         if(building.state.subway === null){
           setSid(0);
+        }else{
+          setIcon(train);
         }
       }
       else if(building.state.props.address === '버스정류장' && !building.state.id){
         setSid(2);
+        setIcon(busstop);
         buildinglatitude = building.state.props.obj.posx;
         buildinglongitude = building.state.props.obj.posy;
       }else{
@@ -189,7 +196,7 @@ function LocationMap() {
             return map;
         }
 
-        function createmarker(lat, lng, img){
+        function createmarker(lat, lng, img, sizew, sizeh){
           var wgs84;
           if(parseInt(lat) > 1000){
             var epsg3857 = new Tmapv2.Point(lat, lng);
@@ -204,6 +211,7 @@ function LocationMap() {
           var marker = new Tmapv2.Marker({
             position: wgs84,
             icon: img,
+            iconSize : new Tmapv2.Size(sizew, sizeh),
             map: locationmap
           })
         }
@@ -224,8 +232,8 @@ function LocationMap() {
         if(!locationmap && ${lat} && ${blat}){
           var mylocation = {lat: ${blat}, lng: ${blng}};
           locationmap = initTmap(mylocation);
-          createmarker(${lat}, ${lng}, "${mylocation}");
-          createmarker(${blat}, ${blng}, "${placeholderred}");  
+          createmarker(${lat}, ${lng}, "${mylocation}", 40, 40);
+          createmarker(${blat}, ${blng}, "${icon}", 40, 60);  
         }
         else if(${refresh}){
           

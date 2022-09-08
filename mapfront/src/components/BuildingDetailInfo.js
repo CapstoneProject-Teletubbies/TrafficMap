@@ -8,6 +8,7 @@ import {useState, useEffect} from 'react';
 import Button from 'react-bootstrap/Button';
 import arrowsrefresh from "../images/arrows-refresh.png";
 import elevator from "../images/elevator.png";
+import lift from "../images/lift.png";
 import spinner from "../images/spinner.gif";
 
 
@@ -302,13 +303,15 @@ const BuildingDetailInfo = (props) => {
                 <div id='Info' className="detailInfo" style={{height: "100%"}}>
                         <div id='headInfo' className="row" style={{position: "relative", paddingTop: "10px"}}>
                             <div className="col-8" style={{textAlign: "left", paddingLeft: "5%", paddingRight: "0px"}}>
-                                <b>{buildingDetailInfo.name}</b> {buildingDetailInfo.bizname}
-                            </div><div className="col-4">
+                                <b>{buildingDetailInfo.name}</b> {buildingDetailInfo.bizname} 
+                            </div><div className="col-4" style={{paddingLeft: "0px"}}>
                                 <div id="subwaymapbutton" className="" style={{paddingRight: "5%"}}>
-                                    <i class="bi bi-map" onClick={openMadal}></i>
+                                    {iselevator && <img src={elevator} style={{width: "24px", height: "24px", marginRight: "7px", float: "left"}}></img>}
+                                    
                                     <button id='arrowbutton' onClick={searchsubwaytime} style={{backgroundColor: "white", border: "none", padding: "0px", width: "26px", height: "26px", float: "right"}}>
                                         <img id='arrowrefresh' src={arrowsrefresh} style={{width: "26px", height: "26px", padding: "0px", left : "-1px", top: "-2px"}}></img>
                                     </button>
+                                    <i class="bi bi-map" onClick={openMadal} style={{float: "right", paddingRight: "7px"}}></i>
                                 </div>
                             </div>  
                         </div>

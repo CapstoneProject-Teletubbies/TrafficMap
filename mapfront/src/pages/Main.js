@@ -12,7 +12,7 @@ import minus from "../images/minus.png";
 import target from "../images/location.png";
 import nav from "../images/nav.png";
 import stairs from "../images/stairs.png";
-
+import elevator from "../images/elevator.png";
 
 import mylocation from "../images/mylocation.png";
 
@@ -43,8 +43,8 @@ function Main() {
     };
 
     const LIST = [
-      {id: 0, data: '엘리베이터'},
-      {id: 1, data: '계단'},
+      {id: 0, data: '엘리베이터', src: elevator, cid: "chk1"},
+      {id: 1, data: '계단', src: stairs, cid: "chk2"},
     ];
 
     const navigate = useNavigate();

@@ -32,6 +32,10 @@ const SideBar =({width=200, children})=>{
             await setOpen(false);
         }
     }
+    const handleCheckBox = (id) => {
+        console.log(id);
+        console.log("머임");
+    }
 
     useEffect(()=>{
         console.log(children);
@@ -53,13 +57,23 @@ const SideBar =({width=200, children})=>{
                 className="sidebarbuttone" style={{left: "-120px"}} >
                 <i class={chevron} style={{border: ""}}></i>
                 </button>
-                <div className="" style={{position: "relative", top: "-100px", height: "100%"}}>
+                <div className="" style={{position: "relative", top: "-95px", height: "100%"}}>
                     <div className='list-group' style={{}}>
                         {children.map((obj)=>{
                             console.log(obj);
                             return(
-                                <div>
-                                <input type="checkbox" style={{width: "35px", float: "left", marginTop: "10px"}}></input>{obj.data}
+                                <div className="row">
+                                    <div className="">
+                                        <label for="chk">
+                                            <input type="checkbox" id="chk"  style={{width: "35px", float: "left", marginTop: "10px", marginLeft: "10px"}}></input>
+                                            <i class="circle"></i>
+                                            {obj.data}
+                                        </label>
+                                    </div>
+                                    {/* <div className="col-9" style={{alignSelf: "center", marginTop: "10px"}}>
+                                        <img src={obj.src} style={{width: "20px", height: "20px"}}></img>
+                                        {obj.data}
+                                    </div> */}
                                 </div>
                             );
                         })}
