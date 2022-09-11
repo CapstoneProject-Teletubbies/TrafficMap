@@ -2,7 +2,7 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { ListGroup } from 'react-bootstrap';
 
-const SideBar =({width=200, children})=>{
+const SideBar =({width=200, children, onCheck})=>{
     const [isOpen, setOpen] = useState(false);
     const [xPosition, setX] = useState(-width);
     const [boxShadow, setBoxShadow] = useState();
@@ -23,8 +23,6 @@ const SideBar =({width=200, children})=>{
         }
     }
     const handleClose = async e => {
-        console.log("클릭");
-        console.log(isOpen);
         let sideArea = side.current;
         let sideCildren = side.current.contains(e.target);
         if (isOpen && (!sideArea || !sideCildren)) {
@@ -38,7 +36,6 @@ const SideBar =({width=200, children})=>{
     }
 
     useEffect(()=>{
-        console.log(children);
         window.addEventListener('click', handleClose);
         return () => {
             window.removeEventListener('click', handleClose);
@@ -46,7 +43,6 @@ const SideBar =({width=200, children})=>{
     })
 
     useEffect(()=>{
-        console.log(children);
     }, [children])
 
 
@@ -59,24 +55,21 @@ const SideBar =({width=200, children})=>{
                 </button>
                 <div className="" style={{position: "relative", top: "-95px", height: "100%"}}>
                     <div className='list-group' style={{}}>
-                        {children.map((obj)=>{
-                            console.log(obj);
-                            return(
-                                <div className="row">
-                                    <div className="">
-                                        <label for="chk">
-                                            <input type="checkbox" id="chk"  style={{width: "35px", float: "left", marginTop: "10px", marginLeft: "10px"}}></input>
-                                            <i class="circle"></i>
-                                            {obj.data}
-                                        </label>
-                                    </div>
-                                    {/* <div className="col-9" style={{alignSelf: "center", marginTop: "10px"}}>
-                                        <img src={obj.src} style={{width: "20px", height: "20px"}}></img>
-                                        {obj.data}
-                                    </div> */}
-                                </div>
-                            );
-                        })}
+
+                        <div className="row">
+                            <div className="" style={{marginTop: "12px"}}>
+                                <label for="chk">
+                                    <input type="checkbox" id="chk" onChange={e => {onCheck(e.target.checked, e.target.value)}} style={{width: "35px", float: "left", marginTop: "10px", marginLeft: "10px"}}></input>
+                                    <i class="circle"></i>
+                                    계단
+                                </label>
+                            </div>
+                            {/* <div className="col-9" style={{alignSelf: "center", marginTop: "10px"}}>
+                                <img src={obj.src} style={{width: "20px", height: "20px"}}></img>
+                                {obj.data}
+                            </div> */}
+                        </div>
+
                     </div>  
                 </div> 
             </div>

@@ -29,12 +29,17 @@ function Main() {
     const locationWatchId = useRef(null);
 
     const [checkedList, setCheckedList] = useState([]);
+    const [checked, setChecked] = useState(false);
 
     const onCheckedElement = (checked, item) => {
       if(checked){
+        console.log("체크");
         setCheckedList([...checkedList, item]);
+        setChecked(true);
       }else if(!checked){
+        console.log("체크 안돼있음");
         setCheckedList(checkedList.filter(el => el !== item));
+        setChecked(false);
       }
     };
 
@@ -159,6 +164,7 @@ function Main() {
     var zoomin;
     var zoomout;
     var movelocation;
+    console.log(checkedList);
     setScreenSize();
     if(location){
       var lat = location.latitude;
@@ -286,7 +292,7 @@ function Main() {
               position: new Tmapv2.LatLng(lat, lng),
               icon: "${stairs}",
               iconSize: new Tmapv2.Size(15, 15),
-              map: testmap
+              //map: testmap
             });
             
             markers.push(markerone);
@@ -297,6 +303,15 @@ function Main() {
         }
       })
     }else{
+      if(${checked}){
+        for(var i = 0; i < markers.length; i++){
+          markers[i].setMap(testmap);
+        }
+      }else if(markers && !${checked}){
+        for(var i = 0; i < markers.length; i++){
+          markers[i].setMap(null);
+        }
+      }
       console.log(markers);
       
       console.log(marker);
@@ -338,7 +353,7 @@ function Main() {
 
     </div>
     
-    <SideBar onCheck={onCheckedElement}>{LIST}</SideBar>
+    <SideBar onCheck={onCheckedElement} >{LIST}{onCheckedElement}</SideBar>
     
     <div className="rightbarbutton">
       <div className="zoom">
