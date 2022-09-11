@@ -150,7 +150,7 @@ const BusStopDetailInfo = (props)=>{
         console.log("도착 버튼~");
         navigate('/find-way', {
             state:{
-                startBuilding: {obj: props.obj, address: "버스정류장", name: props.obj.bstopnm},
+                endBuilding: {obj: props.obj, address: "버스정류장", name: props.obj.bstopnm},
                 mylocation: props.location,
                 address: '버스정류장',
                 id: 'end',

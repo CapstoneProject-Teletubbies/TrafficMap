@@ -40,6 +40,15 @@ function FindWay(props){
         console.log("내위치 받아옴");
         const {latitude, longitude } = pos.coords;
 
+        if(!startPlace){
+            console.log("스타트 플레이스 없음");
+            reverseGeocoding(latitude, longitude);
+        }else{
+            console.log("스타ㅡㅌ플레이스가 있냐?");
+            console.log(startPlace);
+            console.log(findLocation);
+        }
+
         setFindLocation({
           latitude, longitude
         })
@@ -97,6 +106,19 @@ function FindWay(props){
         }).catch(function(err){
             window.open('https://map.kakao.com/', '_blank');
             console.log("대중교통 길찾기 실패");
+        })
+    }
+    const reverseGeocoding = (lat, lon) => {        //좌표를 주소로 변환
+        const rG = axios.create({
+            baseURL: baseurl
+        })
+        rG.post('/api/find/reverseGeo', null, {params: {
+            lat: lat, lon: lon
+        }}).then(function(res){
+            setStartPlaceHolder(res.data);
+            setStartPlace({name: res.data, obj: {latitude: lat, longitude: lon}})
+        }).catch(function(err){
+            console.log("지오코딩 실패");
         })
     }
 
@@ -176,7 +198,7 @@ function FindWay(props){
                 TmapfindWay(startlng, startlat, endlng, endlat);
             }
         }
-    }, [findway])
+    }, [startPlace, endPlace])
 ///////////////////////////////////////////
 //////////////////////////////////////////
     const handleXButton =   () => {
