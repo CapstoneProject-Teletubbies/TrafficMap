@@ -20,13 +20,17 @@ public class SubwayController {
     }
 
     @RequestMapping(value="/subway/wheelchair", method = {RequestMethod.POST})
-    public List<WheelchairDto> findWheelchair(int lnCd, int stinCd, String railOprIsttCd) { // 휠체어리프트 관련 컨트롤러
-        return subwayService.findWheelchair(lnCd, stinCd, railOprIsttCd);
+    //@GetMapping(value="/subway/wheelchair")
+    public List<WheelchairDto> findWheelchair(String subwayName) { // 휠체어리프트 관련 컨트롤러
+        //String subwayName = "1호선 부평";
+        return subwayService.findWheelchair(subwayName);
     }
 
     @RequestMapping(value="/subway/toilet", method = {RequestMethod.POST})
-    public List<ToiletDto> findToilet(int lnCd, int stinCd, String railOprIsttCd) { // 장애인화장실 관련 컨트롤러
-        return subwayService.findToilet(lnCd, stinCd, railOprIsttCd);
+    //@GetMapping(value="/subway/toilet")
+    public List<ToiletDto> findToilet(String subwayName) { // 장애인화장실 관련 컨트롤러
+    //    String subwayName = "공항철도 서울역";
+        return subwayService.findToilet(subwayName);
     }
 
     //인천 1.2호선 내부지도

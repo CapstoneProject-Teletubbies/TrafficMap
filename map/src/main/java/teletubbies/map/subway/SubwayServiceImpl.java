@@ -22,7 +22,9 @@ import java.io.InputStreamReader;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @Service
@@ -161,10 +163,19 @@ public class SubwayServiceImpl implements SubwayService {
     }
 
     @SneakyThrows
-    public List<WheelchairDto> findWheelchair(int lnCd, int stinCd, String railOprIsttCd) { // 휠체어리프트
+    public List<WheelchairDto> findWheelchair(String subwayName) { // 휠체어리프트
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders(); //헤더
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 한글깨짐 방지
+
+        SubwayNumDto subwayNumDto = new SubwayNumDto();
+        subwayNumDto = callSubwayNum().get(subwayName);
+
+
+        int lnCd = Integer.parseInt(subwayNumDto.getLN_CD());
+        int stinCd = Integer.parseInt(subwayNumDto.getSTIN_CD());
+        String railOprIsttCd = subwayNumDto.getRAIL_OPR_ISTT_CD();
+
 
         //URI 생성
         UriComponents uri = UriComponentsBuilder
@@ -215,10 +226,19 @@ public class SubwayServiceImpl implements SubwayService {
     }
 
     @SneakyThrows
-    public List<ToiletDto> findToilet(int lnCd, int stinCd, String railOprIsttCd) { // 장애인화장실
+    public List<ToiletDto> findToilet(String subwayName) { // 장애인화장실
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders(); //헤더
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 한글깨짐 방지
+
+        SubwayNumDto subwayNumDto = new SubwayNumDto();
+        subwayNumDto = callSubwayNum().get(subwayName);
+
+        String lnCd = subwayNumDto.getLN_CD();
+        String stinCd = subwayNumDto.getSTIN_CD();
+        String railOprIsttCd = subwayNumDto.getRAIL_OPR_ISTT_CD();
+
+        System.out.println("lnCd:"+lnCd+" stin:"+stinCd+" rail:"+railOprIsttCd);
 
         //URI 생성
         UriComponents uri = UriComponentsBuilder
@@ -236,6 +256,7 @@ public class SubwayServiceImpl implements SubwayService {
         JSONObject object = (JSONObject) parser.parse(result.getBody());
         JSONObject header = (JSONObject) object.get("header");
 
+        System.out.println(object);
 
         if (header.get("resultCnt").toString().equals("0")) {  // 장애인화장실이 없는 역이면
             return null;
@@ -327,4 +348,36 @@ public class SubwayServiceImpl implements SubwayService {
         }
         return null; //없으면 null 반환해버렷
     }
+
+    @SneakyThrows
+    public Map<String,SubwayNumDto> callSubwayNum(){
+
+        File doc = new File(new File("./src/main/resources/SubwayNumber.txt").getCanonicalPath());
+        BufferedReader obj = new BufferedReader(new InputStreamReader(new FileInputStream(doc), "utf-8"));
+        String[] Name;
+        String str;
+        String RAIL_OPR_ISTT_CD;
+        String LN_CD;
+        String STIN_CD;
+        String SubwayName;
+        String test;
+
+        Map<String,SubwayNumDto> map = new HashMap<String,SubwayNumDto>();
+        while((str=obj.readLine())!=null){
+            Name = str.split("\\t");
+
+            SubwayName = Name[3]+" "+Name[5];
+
+            SubwayNumDto subwayNumDto = new SubwayNumDto();
+            subwayNumDto.setRAIL_OPR_ISTT_CD(Name[0]);
+            subwayNumDto.setLN_CD(Name[2]);
+            subwayNumDto.setSTIN_CD(Name[4]);
+
+            map.put(SubwayName, subwayNumDto);
+        }
+
+        return map;
+    }
+
+
 }

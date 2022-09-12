@@ -492,4 +492,34 @@ class MapApplicationTests {
 		//,,,? 어느 포인트에서 안되는겅미..?
 	}
 
+	@Test
+	void callSubwayNum() throws Exception{
+		File doc = new File("C:\\Users\\alicx\\Desktop\\Map\\TrafficMap\\map\\src\\test\\java\\teletubbies\\map\\SubwayNumber.txt");
+
+		BufferedReader obj = new BufferedReader(new InputStreamReader(new FileInputStream(doc), "utf-8"));
+		String[] Name;
+		String str;
+		String RAIL_OPR_ISTT_CD;
+		String LN_CD;
+		String STIN_CD;
+		String SubwayName;
+		String test;
+
+		MultiValueMap<String,String> map = new LinkedMultiValueMap<String,String>();
+		while((str=obj.readLine())!=null){
+			Name = str.split("\\t");
+			RAIL_OPR_ISTT_CD = Name[0];
+			LN_CD = Name[2];
+			STIN_CD = Name[4];
+			SubwayName = Name[3]+" "+Name[5];
+			test=RAIL_OPR_ISTT_CD+" "+LN_CD+" "+STIN_CD;
+
+			map.add(SubwayName, test);
+		}
+		System.out.println("출력 되나");
+		System.out.println(map.get("1호선 부평"));
+
+
+	}
+
 }
