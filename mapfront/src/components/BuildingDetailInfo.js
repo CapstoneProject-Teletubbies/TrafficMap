@@ -211,6 +211,16 @@ const BuildingDetailInfo = (props) => {
                         // SetSubwayDown(subwayDown => [...subwayDown, obj]);
                         j++;
                     }
+                    if(obj.updnLine === "외선" && i<2){
+                        tmp1.push(obj);
+                        // SetSubwayUp(subwayUp => [...subwayUp, obj]);
+                        i++;
+                    }
+                    else if(obj.updnLine === "내선" && j<2){
+                        tmp2.push(obj);
+                        // SetSubwayDown(subwayDown => [...subwayDown, obj]);
+                        j++;
+                    }
                 };
             })}
             SetSubwayUp(tmp1);
@@ -245,6 +255,10 @@ const BuildingDetailInfo = (props) => {
         })
 
     };
+
+    const handleWCButton = () => {  //화장실 아이콘 버튼 클릭
+        console.log("클릭했구려");
+    }
 
 
     useEffect(()=>{
@@ -364,7 +378,7 @@ const BuildingDetailInfo = (props) => {
                                     </button>
                                     <div style={{top: "-2px"}}>
                                     <i class="bi bi-map" onClick={openMadal} style={{float: "right", paddingRight: "10px", fontSize: "20px", height: "24px"}}></i></div>
-                                    {isToilet && <img src={toileticon} style={{width: "25px", height: "25px", top: "-3px", marginRight: "4px"}}></img>}
+                                    {isToilet && <img src={toileticon} onClick={handleWCButton} style={{width: "25px", height: "25px", top: "-3px", marginRight: "4px"}}></img>}
                                 </div>
                             </div>  
                         </div>
@@ -376,7 +390,7 @@ const BuildingDetailInfo = (props) => {
                                 {subwayUp && subwayUp.map((obj, index)=>{
                                     var arv = '';
                                     const name =(obj.trainLineNm).split('-');
-                                    if((obj.arvlMsg2).includes("도착")){                          
+                                    if((obj.arvlMsg2).includes("도착")){                        
                                         if(obj.arvlMsg3 == (obj.arvlMsg2).split(' 도착')[0]){
                                             arv = '도착';
                                         }else{
@@ -384,6 +398,8 @@ const BuildingDetailInfo = (props) => {
                                         }
                                     }else if((obj.arvlMsg2).includes("진입")){
                                         arv = obj.arvlMsg2;
+                                    }else if((obj.arvlMsg2).includes("전역 출발")){
+                                        arv = "전역 출발";
                                     }else{  
                                         var tmp;                
                                         if((obj.arvlMsg2).includes('(')){
@@ -396,6 +412,9 @@ const BuildingDetailInfo = (props) => {
                                         }else{
                                             arv = tmp;
                                         }
+                                    }
+                                    if(arv.includes('초 후')){
+                                        arv = (obj.arvlMsg2).split('후')[0];
                                     }
                                    return(
                                     <div className="row" style={{textAlign: "left"}}>
@@ -422,6 +441,8 @@ const BuildingDetailInfo = (props) => {
                                         }    
                                     }else if((obj.arvlMsg2).includes("진입")){
                                         arv = obj.arvlMsg2;
+                                    }else if((obj.arvlMsg2).includes("전역 출발")){
+                                        arv = "전역 출발";
                                     }else{
                                         var tmp;
                                         if((obj.arvlMsg2).includes('(')){
@@ -434,6 +455,9 @@ const BuildingDetailInfo = (props) => {
                                         }else{
                                             arv = tmp;
                                         }
+                                    }
+                                    if(arv.includes('초 후')){
+                                        arv = (obj.arvlMsg2).split('후')[0];
                                     }
                                    return(
                                     <div className="row" style={{textAlign: "left",}}>
