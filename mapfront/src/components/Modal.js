@@ -39,8 +39,8 @@ const Modal = (props) => {
       {open ? (
         <section>
           <header>
-            <div>지하철 입체지도</div>
-            <button className="close" onClick={close} >
+            <div style={{left: "15px"}}>지하철 입체지도</div>
+            <button className="close" onClick={close} style={{top: "3px"}}>
               &times;
             </button>
           </header>

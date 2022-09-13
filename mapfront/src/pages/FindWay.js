@@ -55,6 +55,7 @@ function FindWay(props){
     };
 
     useEffect(()=>{
+        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         navigator.geolocation.watchPosition(handleSuccess);
     })
 

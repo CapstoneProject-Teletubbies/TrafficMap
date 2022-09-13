@@ -8,6 +8,7 @@ import {useState, useEffect} from 'react';
 import Button from 'react-bootstrap/Button';
 import arrowsrefresh from "../images/arrows-refresh.png";
 import elevator from "../images/elevator.png";
+import toileticon from "../images/toilet.png"
 import lift from "../images/lift.png";
 import spinner from "../images/spinner.gif";
 
@@ -24,6 +25,8 @@ const BuildingDetailInfo = (props) => {
     const [url, Seturl] = useState();
     const [line, setLine] = useState();
     const [iselevator, setIsElevator] = useState();
+    const [iswheelchairlift, setIsWheelChairLift] = useState(false);
+    const [isToilet, setIsToilet] = useState(false);
 
     const [modalOpen, setModalOpen] = useState(false);
 
@@ -218,9 +221,57 @@ const BuildingDetailInfo = (props) => {
         
     };
 
+    const findWheelchair = (subwayname) => {        //휠체어 리프트
+        const wheelchairlift = axios.create({
+            baseURL: baseurl
+        })
+        wheelchairlift.post('/api/subway/wheelchair', null, {params: {subwayName: subwayname}})
+        .then(function(res){
+            console.log(res.data);
+        }).catch(function(err){
+            console.log("휠체어리프트 정보 못받아옴");
+        })
+    }
+    const findToilet = (subwayname) => {            //장애인 화장실
+        const toilet = axios.create({
+            baseURL: baseurl
+        })
+        toilet.post('/api/subway/toilet', null, {params: {subwayName: subwayname}})
+        .then(function(res){
+            console.log(res.data);
+            setIsToilet(true);
+        }).catch(function(err){
+            console.log("장애인 화장실 정보 못받아옴");
+        })
+
+    };
+
 
     useEffect(()=>{
+        var tmp;
         console.log(props);
+        console.log(props.props.name);
+        var sname1 = (props.props.name).split(/[\[\]'역']/);
+        console.log(sname1);
+        console.log(sname);
+        if(sname1[2] === '지하철경의중앙선'){
+            tmp = '경의중앙선';
+        }else if(sname1[2].includes('부산지하철')){
+            tmp = sname1[2].split('부산지하철')[1];
+        }else{
+            tmp = sname1[2];
+        }
+        var subwayname = sname1[0];
+        switch (subwayname) {
+            case '서울': subwayname = '서울역'; break;
+            case '대구': subwayname = '대구역'; break;
+            case '동대구': subwayname = '동대구역'; break;
+            case '광주송정': subwayname = '광주송정역'; break;
+        };
+        var sname = tmp + " " + subwayname;
+        console.log(sname);
+        findToilet(sname);
+        findWheelchair(sname);
         setBuildingDetailInfo(props.props);
         SetSubway(props.subway);
         if(props.props.elevatorState === '운행중'){
@@ -234,7 +285,7 @@ const BuildingDetailInfo = (props) => {
         //     searchsubwaytime();
         // }
 
-        if(!one && buildingDetailInfo && subway){
+        if(!one && buildingDetailInfo && subway){       //이거 뭐더라..?
             console.log(buildingDetailInfo);
             setOne(true);
             searchsubwaytime();
@@ -311,7 +362,9 @@ const BuildingDetailInfo = (props) => {
                                     <button id='arrowbutton' onClick={searchsubwaytime} style={{backgroundColor: "white", border: "none", padding: "0px", width: "26px", height: "26px", float: "right"}}>
                                         <img id='arrowrefresh' src={arrowsrefresh} style={{width: "26px", height: "26px", padding: "0px", left : "-1px", top: "-2px"}}></img>
                                     </button>
-                                    <i class="bi bi-map" onClick={openMadal} style={{float: "right", paddingRight: "7px"}}></i>
+                                    <div style={{top: "-2px"}}>
+                                    <i class="bi bi-map" onClick={openMadal} style={{float: "right", paddingRight: "10px", fontSize: "20px", height: "24px"}}></i></div>
+                                    {isToilet && <img src={toileticon} style={{width: "25px", height: "25px", top: "-3px", marginRight: "4px"}}></img>}
                                 </div>
                             </div>  
                         </div>
@@ -346,10 +399,10 @@ const BuildingDetailInfo = (props) => {
                                     }
                                    return(
                                     <div className="row" style={{textAlign: "left"}}>
-                                        <div className="col-6" style={{padding: "0px"}}>
-                                            <h8>{name[0]}</h8>
+                                        <div className="col-6" style={{padding: "0px", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden",}}>
+                                            <text style={{}}><h8>{name[0]}</h8></text>
                                         </div>
-                                        <div className="col-6" style={{textAlign: "left", padding: "0px", color: "red"}}>
+                                        <div className="col-6" style={{textAlign: "left", padding: "0px", color: "red", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden",}}>
                                             <h8>{arv}</h8>
                                         </div>
                                     </div>
@@ -384,10 +437,10 @@ const BuildingDetailInfo = (props) => {
                                     }
                                    return(
                                     <div className="row" style={{textAlign: "left",}}>
-                                        <div className="col-6" style={{padding: "0px"}}>
+                                        <div className="col-6" style={{padding: "0px", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden",}}>
                                         <h8>{name[0]}</h8>
                                         </div>
-                                        <div className="col-6" style={{textAlign: "left", padding: "0px", color: "red"}}>
+                                        <div className="col-6" style={{textAlign: "left", padding: "0px", color: "red", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden",}}>
                                             <h8>{arv}</h8>
                                         </div>
                                     </div>
