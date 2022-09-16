@@ -1,6 +1,6 @@
 import React from 'react';
 import '../css/BusRouteList.css'
-import bus from '../images/bus.png'
+import bus from '../images/bus_white.png'
 
 
 const BusRouteList = (props) => {
@@ -41,6 +41,7 @@ const BusRouteList = (props) => {
                 </div> : null}
             <div className = "col-3" style={{backgroundColor: "white", borderRadius: "3px", textAlign: "center"}}>
                 <div className = "" style={{top: mtop}}>
+                    {num && <div className="pull"></div>}
                     {num}<br></br>
                     {low}
                 </div> 

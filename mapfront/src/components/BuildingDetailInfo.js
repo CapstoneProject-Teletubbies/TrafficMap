@@ -4,7 +4,7 @@ import $ from 'jquery';
 import '../css/BuildingDetailInfo.css'
 import Modal from './Modal';
 import { Navigate, useNavigate } from "react-router-dom";
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useRef} from 'react';
 import Button from 'react-bootstrap/Button';
 import arrowsrefresh from "../images/arrows-refresh.png";
 import elevator from "../images/elevator.png";
@@ -27,8 +27,12 @@ const BuildingDetailInfo = (props) => {
     const [iselevator, setIsElevator] = useState();
     const [iswheelchairlift, setIsWheelChairLift] = useState(false);
     const [isToilet, setIsToilet] = useState(false);
+    const [iswheelchairliftClick, setIsWheelChairLiftClick] = useState(false);
+    const [isToiletClick, setIsToiletClick] = useState(false);
+    const [toiletLocation, setToiletLocation] = useState([]);
 
     const [modalOpen, setModalOpen] = useState(false);
+    const el = useRef();
 
     const navigate = useNavigate();
 
@@ -249,7 +253,12 @@ const BuildingDetailInfo = (props) => {
         toilet.post('/api/subway/toilet', null, {params: {subwayName: subwayname}})
         .then(function(res){
             console.log(res.data);
-            setIsToilet(true);
+            if(res.data){
+                setIsToilet(true);
+                setToiletLocation(res.data);
+            }else{
+                setIsToilet(false);
+            }     
         }).catch(function(err){
             console.log("장애인 화장실 정보 못받아옴");
         })
@@ -258,13 +267,37 @@ const BuildingDetailInfo = (props) => {
 
     const handleWCButton = () => {  //화장실 아이콘 버튼 클릭
         console.log("클릭했구려");
-    }
-
+        
+        if(isToiletClick){
+            setIsToiletClick(false);
+        }else{
+            setIsToiletClick(true);
+        }
+    };
+    const handleCloseInfo = (e) => {
+        if(el.current){
+            console.log(el);
+            console.log(el.current.contains(e.target));
+            console.log(isToiletClick);
+        }
+        if(isToiletClick && (!el.current || !el.current.contains(e.target))){
+            console.log("다른곳 클릭");
+            console.log(el);
+            
+        }
+    };
+    useEffect(()=>{
+        window.addEventListener('touchstart', handleCloseInfo);
+        return()=>{
+            window.removeEventListener('touchstart', handleCloseInfo);
+        }
+    }, []);
 
     useEffect(()=>{
         var tmp;
         console.log(props);
         console.log(props.props.name);
+        if((props.props.upperBizName) == '교통편의' && (props.props.name).includes('역')){
         var sname1 = (props.props.name).split(/[\[\]'역']/);
         console.log(sname1);
         console.log(sname);
@@ -286,6 +319,7 @@ const BuildingDetailInfo = (props) => {
         console.log(sname);
         findToilet(sname);
         findWheelchair(sname);
+        }
         setBuildingDetailInfo(props.props);
         SetSubway(props.subway);
         if(props.props.elevatorState === '운행중'){
@@ -343,19 +377,8 @@ const BuildingDetailInfo = (props) => {
         height: "35px",
         marginLeft: "8px",
     }
-    /*function iselivator(props){
-        if props ===true
-    }
-    var text=document.createTextNode("\u00a0");*/
 
-    const setArrive = (props) => {
-        let destination = props.address;
 
-    }; //도착지 변수로 주소 넘겨주기
-
-    const setStart = (props) => {
-        let departure = props.address;
-    };//출발지로 주소 넘기기
     if(buildingDetailInfo){
         if(subway){
             return(
@@ -364,7 +387,17 @@ const BuildingDetailInfo = (props) => {
                         팝업창임
                     </Modal>
                 <footer>
-                    
+                    {toiletLocation && isToiletClick && 
+                        <div ref={el} style={{position: "absolute", backgroundColor: "white", height: "20%", top: "-20%", right: "0px"}}>
+                            {toiletLocation.map((obj, index)=>{
+                                console.log(obj.dtlLoc);
+                                return(
+                                    <div>
+                                        <text style={{fontFamily: 'Nanum Gothic Coding', fontSize: "1rem"}}>{obj.dtlLoc}</text>
+                                    </div>
+                                );
+                            })}
+                        </div>}
                 <div id='Info' className="detailInfo" style={{height: "100%"}}>
                         <div id='headInfo' className="row" style={{position: "relative", paddingTop: "10px"}}>
                             <div className="col-8" style={{textAlign: "left", paddingLeft: "5%", paddingRight: "0px"}}>
@@ -378,7 +411,7 @@ const BuildingDetailInfo = (props) => {
                                     </button>
                                     <div style={{top: "-2px"}}>
                                     <i class="bi bi-map" onClick={openMadal} style={{float: "right", paddingRight: "10px", fontSize: "20px", height: "24px"}}></i></div>
-                                    {isToilet && <img src={toileticon} onClick={handleWCButton} style={{width: "25px", height: "25px", top: "-3px", marginRight: "4px"}}></img>}
+                                    {isToilet && <img id="toileticon" src={toileticon} onClick={handleWCButton} style={{width: "25px", height: "25px", top: "-3px", marginRight: "4px"}}></img>}
                                 </div>
                             </div>  
                         </div>

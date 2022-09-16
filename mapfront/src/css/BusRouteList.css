@@ -19,3 +19,21 @@
     margin: -13px;
     top: 12px;
 }
+.pull{
+    border-radius: 5px; 
+    border: 1px solid black;
+    width: 70%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left:15%;
+}
+.pull:after{
+    content: "";
+    position: absolute;
+    top: 25%;
+    right: -15px;
+    border-left: 15px solid black;
+    border-top:  6px solid transparent;
+    border-bottom:  6px solid transparent;
+}
