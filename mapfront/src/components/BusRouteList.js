@@ -40,10 +40,12 @@ const BusRouteList = (props) => {
                 <div className="col-9" style={{backgroundColor: "#BDBDBD"}}>회차지</div>
                 </div> : null}
             <div className = "col-3" style={{backgroundColor: "white", borderRadius: "3px", textAlign: "center"}}>
-                <div className = "" style={{top: mtop}}>
-                    {num && <div className="pull"></div>}
+                <div className = "" style={{top: mtop}}>   
+                    <div style={{zIndex: "1"}}>
                     {num}<br></br>
                     {low}
+                    </div>
+                    {num && <div className="pull"></div>}
                 </div> 
             </div>
             <li className="list-group-item col-9">        

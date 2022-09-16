@@ -30,7 +30,7 @@ const BuildingInfo = (props) => {
      }
 
      const searchBusRouteInfo = () => {
-        console.log(props.obj.routeid);
+        console.log(props);
         const busrouteinfo = axios.create({
             baseURL: baseurl
         })
@@ -50,6 +50,7 @@ const BuildingInfo = (props) => {
                     {props.obj.routeno}
                 </div>
                 {props.obj.origin_BSTOPNM} {arrow} {props.obj.turn_BSTOPNM}
+                {props.time && <div style={{color: "red", textAlign: "left"}}>남은 시간: {props.time}분 {props.lowTP && <text style={{color: "blue"}}>{props.lowTP}</text>}</div>}
             </div>
         </li>
     );

@@ -250,10 +250,10 @@ const BusStopDetailInfo = (props)=>{
                                     }
                                 return(
                                     <div>
-                                    <BusInfo obj={test}></BusInfo>
-                                    <div style={{float: "left", textAlign: "-webkit-left" ,width: "100%", paddingLeft: "5%", color: "red"}}>
+                                    <BusInfo obj={test} time={time} lowTP={lowTP}></BusInfo>
+                                    {/* <div style={{float: "left", textAlign: "-webkit-left" ,width: "100%", paddingLeft: "5%", color: "red"}}>
                                         남은 시간: {time}분   <text style={{color: "blue"}}>{lowTP}</text>
-                                    </div>
+                                    </div> */}
                                     </div>
                                 );}})}
                             </ol>
