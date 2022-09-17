@@ -8,8 +8,11 @@ import SideBar from "../components/ElevatorAndStair";
 import Button from "../components/Button";
 import getLocation from '../getLocation';
 import plus from "../images/plus.png";
+import plussign from "../images/plussign.png";
 import minus from "../images/minus.png";
+import minussign from "../images/minussign.png"
 import target from "../images/location.png";
+import mytarget from "../images/target.png"
 import nav from "../images/nav.png";
 import stairs from "../images/stairs.png";
 import elevator from "../images/elevator.png";
@@ -263,61 +266,61 @@ function Main() {
       }
 
       var markers;
-      if(testmap && !markers){
-      $.ajax({                //계단 받아옴
-        method: "POST",
-        url: "http://localhost:9000/api/find/stair",
-        async: false,
-        data: {
+    //   if(testmap && !markers){
+    //   $.ajax({                //계단 받아옴
+    //     method: "POST",
+    //     url: "http://localhost:9000/api/find/stair",
+    //     async: false,
+    //     data: {
 
-        },
-        success: function(res){
-          console.log(res);
-          if(markers){
-            console.log("마커 지워야해");
-            console.log(markers);
-            for(var i = 0; i < markers.length; i++){
-              markers[i].setMap(null);
-            }
-            markers = [];
-          }
-          markers = [];
+    //     },
+    //     success: function(res){
+    //       console.log(res);
+    //       if(markers){
+    //         console.log("마커 지워야해");
+    //         console.log(markers);
+    //         for(var i = 0; i < markers.length; i++){
+    //           markers[i].setMap(null);
+    //         }
+    //         markers = [];
+    //       }
+    //       markers = [];
           
-          for(var i = 0; i < res.length; i++){
-            console.log("마커생성");
-            var lat = res[i].startlatitude;
-            var lng = res[i].startlongitude;
+    //       for(var i = 0; i < res.length; i++){
+    //         console.log("마커생성");
+    //         var lat = res[i].startlatitude;
+    //         var lng = res[i].startlongitude;
 
-            var markerone = new Tmapv2.Marker({
-              position: new Tmapv2.LatLng(lat, lng),
-              icon: "${stairs}",
-              iconSize: new Tmapv2.Size(15, 15),
-              //map: testmap
-            });
+    //         var markerone = new Tmapv2.Marker({
+    //           position: new Tmapv2.LatLng(lat, lng),
+    //           icon: "${stairs}",
+    //           iconSize: new Tmapv2.Size(15, 15),
+    //           //map: testmap
+    //         });
             
-            markers.push(markerone);
-          }
-        },
-        error: function(err){
-          console.log("계단 못받아옴");
-        }
-      })
-    }else{
-      if(${checked}){
-        for(var i = 0; i < markers.length; i++){
-          markers[i].setMap(testmap);
-        }
-      }else if(markers && !${checked}){
-        for(var i = 0; i < markers.length; i++){
-          markers[i].setMap(null);
-        }
-      }
-      console.log(markers);
+    //         markers.push(markerone);
+    //       }
+    //     },
+    //     error: function(err){
+    //       console.log("계단 못받아옴");
+    //     }
+    //   })
+    // }else{
+    //   if(${checked}){
+    //     for(var i = 0; i < markers.length; i++){
+    //       markers[i].setMap(testmap);
+    //     }
+    //   }else if(markers && !${checked}){
+    //     for(var i = 0; i < markers.length; i++){
+    //       markers[i].setMap(null);
+    //     }
+    //   }
+    //   console.log(markers);
       
-      console.log(marker);
-      console.log(marker.getOffset());
+    //   console.log(marker);
+    //   console.log(marker.getOffset());
 
-    }
+    // }
    `;
     script.type = "text/javascript";
     script.async = "async";
@@ -338,7 +341,7 @@ function Main() {
     </div>
 
     <div className="search">
-        <SearchBar onChange={handleKeyword} placeholder={'장소, 버스, 지하철, 주소 검색'} location={location} src={'/search'}/>
+        <SearchBar onChange={handleKeyword} placeholder={'장소, 버스, 지하철, 주소 검색'} location={location} src={'/search'} style={{boxShadow: "1px 1px 20px 1px #D5D5D5"}}/>
         <Button onClick={handleNavButton} src={nav}></Button>
     </div>
     <div id="test">
@@ -348,7 +351,8 @@ function Main() {
 
     <div className="left">
       <div className="mylocation">
-        <Button onClick={handleLocationButton} src={target}/>
+        {/* <Button onClick={handleLocationButton} src={target}/> */}
+        <button onClick={handleLocationButton} style={{backgroundColor: "white", borderRadius: "7px", height: "45px"}}><img src={mytarget} style={{width: "120%", height: "87%", left: "-2px"}}></img></button>
       </div>
 
     </div>
@@ -357,8 +361,10 @@ function Main() {
     
     <div className="rightbarbutton">
       <div className="zoom">
-        <Button onClick={handlePlusButton} src={plus}/>
-        <Button onClick={handleMinusButton} src={minus}/>
+        {/* <Button onClick={handlePlusButton} src={plus}/> */}
+        {/* <Button onClick={handleMinusButton} src={minus}/> */}
+        <button onClick={handlePlusButton} style={{backgroundColor: "white", borderRadius: "7px", width: "42px"}}><img src={plussign} style={{width: "100%", height: "80%"}}></img></button>
+        <button onClick={handleMinusButton} style={{backgroundColor: "white", borderRadius: "7px", marginTop: "4px", width: "42px"}}><img src={minussign} style={{width: "100%", height: "80%"}}></img></button>
         {/* <SideBar /> */}
       </div>
     </div>

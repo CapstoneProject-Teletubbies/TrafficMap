@@ -2,11 +2,14 @@ import React from 'react';
 import styles from '../css/SideBar.css'
 import { useState, useEffect, useRef } from 'react';
 
-const SideBar =({width=310, children})=>{
+const SideBar =({width=350, children, totalDistance, totalTime})=>{
     const [isOpen, setOpen] = useState(false);
     const [xPosition, setX] = useState(width);
     const [boxShadow, setBoxShadow] = useState();
     const side = useRef();
+
+    const [distance, setDistance] = useState();
+    const [time, setTime] = useState();
 
     const toggleMenu = () => {
         if(xPosition > 0){
@@ -38,7 +41,26 @@ const SideBar =({width=310, children})=>{
     })
 
     useEffect(()=>{
-        console.log(children);
+        console.log(totalDistance);
+        console.log(totalTime);
+        var n;
+        if(totalDistance > 1000){                   //총 거리
+            totalDistance = totalDistance / 1000;
+            console.log(totalDistance); 
+            setDistance(totalDistance+"km");       
+        }else{
+            setDistance(totalDistance+"m");
+        }
+        totalTime = totalTime / 60;
+        if(totalTime > 60){                         //총 시간
+            n = parseInt(totalTime%60);
+            totalTime = parseInt(totalTime / 60);
+            console.log(n);
+            console.log(totalTime);
+            setTime("약 "+totalTime+"시간 "+n+"분");
+        }else{
+            setTime("약 "+totalTime+"분")
+        }
     }, [children])
 
 
@@ -49,7 +71,12 @@ const SideBar =({width=310, children})=>{
                 className="sidebarbutton" >
                 상세
                 </button>
-                <div className="sidebarcontent" style={{position: "relative", height: "89%", overflowY: "scroll"}}>
+                <div style={{width: "100%", height: "10%", top: "-70px", textAlign: "left", marginLeft: "15px"}}>
+                    <text style={{fontWeight: "1000"}}>총 거리 {distance}</text>
+                    <br></br>
+                    <text style={{fontWeight: "1000"}}> {time}</text>
+                </div>
+                <div className="sidebarcontent" style={{position: "relative", height: "89%", overflowY: "scroll", top: "-70px"}}>
                     <div className='list-group' style={{overflowY: "scroll"}}>
                     {children && children.map((obj, index)=>{
                         return(

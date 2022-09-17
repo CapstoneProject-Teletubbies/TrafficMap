@@ -9,8 +9,11 @@ import BuildingDetailInfo from "../components/BuildingDetailInfo";
 import ReactDOM from "react-dom";
 import getLocation from '../getLocation';
 import plus from "../images/plus.png";
+import plussign from "../images/plussign.png";
 import minus from "../images/minus.png"
+import minussign from "../images/minussign.png"
 import target from "../images/location.png"
+import mytarget from "../images/target.png"
 import ph from "../images/placeholder.png"
 
 import mylocation from "../images/mylocation.png"
@@ -362,14 +365,17 @@ function ResultSearch() {
 
     <div className="left">
       <div className="mylocation">
-        <Button onClick={handleLocationButton} src={target}/>
+        {/* <Button onClick={handleLocationButton} src={target}/> */}
+        <button onClick={handleLocationButton} style={{backgroundColor: "white", borderRadius: "7px", height: "45px"}}><img src={mytarget} style={{width: "120%", height: "87%", left: "-2px"}}></img></button>
       </div>
     </div>
 
     <div className="rightbarbutton">
       <div className="zoom">
-        <Button onClick={handlePlusButton} src={plus}/>
-        <Button onClick={handleMinusButton} src={minus}/>
+        {/* <Button onClick={handlePlusButton} src={plus}/>
+        <Button onClick={handleMinusButton} src={minus}/> */}
+        <button onClick={handlePlusButton} style={{backgroundColor: "white", borderRadius: "7px", width: "42px"}}><img src={plussign} style={{width: "100%", height: "80%"}}></img></button>
+        <button onClick={handleMinusButton} style={{backgroundColor: "white", borderRadius: "7px", marginTop: "5px", width: "42px"}}><img src={minussign} style={{width: "100%", height: "80%"}}></img></button>
       </div>
     </div>
 

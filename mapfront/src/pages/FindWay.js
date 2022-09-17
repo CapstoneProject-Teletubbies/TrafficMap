@@ -30,6 +30,8 @@ function FindWay(props){
     const [findway, setFindway] = useState();
     const [route, setRoute] = useState();
     const [routeDetail, setRouteDetail] = useState([]);
+    const [totalDistance, setTotalDistance] = useState();
+    const [totalTime, setTotalTime] = useState();
 
 
     const location = useLocation();
@@ -139,6 +141,10 @@ function FindWay(props){
         var i = 0;
         if(route){
             route.map((obj, index)=>{
+                if(index==0){
+                    setTotalDistance(obj.totalDistance);
+                    setTotalTime(obj.totalTime);
+                }
                 if(obj.pointIndex == i){
                     setRouteDetail(routeDetail => [...routeDetail, obj.pointDescription]);
                     i++;
@@ -498,7 +504,7 @@ function FindWay(props){
               }}>
                 
             </div>
-            <SideBar>{routeDetail}</SideBar>
+            <SideBar totalDistance={totalDistance} totalTime={totalTime}>{routeDetail}</SideBar>
             </body>}
             <UrlModal open={modalOpen} close={closeModal} connect={urlModal}>  
             </UrlModal>

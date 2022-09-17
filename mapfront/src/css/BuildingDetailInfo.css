@@ -63,8 +63,9 @@ footer{
 }
 
 #toileticon{
-    background-color: red;  
+    /* background-color: red;   */
 }
 #toileticon:active{
     background-color: white;
+    
 }

@@ -388,11 +388,11 @@ const BuildingDetailInfo = (props) => {
                     </Modal>
                 <footer>
                     {toiletLocation && isToiletClick && 
-                        <div ref={el} style={{position: "absolute", backgroundColor: "white", height: "20%", top: "-20%", right: "0px"}}>
+                        <div ref={el} style={{position: "absolute", backgroundColor: "white", height: "20%", top: "-21%", right: "0px"}}>
                             {toiletLocation.map((obj, index)=>{
                                 console.log(obj.dtlLoc);
                                 return(
-                                    <div>
+                                    <div style={{boxShadow: "-1px -1px 100px 1px gray", borderRadius: "3px"}}>
                                         <text style={{fontFamily: 'Nanum Gothic Coding', fontSize: "1rem"}}>{obj.dtlLoc}</text>
                                     </div>
                                 );
@@ -411,7 +411,7 @@ const BuildingDetailInfo = (props) => {
                                     </button>
                                     <div style={{top: "-2px"}}>
                                     <i class="bi bi-map" onClick={openMadal} style={{float: "right", paddingRight: "10px", fontSize: "20px", height: "24px"}}></i></div>
-                                    {isToilet && <img id="toileticon" src={toileticon} onClick={handleWCButton} style={{width: "25px", height: "25px", top: "-3px", marginRight: "4px"}}></img>}
+                                    {isToilet && <img id="toileticon" src={toileticon} onClick={handleWCButton} style={{width: "25px", height: "25px", top: "-3px", marginRight: "4px",}}></img>}
                                 </div>
                             </div>  
                         </div>
