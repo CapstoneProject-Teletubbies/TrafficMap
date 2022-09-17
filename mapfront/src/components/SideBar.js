@@ -59,6 +59,7 @@ const SideBar =({width=350, children, totalDistance, totalTime})=>{
             console.log(totalTime);
             setTime("약 "+totalTime+"시간 "+n+"분");
         }else{
+            totalTime = parseInt(totalTime);
             setTime("약 "+totalTime+"분")
         }
     }, [children])
@@ -76,7 +77,7 @@ const SideBar =({width=350, children, totalDistance, totalTime})=>{
                     <br></br>
                     <text style={{fontWeight: "1000"}}> {time}</text>
                 </div>
-                <div className="sidebarcontent" style={{position: "relative", height: "89%", overflowY: "scroll", top: "-70px"}}>
+                <div className="sidebarcontent" style={{position: "relative", height: "80%", overflowY: "scroll", top: "-70px"}}>
                     <div className='list-group' style={{overflowY: "scroll"}}>
                     {children && children.map((obj, index)=>{
                         return(

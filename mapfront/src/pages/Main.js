@@ -363,8 +363,8 @@ function Main() {
       <div className="zoom">
         {/* <Button onClick={handlePlusButton} src={plus}/> */}
         {/* <Button onClick={handleMinusButton} src={minus}/> */}
-        <button onClick={handlePlusButton} style={{backgroundColor: "white", borderRadius: "7px", width: "42px"}}><img src={plussign} style={{width: "100%", height: "80%"}}></img></button>
-        <button onClick={handleMinusButton} style={{backgroundColor: "white", borderRadius: "7px", marginTop: "4px", width: "42px"}}><img src={minussign} style={{width: "100%", height: "80%"}}></img></button>
+        <button onClick={handlePlusButton} style={{backgroundColor: "white", borderRadius: "7px", width: "42px", right: "-1px"}}><img src={plussign} style={{width: "100%", height: "80%"}}></img></button>
+        <button onClick={handleMinusButton} style={{backgroundColor: "white", borderRadius: "7px", marginTop: "4px", width: "42px", right: "-1px"}}><img src={minussign} style={{width: "100%", height: "80%"}}></img></button>
         {/* <SideBar /> */}
       </div>
     </div>

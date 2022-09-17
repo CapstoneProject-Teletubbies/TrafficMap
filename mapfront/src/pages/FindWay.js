@@ -33,6 +33,8 @@ function FindWay(props){
     const [totalDistance, setTotalDistance] = useState();
     const [totalTime, setTotalTime] = useState();
 
+    const [mtest, setMTest] = useState(true);
+
 
     const location = useLocation();
 
@@ -57,7 +59,6 @@ function FindWay(props){
     };
 
     useEffect(()=>{
-        console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
         navigator.geolocation.watchPosition(handleSuccess);
     })
 
@@ -86,6 +87,7 @@ function FindWay(props){
     }
 
     const TmapfindWay = (startlng, startlat, endlng, endlat) => {   //길찾기
+        setMTest(false);
         const fw = axios.create({
             baseURL: baseurl
         })
@@ -93,6 +95,7 @@ function FindWay(props){
             startX : startlng, startY : startlat, endX : endlng, endY : endlat, startName : "출발지", endName : "도착지", option : '0'
         }}).then(function(res){
             setRoute(res.data);
+            console.log("@@@@@@@@@@@@@@@@@@@길찾기 실행했다!@@@@@@@@@@@@@@@@@");
         }).catch(function(err){
             console.log("길찾기 실패");
         })
@@ -135,6 +138,7 @@ function FindWay(props){
             console.log("없어");
         }
     }, [])
+
 
     useEffect(()=>{
         console.log(route);
@@ -202,10 +206,12 @@ function FindWay(props){
                     endlat = endPlace.obj.latitude;
                     endlng = endPlace.obj.longitude;
                 }
-                TmapfindWay(startlng, startlat, endlng, endlat);
+                if(mtest){
+                    TmapfindWay(startlng, startlat, endlng, endlat);
+                }
             }
         }
-    }, [startPlace, endPlace])
+    }, [startPlace, endPlace, mtest])
 ///////////////////////////////////////////
 //////////////////////////////////////////
     const handleXButton =   () => {
@@ -304,13 +310,16 @@ function FindWay(props){
                         iconSize : new Tmapv2.Size(24, 38),
                         map : map
                 });
+
+                
+                
                 
                 $.ajax({
                     method: "POST",
                     url : "https://apis.openapi.sk.com/tmap/routes/pedestrian?version=1&format=json&callback=result",
                     async: false,
                     data: {
-                        "appKey" : "l7xxafd79b2f4cce4ae6a4f6d1a1f4c31386",
+                        "appKey" : "l7xx597ff83932a8455888e5e223d55124e7",
 						"startX" : "${startLng}",
 						"startY" : "${startLat}",
 						"endX" : "${endLng}",
@@ -456,7 +465,7 @@ function FindWay(props){
             }
 
             if('${startPlace}' && '${endPlace}'){
-                console.log("이닛맵");
+                console.log("@@@@@@@@@@@@@@@@이닛맵@@@@@@@@@@@@@");
                 initTmap();   
             }
             if(${lat}){
