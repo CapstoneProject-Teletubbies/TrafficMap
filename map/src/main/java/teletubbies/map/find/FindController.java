@@ -34,7 +34,8 @@ public class FindController {
 
 
     //데이터가 무려 1996개!
-    @RequestMapping(value="/find/stair", method = {RequestMethod.POST})
+    //@RequestMapping(value="/find/stair", method = {RequestMethod.POST})
+    @GetMapping(value="find/stair")
     public List<StairDto> StairByAPI() { //계단 api
         return findService.findStairs();
     }

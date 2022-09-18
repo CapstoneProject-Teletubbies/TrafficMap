@@ -35,6 +35,8 @@ import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.*;
 import java.util.function.Consumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @SpringBootTest
@@ -531,5 +533,18 @@ class MapApplicationTests {
 		System.out.println(str2);
 
 	}
+
+	@Test
+	void regularExpression () {
+
+
+		String a = "11아파트";
+		Pattern str_a = Pattern.compile("아파트");
+
+		Matcher matcher = str_a.matcher(a);
+
+		System.out.println(matcher.find());
+	}
+
 
 }

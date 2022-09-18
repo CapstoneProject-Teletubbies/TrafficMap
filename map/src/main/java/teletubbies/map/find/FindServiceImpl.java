@@ -23,6 +23,8 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class FindServiceImpl implements FindService {
@@ -281,6 +283,9 @@ public class FindServiceImpl implements FindService {
         //response
         ResponseEntity<String> result = restTemplate.exchange(uri.toUri(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
 
+
+
+
         if (result.getBody() != null) {
             //json parser
             JSONParser parser = new JSONParser();
@@ -289,7 +294,7 @@ public class FindServiceImpl implements FindService {
             JSONArray features = (JSONArray) object.get("features");
 
             List<StairDto> dtos = new ArrayList<>(); //리스트에 담을 dtos 선언
-
+            int j = 0;
             //배열 크기만큼 반복
             for (int i = 0; i < features.size(); i++) {
                 StairDto stairDto = new StairDto();
@@ -309,6 +314,7 @@ public class FindServiceImpl implements FindService {
                 Double endlatitude = (Double) attributes.get("endlatitude"); //끝위도
                 Double endlongitude = (Double) attributes.get("endlongitude"); //끝경도
 
+
                 //일단 테스트로 이제 가공한 데이터를 stairDto에 저장
                 stairDto.setObjectid(objectid);
                 stairDto.setCtprvnnm(ctprvnnm);
@@ -321,8 +327,22 @@ public class FindServiceImpl implements FindService {
                 stairDto.setEndlatitude(endlatitude);
                 stairDto.setEndlongitude(endlongitude);
 
-                dtos.add(i, stairDto);
+                //System.out.println("오류나냐?:"+rdnmadr);
+                Pattern str_a = Pattern.compile("아파트");
+                if(rdnmadr==null){
+                    dtos.add(j, stairDto);
+                    j+=1;
+                }
+                else {
+                    Matcher matcher = str_a.matcher(rdnmadr);
+                    if (!matcher.find()) {
+                        //System.out.println(rdnmadr);
+                        dtos.add(j, stairDto);
+                        j += 1;
+                    }
+                }
             }
+            System.out.println(j);
             return dtos;
         } else {
             return null;
