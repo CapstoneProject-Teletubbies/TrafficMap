@@ -533,7 +533,7 @@ const BuildingDetailInfo = (props) => {
                         }
                         {props.findway && 
                         <div id="checkbutton" style={{position: "relative", width: "100%", }}>
-                            <button style={{width: "100%", backgroundColor: "white", borderRadius: "5px"}} onClick={handlecheckButton}>확인</button>
+                            <button style={{position: "absolute", width: "100%", backgroundColor: "white", borderRadius: "5px", left: "0px", bottom: "-60px"}} onClick={handlecheckButton}>확인</button>
                         </div>
                         }
                 </div>

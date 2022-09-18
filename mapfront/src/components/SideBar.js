@@ -69,7 +69,7 @@ const SideBar =({width=350, children, totalDistance, totalTime})=>{
         <div className="sidebarmain">
             <div ref={side}  className="innersidbar" style={{ width: `${width}px`, height: window.innerHeight,  transform: `translatex(${-xPosition}px)`, boxShadow: boxShadow}}>
                 <button  onClick={() => toggleMenu()}
-                className="sidebarbutton" >
+                className="sidebarbutton">
                 상세
                 </button>
                 <div style={{width: "100%", height: "10%", top: "-70px", textAlign: "left", }}>
