@@ -522,4 +522,14 @@ class MapApplicationTests {
 
 	}
 
+	@Test
+	void gwalho(){
+		String str = "종로3가(어쩌구)";
+
+		String str2=str.replaceAll("\\(.*?\\)","");
+
+		System.out.println(str2);
+
+	}
+
 }

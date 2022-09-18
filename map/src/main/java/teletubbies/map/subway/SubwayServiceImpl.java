@@ -367,13 +367,14 @@ public class SubwayServiceImpl implements SubwayService {
             Name = str.split("\\t");
 
             SubwayName = Name[3]+" "+Name[5];
+            String SubwayName2=SubwayName.replaceAll("\\(.*?\\)","");
 
             SubwayNumDto subwayNumDto = new SubwayNumDto();
             subwayNumDto.setRAIL_OPR_ISTT_CD(Name[0]);
             subwayNumDto.setLN_CD(Name[2]);
             subwayNumDto.setSTIN_CD(Name[4]);
 
-            map.put(SubwayName, subwayNumDto);
+            map.put(SubwayName2, subwayNumDto);
         }
 
         return map;
