@@ -72,12 +72,14 @@ const SideBar =({width=350, children, totalDistance, totalTime})=>{
                 className="sidebarbutton" >
                 상세
                 </button>
-                <div style={{width: "100%", height: "10%", top: "-70px", textAlign: "left", marginLeft: "15px"}}>
-                    <text style={{fontWeight: "1000"}}>총 거리 {distance}</text>
-                    <br></br>
-                    <text style={{fontWeight: "1000"}}> {time}</text>
+                <div style={{width: "100%", height: "10%", top: "-70px", textAlign: "left", }}>
+                    <div style={{position: "relative",textAlign: "left", marginLeft: "15px", top: "35%"}}>           
+                    <text style={{fontSize: "20px", fontWeight: "1000"}}> {time} </text>
+                    <div class="vr" style={{fontWeight: "100"}}></div>
+                    <text style={{fontSize: "18px", fontWeight: "600"}}>  {distance}</text>
+                    </div>
                 </div>
-                <div className="sidebarcontent" style={{position: "relative", height: "80%", overflowY: "scroll", top: "-70px"}}>
+                <div className="sidebarcontent" style={{position: "relative", height: "85%", overflowY: "scroll", top: "-70px"}}>
                     <div className='list-group' style={{overflowY: "scroll"}}>
                     {children && children.map((obj, index)=>{
                         return(

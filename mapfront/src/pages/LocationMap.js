@@ -12,6 +12,7 @@ import BuildingDetailInfo from "../components/BuildingDetailInfo"
 import BusStopDetailInfo from '../components/BusStopDetailInfo';
 
 import placeholderred from "../images/placeholderred.png"
+import ping from "../images/ping.png"
 import mylocation from "../images/mylocation.png"
 import busstop from "../images/busstop.png"
 import train from "../images/train.png"
@@ -24,7 +25,7 @@ function LocationMap() {
     const [plusbutton, setPlusButton] = useState();
     const [minusbutton, setMinusButton] = useState();
     const [locationbutton, setLocationButton] = useState();
-    const [icon, setIcon] = useState(placeholderred);
+    const [icon, setIcon] = useState(ping);
     const [findWay, setFindWay] = useState();
     const [infoWindow, setInfoWindow] = useState(true);
 
@@ -208,6 +209,7 @@ function LocationMap() {
           else{
             wgs84 = new Tmapv2.LatLng(lat, lng);
           }
+          console.log(img);
           var marker = new Tmapv2.Marker({
             position: wgs84,
             icon: img,

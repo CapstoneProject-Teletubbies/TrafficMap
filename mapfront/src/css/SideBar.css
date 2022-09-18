@@ -23,7 +23,9 @@
     height: 100px;
     z-index: 99;
     transition: 0.8s ease;
-    border: 2px solid #202020;
+    border: none;
+    box-shadow: 1px 0px 5px 1px gray;
+    background-color: white;
     border-radius: 0px 5px 5px 0px;
     overflow: hidden;
   }

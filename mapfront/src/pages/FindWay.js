@@ -487,9 +487,9 @@ function FindWay(props){
     return(
         <div style={{position: "fixed", width: "100%", height: "100%", backgroundColor: "#D5D5D5"}}>
             <div className= "row align-items-center" id="findwayheader" style={{position: "relative", width: "100%", margin: "0px", display: "flex"
-                , backgroundColor: "white", boxShadow: "1px 1px 10px 0.8px gray"}}>
+                , backgroundColor: "white", boxShadow: "1px 1px 20px 1px gray", zIndex: "1"}}>
                 <div className='col-11' style={{position: "relative", textAlign: "-webkit-left"}}>
-                    <SearchBar style={{border: "1px solid gray", borderRadius: "6px", margin: "5px", marginTop: "12px", width: "100%", }} placeholder={startplaceholder} location={mylocation} src={'/find-search'} id={'start'} endPlace={endPlace}></SearchBar>
+                    <SearchBar style={{border: "1px solid gray", borderRadius: "6px", margin: "5px", marginTop: "12px", width: "100%", }} color="black" placeholder={startplaceholder} location={mylocation} src={'/find-search'} id={'start'} endPlace={endPlace}></SearchBar>
                     <SearchBar style={{border: "1px solid gray", borderRadius: "6px", margin: "5px", marginBottom: "12px",  width: "100%", }} placeholder={endplaceholder} location={mylocation} src={'/find-search'} id={'end'} startPlace={startPlace}></SearchBar>
                 </div>
                 <div className="col-1" style={{alignSelf: "flex-start", marginTop: "5px", padding: "0px"}}>
