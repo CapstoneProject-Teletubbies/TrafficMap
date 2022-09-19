@@ -5,6 +5,9 @@ import '../css/Main.css'
 import '../css/input.css'
 import Search from '../pages/Search'
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import loading from '../images/loading.gif';
+// import Modal from 'react-modal';
+import {button} from 'react-bootstrap';
 
 const baseurl = 'http://localhost:9000/'         //베이스 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -21,13 +24,21 @@ const SearchBar = (props) => {
     const [startBuilding, setStartBuildingInfo] = useState();
     const [endBuilding, setEndBuildingInfo] = useState();
 
+    const [showPopup, setShowPopup] = useState(false);
+    // const togglePopup = (e) => {
+    //     setShowPopup(e.target.value)
+    // };
+    
+
     const location = useLocation();
 
     const handleValue = (e) => {        //검색어 입력받는 부분
         setSearchValue(e.target.value);
+        // setShowPopup(e.target.value)
     }
     const handleKeyPress = (e) => { //enter키 추적용 -> 검색 결과창으로 이동시킴
         if(e.key === 'Enter'){
+            setShowPopup(e.target.value);
             if(src == '/search' && (searchValue.includes('번 버스') || searchValue.includes('번버스'))){
                 
                 searchOnlyBus();
@@ -68,6 +79,7 @@ const SearchBar = (props) => {
         .then(function(res){
             console.log(res.data);
             setBuildingList(res.data);
+            setShowPopup(false);
             navigate(src, {
                 state: {
                     keyword: searchValue,
@@ -123,7 +135,7 @@ const SearchBar = (props) => {
         busstop.post('api/bus/busStop', null, {params: {busStopName: searchValue}})
         .then(function(res){
             searchBus(res.data);
-            console.log('버스정륙소');
+            console.log('버스정류소');
             console.log(res.data);
         }).catch(function(error){
             console.log('에러');
@@ -139,6 +151,14 @@ const SearchBar = (props) => {
             onChange={handleValue}
             onKeyDown={handleKeyPress}
             />
+            {showPopup? (
+            <div className="Popup" isOpen={handleKeyPress} value='false' style={{position: "fixed", width:"100%", height: "100%", top: "0px", backgroundColor: "white", zIndex: "10"}}>
+                <div style={{top: "45%"}}>
+                <img className="loadingspinner" src={loading}/>
+                <p>로딩중입니다. 잠시만 기다려주세요</p>
+                </div>
+            </div>
+            ): null}
         </>
     );
 };

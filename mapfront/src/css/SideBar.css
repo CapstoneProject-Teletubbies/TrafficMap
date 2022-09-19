@@ -55,7 +55,9 @@
   }
   .sidebarbuttone {
     position: relative;
-    background-color: rgb(244, 244, 244);
+    background-color: rgb(255, 255, 255);
+    border: none;
+    box-shadow: -1px 1px 7px 1px gray;
     left: 175px;
     top: 0px;
     width: 40px;
