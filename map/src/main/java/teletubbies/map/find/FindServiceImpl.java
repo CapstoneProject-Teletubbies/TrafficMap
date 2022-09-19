@@ -180,7 +180,7 @@ public class FindServiceImpl implements FindService {
 
             long end0 = System.currentTimeMillis();
             System.out.println("총 시간 : " + (end0 - start0) / 1000.0);
-            System.out.println("dtos = " + dtos);
+//            System.out.println("dtos = " + dtos);
             return dtos;
 
         }
@@ -211,6 +211,10 @@ public class FindServiceImpl implements FindService {
 
             org.json.JSONObject object = XML.toJSONObject(responseResult.get(i));
             org.json.JSONObject response = (org.json.JSONObject) object.get("response");
+            if(response == null) { //호출 실패하면(아마 null일듯)
+                findElevatorByAPI(ele); // 함수 다시 불러
+//                return null;
+            }
             org.json.JSONObject body = (org.json.JSONObject) response.get("body");
             //System.out.println(body);
             if (!(body.get("items").equals(""))) { // 엘리베이터가 없으면 body":{"items":"","numOfRows":,"pageNo":,"totalCount":} 이런식으로 반환
@@ -342,7 +346,7 @@ public class FindServiceImpl implements FindService {
                     }
                 }
             }
-            System.out.println(j);
+//            System.out.println(j);
             return dtos;
         } else {
             return null;

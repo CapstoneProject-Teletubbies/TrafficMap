@@ -238,7 +238,7 @@ public class SubwayServiceImpl implements SubwayService {
         String stinCd = subwayNumDto.getSTIN_CD();
         String railOprIsttCd = subwayNumDto.getRAIL_OPR_ISTT_CD();
 
-        System.out.println("lnCd:"+lnCd+" stin:"+stinCd+" rail:"+railOprIsttCd);
+//        System.out.println("lnCd:"+lnCd+" stin:"+stinCd+" rail:"+railOprIsttCd);
 
         //URI 생성
         UriComponents uri = UriComponentsBuilder
@@ -256,7 +256,7 @@ public class SubwayServiceImpl implements SubwayService {
         JSONObject object = (JSONObject) parser.parse(result.getBody());
         JSONObject header = (JSONObject) object.get("header");
 
-        System.out.println(object);
+//        System.out.println(object);
 
         if (header.get("resultCnt").toString().equals("0")) {  // 장애인화장실이 없는 역이면
             return null;

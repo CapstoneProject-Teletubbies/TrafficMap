@@ -71,6 +71,10 @@ public class BusServiceImpl implements BusService {
         //xml 형식을 json 형식으로 변환
         JSONObject response = XML.toJSONObject(result.getBody());
         JSONObject ServiceResult = response.getJSONObject("ServiceResult"); // ServiceResult의 value들
+        if(ServiceResult == null) { //아마 호출실패
+            findBusStopByBusStopName(name); //다시불러
+//            return null;
+        }
         JSONObject msgHeader = ServiceResult.getJSONObject("msgHeader"); //msgHeader의 value들
 
         if(msgHeader.get("resultCode").equals(0)) { // 결과가 있을 경우
@@ -81,7 +85,7 @@ public class BusServiceImpl implements BusService {
 
                 List<BusStopDto> dtos = new ArrayList<>();
 
-                System.out.println("정류소명으로 정류소(ID) 검색");
+//                System.out.println("정류소명으로 정류소(ID) 검색");
                 for (int i = 0; i < itemList.length(); i++) { // 받아올 데이터 개수만큼 반복
                     JSONObject array = itemList.getJSONObject(i);
                     BusStopDto busStopDto = new BusStopDto();
@@ -153,7 +157,7 @@ public class BusServiceImpl implements BusService {
 
         JSONObject response = XML.toJSONObject(result.getBody()); // xml 형식을 json 형식으로 변환
         JSONObject ServiceResult = response.getJSONObject("ServiceResult"); //ServiceResult의 value들
-        System.out.println("ServiceResult = " + ServiceResult);
+//        System.out.println("ServiceResult = " + ServiceResult);
         JSONObject msgHeader = ServiceResult.getJSONObject("msgHeader"); //msgHeader의 value들
         Integer totalCount = msgHeader.getInt("totalCount"); // 총 개수
 
@@ -165,7 +169,7 @@ public class BusServiceImpl implements BusService {
 
                 List<BusLocationDto> dtos = new ArrayList<>();
 
-                System.out.println("routeID로 버스 위치 조회");
+//                System.out.println("routeID로 버스 위치 조회");
                 for (int i = 0; i < totalCount; i++) { // 총 개수 만큼 반복
                     JSONObject array = itemList.getJSONObject(i);
                     BusLocationDto busLocationDto = new BusLocationDto();
@@ -267,7 +271,7 @@ public class BusServiceImpl implements BusService {
 
             List<BusRouteDetailDto> dtos = new ArrayList<>();
 
-            System.out.println("routeID로 상세 정보 조회");
+//            System.out.println("routeID로 상세 정보 조회");
             BusRouteDetailDto busRouteDetailDto = new BusRouteDetailDto();
 
             Integer ROUTEID = itemList.getInt("ROUTEID"); // 버스 노선 고유번호
@@ -335,7 +339,7 @@ public class BusServiceImpl implements BusService {
             JSONArray itemList = msgBody.getJSONArray("itemList"); //itemList의 value들
 
             List<BusRouteListDto> dtos = new ArrayList<>();
-            System.out.println("routeID로 노선 검색");
+//            System.out.println("routeID로 노선 검색");
             for (int i = 0; i < totalCount; i++) { // 정류장 개수만큼 반복
                 JSONObject array = itemList.getJSONObject(i);
                 BusRouteListDto busRouteListDto = new BusRouteListDto();
@@ -425,7 +429,7 @@ public class BusServiceImpl implements BusService {
                 JSONArray itemList = msgBody.getJSONArray("itemList"); //itemList의 value들
 
                 List<BusInfoDto> dtos = new ArrayList<>();
-                System.out.println(" 버스번호로 버스정보 조회");
+//                System.out.println(" 버스번호로 버스정보 조회");
 
                 int i = 0;
                 int j = 0;
@@ -544,7 +548,7 @@ public class BusServiceImpl implements BusService {
 
             if(msgBody.get("itemList").getClass().getName() == "org.json.JSONArray") { // itemList가 JSONArray라면 (여러개)
                 JSONArray itemList = msgBody.getJSONArray("itemList"); // itemList의 value들
-                System.out.println("정류소 ID로 버스 도착정보목록 조회");
+//                System.out.println("정류소 ID로 버스 도착정보목록 조회");
                 List<BusArrivalDto> dtos = new ArrayList<>();
 
                 for (int i = 0; i < itemList.length(); i++) { // 받아올 데이터 개수만큼 반복
