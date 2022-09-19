@@ -52,15 +52,15 @@ const Modal = (props) => {
               return(
                 <SwiperSlide>
                   <img src={line+obj+'.png'}
-                style={{width: "100%", height: "100%"}}></img>
+                style={{width: "100%", height: "100%", objectFit: "contain"}}></img>
                 </SwiperSlide>
               );
             })}
           </Swiper>
           }
           {!Array.isArray(url) && url &&
-          <div style={{swiperStyle}}>
-            <img src={url} style={{position: "relative", width: "100%", height: "100%"}}></img>
+          <div style={swiperStyle}>
+            <img src={url} style={{position: "relative", width: "100%", height: "100%", objectFit: "contain"}}></img>
           </div>}
           {!url && 
             <div style={{position: "relative", top: "40%"}}>

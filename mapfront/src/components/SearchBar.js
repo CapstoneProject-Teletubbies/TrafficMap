@@ -116,6 +116,7 @@ const SearchBar = (props) => {
         bus.post('api/bus/busInfo/', null, {params: {busName: searchValue}})
         .then(function(res){
             console.log(res.data);
+            setShowPopup(false);
             navigate('/search', {
                 state: {
                     keyword: searchValue,
@@ -152,7 +153,7 @@ const SearchBar = (props) => {
             onKeyDown={handleKeyPress}
             />
             {showPopup? (
-            <div className="Popup" isOpen={handleKeyPress} value='false' style={{position: "fixed", width:"100%", height: "100%", top: "0px", backgroundColor: "white", zIndex: "10"}}>
+            <div className="Popup" isOpen={handleKeyPress} value='false' style={{position: "fixed", width:"100%", height: "100%", top: "0px", left:"0px", backgroundColor: "white", zIndex: "10"}}>
                 <div style={{top: "45%"}}>
                 <img className="loadingspinner" src={loading}/>
                 <p>로딩중입니다. 잠시만 기다려주세요</p>
