@@ -300,6 +300,8 @@ function Main() {
             
             markers.push(markerone);
           }
+
+        
         },
         error: function(err){
           console.log("계단 못받아옴");
@@ -310,6 +312,11 @@ function Main() {
         for(var i = 0; i < markers.length; i++){
           markers[i].setMap(testmap);
         }
+        markerCluster = new Tmapv2.extension.MarkerCluster({
+          markers: markers,
+          // icons: "${stairs}",
+          map: testmap
+        });
       }else if(markers && !${checked}){
         for(var i = 0; i < markers.length; i++){
           markers[i].setMap(null);
