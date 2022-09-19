@@ -130,7 +130,12 @@ const BusStopDetailInfo = (props)=>{
         var d = r* c;
         
         console.log("km: "+d);
-        setDist(Math.round(d*1000));
+        if(d < 1){
+            setDist(Math.round(d*1000)+"m");
+        }else{
+            setDist(parseInt(d)+"km");
+        }
+        
     
     }, [])
     //////////////
@@ -225,7 +230,7 @@ const BusStopDetailInfo = (props)=>{
                             <div style={{position: "relative", width:"100%"}}>
                                 <div style={{fontSize: "1.2rem", float: "left", padding: "9px"}}>
                                     {bustop.bstopnm} <br></br>
-                                    <div style={{fontSize: "1.0rem", float: "left", paddingLeft: "2px"}}>{dist}m</div>
+                                    <div style={{fontSize: "1.0rem", float: "left", paddingLeft: "2px"}}>{dist}</div>
                                 </div>
                                 <div className="" style={{position: "relative", width: "170px", float: "right", right: "0px", marginTop: "13%"}}>
                                     <button id="button1" onTouchEnd={handleStartButton} type="button" class="btn btn-outline-primary btn-sm col-5" style={{borderRadius: "20px", height: "35px", marginLeft: "8px"}}>출발</button>
