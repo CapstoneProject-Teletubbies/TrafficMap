@@ -2,7 +2,6 @@ import React from 'react';
 import '../css/BusRouteList.css'
 import bus from '../images/bus_white.png'
 
-
 const BusRouteList = (props) => {
     var ibus, imnum, num, arrow, low, mtop, turnaround;
 

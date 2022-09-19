@@ -20,6 +20,8 @@ function BusRoute(){
     const [reallocation, setRealLocation] = useState();
     const [isitbus, setIsItBus] = useState();
 
+    const [color, setColor] = useState(); //버스 분류 색깔
+
     const navigate = useNavigate();
 
     const handlebackButton = () => {
@@ -30,6 +32,14 @@ function BusRoute(){
     useEffect(() => {                               //받아온 버스 정보 버스 노선 정보, 버스 실시간 위치 정보
         setBusRoute(location.state.busroute);
         setBusInfo(location.state.props);
+        var id = location.state.props.routetpcd;
+        switch (id) {
+            case 1: setColor('#009300'); break;       //지선
+            case 2: setColor('#0054FF'); break;        //간선
+            case 4: setColor('#DB0000'); break;         //광역
+            case 6: setColor('#87CE00'); break;   //마을버스
+            case 7: setColor('#FFE400'); break;      //순환
+        }
     })
     useEffect(()=>{             
         if(busInfo){
@@ -79,7 +89,7 @@ function BusRoute(){
                     onClick={handlebackButton}
                     ></i>
                 </div>
-                <div className="" style={{width: "60%", fontSize: "2.0em"}}>
+                <div className="" style={{width: "60%", fontSize: "2.0em", color: color}}>
                     {busInfo.routeno}          
                 </div>
                 <div style={{width: "20%"}}>     
