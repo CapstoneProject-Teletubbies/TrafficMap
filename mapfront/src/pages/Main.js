@@ -201,7 +201,7 @@ function Main() {
     script.innerHTML = ` 
         var testmap;
         var zoomIn;
-        var marker;
+        var marker, markerCluster;
 
         function initTmap(pos) {
             var map = new Tmapv2.Map("TMapApp", {
@@ -318,6 +318,9 @@ function Main() {
           map: testmap
         });
       }else if(markers && !${checked}){
+        if(markerCluster){
+          markerCluster.destroy();
+        }
         for(var i = 0; i < markers.length; i++){
           markers[i].setMap(null);
         }
