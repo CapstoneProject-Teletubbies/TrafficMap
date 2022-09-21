@@ -91,3 +91,7 @@
   
   /* 체크박스는 display:none;을 주면 데이터 처리가 안됨 */
   #chk{ position: absolute; left: -999em; }
+
+  .img{
+    z-index: 100;
+  }

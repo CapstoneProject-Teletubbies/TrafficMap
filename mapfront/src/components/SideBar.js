@@ -1,15 +1,22 @@
 import React from 'react';
 import styles from '../css/SideBar.css'
 import { useState, useEffect, useRef } from 'react';
+import traffic from "../images/trafficlight.png";
+import walk from "../images/walkp.png";
+import right from "../images/turnright.png";
+import left from "../images/turnleft.png";
+
 
 const SideBar =({width=350, children, totalDistance, totalTime})=>{
     const [isOpen, setOpen] = useState(false);
     const [xPosition, setX] = useState(width);
     const [boxShadow, setBoxShadow] = useState();
     const side = useRef();
+    // const [img, setImg] = useState();
 
     const [distance, setDistance] = useState();
     const [time, setTime] = useState();
+    var Img;
 
     const toggleMenu = () => {
         if(xPosition > 0){
@@ -83,10 +90,31 @@ const SideBar =({width=350, children, totalDistance, totalTime})=>{
                 <div className="sidebarcontent" style={{position: "relative", height: "85%", overflowY: "scroll", top: "-70px"}}>
                     <div className='list-group' style={{overflowY: "scroll"}}>
                     {children && children.map((obj, index)=>{
+                        var Img;
+                        if (obj.includes("횡단보도")){
+                            // setImg(traffic);
+                            Img=traffic;
+                            
+                        }
+                        else if (obj.includes("우회전")){
+                            // setImg(right);
+                            Img=right;
+                        }
+                        else if (obj.includes("좌회전")){
+                            // setImg(left);
+                            Img=left;
+                        }
+                        else{
+                            // setImg(walk);
+                            Img=walk; 
+                        }
+
+                        
                         return(
                             <li className='list-group-item'>
-                                {obj}
+                                <img src={Img} style={{width:"30px", height: "30px" }}/>{obj}
                             </li>
+                            
                         );
                     })}  
                     </div>  
