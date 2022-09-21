@@ -27,7 +27,7 @@ function BusRoute(){
     const [isitbus, setIsItBus] = useState();
 
     const [color, setColor] = useState(); //버스 분류 색깔
-    const [img, setImg ] = useState();
+    const [img, setImg ] = useState(bus);
 
     const navigate = useNavigate();
 
@@ -99,7 +99,7 @@ function BusRoute(){
                     ></i>
                 </div>
                 <div className="" style={{width: "60%", fontSize: "2.0em", color: color}}>
-                <img src={img} style={{width:"30px",height:"30px" , marginRight:"13px"}}/>{busInfo.routeno}          
+                <img src={img} style={{width:"25px",height:"25px" , marginRight:"13px", marginBottom: "3px"}}/><text style={{fontSize: "25px"}}>{busInfo.routeno}</text>     
                 </div>
                 <div style={{width: "20%"}}>     
                 </div>

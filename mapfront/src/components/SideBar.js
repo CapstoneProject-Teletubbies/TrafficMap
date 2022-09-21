@@ -64,7 +64,6 @@ const SideBar =({width=350, children, totalDistance, totalTime})=>{
         }
     }, [children])
 
-
     return(
         <div className="sidebarmain">
             
