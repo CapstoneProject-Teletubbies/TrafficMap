@@ -67,13 +67,14 @@ const SideBar =({width=350, children, totalDistance, totalTime})=>{
 
     return(
         <div className="sidebarmain">
-            <div ref={side}  className="innersidbar" style={{ width: `${width}px`, height: window.innerHeight,  transform: `translatex(${-xPosition}px)`, boxShadow: boxShadow}}>
+            
+            <div ref={side}  className="innersidbar" style={{ width: `${width}px`, height: window.innerHeight,  transform: `translatex(${-xPosition}px)`, backgroundColor: "yellowgreen", boxShadow: boxShadow}}>
                 <button  onClick={() => toggleMenu()}
-                className="sidebarbutton">
-                상세
+                className="sidebarbutton" style={{backgroundColor:"yellowgreen"}}>
+                도보 경로
                 </button>
                 <div style={{width: "100%", height: "10%", top: "-70px", textAlign: "left", }}>
-                    <div style={{position: "relative",textAlign: "left", marginLeft: "15px", top: "35%"}}>           
+                    <div style={{position: "relative",textAlign: "left", marginLeft: "15px", top: "35%"}}>       
                     <text style={{fontSize: "20px", fontWeight: "1000"}}> {time} </text>
                     <div class="vr" style={{fontWeight: "100"}}></div>
                     <text style={{fontSize: "18px", fontWeight: "600"}}>  {distance}</text>

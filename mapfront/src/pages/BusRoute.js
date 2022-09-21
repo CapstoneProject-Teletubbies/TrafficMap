@@ -1,6 +1,12 @@
 import React, {useState, useEffect} from 'react';
 
 import axios from "axios";
+import bus from "../images/bus.png";
+import bus1 from "../images/bus1.png";
+import bus2 from "../images/bus2.png";
+import bus3 from "../images/bus3.png";
+import bus4 from "../images/bus4.png";
+import bus5 from "../images/bus5.png";
 
 import Button from '../components/Button';
 import BusRouteList from '../components/BusRouteList';
@@ -21,6 +27,7 @@ function BusRoute(){
     const [isitbus, setIsItBus] = useState();
 
     const [color, setColor] = useState(); //버스 분류 색깔
+    const [img, setImg ] = useState();
 
     const navigate = useNavigate();
 
@@ -34,11 +41,11 @@ function BusRoute(){
         setBusInfo(location.state.props);
         var id = location.state.props.routetpcd;
         switch (id) {
-            case 1: setColor('#009300'); break;       //지선
-            case 2: setColor('#0054FF'); break;        //간선
-            case 4: setColor('#DB0000'); break;         //광역
-            case 6: setColor('#87CE00'); break;   //마을버스
-            case 7: setColor('#FFE400'); break;      //순환
+            case 1: setColor('#009300'); setImg(bus1); break;       //지선,초록색
+            case 2: setColor('#0054FF'); setImg(bus2); break;        //간선,파란색
+            case 4: setColor('#DB0000'); setImg(bus3); break;         //광역,빨간색
+            case 6: setColor('#87CE00'); setImg(bus4); break;   //마을버스,연두색
+            case 7: setColor('#FFE400'); setImg(bus5); break;      //순환, 노란색
         }
     })
     useEffect(()=>{             
@@ -80,9 +87,11 @@ function BusRoute(){
     if(busInfo && busRoute){
 
     return(
-        <div className="" >
+        <div className="" >        
             <nav className="navbar navbar-default" style={{position: "fixed", width: "100%", zIndex: 5, backgroundColor: "white", boxShadow: "0px 1px 5px gray"}}>
+            
                 <div style={{width: "20%"}}>
+                
                     <i
                     class="bi bi-arrow-left-circle"
                     style={{ fontSize: "2.2rem", }}
@@ -90,7 +99,7 @@ function BusRoute(){
                     ></i>
                 </div>
                 <div className="" style={{width: "60%", fontSize: "2.0em", color: color}}>
-                    {busInfo.routeno}          
+                <img src={img} style={{width:"30px",height:"30px" , marginRight:"13px"}}/>{busInfo.routeno}          
                 </div>
                 <div style={{width: "20%"}}>     
                 </div>
