@@ -2,6 +2,8 @@ import React from 'react';
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation, Pagination } from "swiper";
 
+import {MapInteractionCSS} from 'react-map-interaction';
+
 import "swiper/swiper.min.css"
 import '../css/modal.css';
 
@@ -60,7 +62,9 @@ const Modal = (props) => {
           }
           {!Array.isArray(url) && url &&
           <div style={swiperStyle}>
+            <MapInteractionCSS>
             <img src={url} style={{position: "relative", width: "100%", height: "100%", objectFit: "contain"}}></img>
+            </MapInteractionCSS>
           </div>}
           {!url && 
             <div style={{position: "relative", top: "40%"}}>
