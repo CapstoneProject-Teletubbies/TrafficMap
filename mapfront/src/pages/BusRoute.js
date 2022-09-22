@@ -2,11 +2,11 @@ import React, {useState, useEffect} from 'react';
 
 import axios from "axios";
 import bus from "../images/bus.png";
-import bus1 from "../images/bus1.png";
-import bus2 from "../images/bus2.png";
-import bus3 from "../images/bus3.png";
-import bus4 from "../images/bus4.png";
-import bus5 from "../images/bus5.png";
+import bus1 from "../images/bus1_white.png";
+import bus2 from "../images/bus2_white.png";
+import bus3 from "../images/bus3_white.png";
+import bus4 from "../images/bus4_white.png";
+import bus5 from "../images/bus5_white.png";
 
 import Button from '../components/Button';
 import BusRouteList from '../components/BusRouteList';
@@ -127,7 +127,7 @@ function BusRoute(){
                             }     
                         }
                         return(
-                            <BusRouteList businfo={reallocation[bus]} isit={isit} bstopnm={obj.bstopnm} bstopid={obj.bstopid} sbstopid={obj.short_BSTOPID} turn={busInfo.turn_BSTOPID}></BusRouteList>
+                            <BusRouteList businfo={reallocation[bus]} isit={isit} img={img} bstopnm={obj.bstopnm} bstopid={obj.bstopid} sbstopid={obj.short_BSTOPID} turn={busInfo.turn_BSTOPID}></BusRouteList>
                         )
                     })}
                 </div>

@@ -1,14 +1,14 @@
 import React from 'react';
 import '../css/BusRouteList.css'
-import bus from '../images/bus_white.png'
 
 const BusRouteList = (props) => {
     var ibus, imnum, num, arrow, low, mtop, turnaround;
 
     if(props.isit === true){                    //현재 위치에 버스가 있나?
+        
         imnum = (props.businfo.busid)%10000;
         num = <h8>{imnum}</h8>
-        ibus = <img src={bus} style={{width: "30px", height: "30px"}}></img>;
+        ibus = <img src={props.img} style={{width: "29px", height: "29px"}}></img>;
         arrow = null;
         if(props.businfo.low_TP_CD === 1){
             low = <h9>저상</h9>

@@ -70,7 +70,7 @@ const BuildingInfo = (props) => {
         <li className="list-group-item" onClick={searchBusRouteInfo} style={{paddingLeft: "10px"}}>
             <div className="ms-2" style={{ textAlign: "left"}}>
                 <div className="fw-bold" style={{ textAlign: "left", color: color}}>
-                    <img src={busIcon} style={{width: "17px", height: "18px", marginRight: "5px", top: "-1px"}}></img>
+                    <img src={busIcon} style={{width: "17px", height: "18px", marginRight: "6px", top: "-1px"}}></img>
                     {props.obj.routeno}
                 </div>
                 {props.obj.origin_BSTOPNM} {arrow} {props.obj.turn_BSTOPNM}
