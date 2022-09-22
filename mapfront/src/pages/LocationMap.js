@@ -5,8 +5,8 @@ import '../css/Main.css';
 import SearchBar from "../components/SearchBar";
 import Button from "../components/Button";
 import getLocation from '../getLocation';
-import plus from "../images/plus.png";
-import minus from "../images/minus.png"
+import plus from "../images/plussign.png";
+import minus from "../images/minussign.png"
 import target from "../images/location.png"
 import BuildingDetailInfo from "../components/BuildingDetailInfo"
 import BusStopDetailInfo from '../components/BusStopDetailInfo';
@@ -307,8 +307,8 @@ function LocationMap() {
 
     <div className="rightbarbutton">
       <div className="zoom">
-        <Button onClick={handlePlusButton} src={plus}/>
-        <Button onClick={handleMinusButton} src={minus}/>
+      <button className="plusbutton" onClick={handlePlusButton} style={{backgroundColor: "#A6A6A6", border: "none", opacity: "0.8", borderRadius: "50px",  width: "42px", right: "-1px",}}><img src={plus} style={{width: "80%", height: "70%"}}></img></button>
+        <button className="minusbutton" onClick={handleMinusButton} style={{backgroundColor: "#A6A6A6", border: "none", opacity: "0.8",  borderRadius: "50px",  marginTop: "10px", width: "42px", right: "-1px",}}><img src={minus} style={{width: "80%", height: "70%"}}></img></button>
         {/* <SideBar /> */}
       </div>
     </div>

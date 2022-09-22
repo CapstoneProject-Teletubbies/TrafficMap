@@ -130,6 +130,7 @@ const BuildingDetailInfo = (props) => {
             case '상월곡역': name = '상월곡역(한국과학기술연구원)'; break;
             case '화랑대역': name = '화랑대역(서울여대입구)'; break;
             case '공릉역': name = '공릉역(서울산업대입구)'; break;
+            default : name=subname; break;
         }
 
 
@@ -149,7 +150,7 @@ const BuildingDetailInfo = (props) => {
             console.log("지하철 입체지도 정보 못받아옴");
         })
         }else{
-            
+            console.log(name);
         subwaymap2.post('api/subway/photo2', null, {params: {line: line[0], name: name}})
         .then(function(res){
             console.log(res.data);
@@ -392,7 +393,7 @@ const BuildingDetailInfo = (props) => {
                             {toiletLocation.map((obj, index)=>{
                                 console.log(obj.dtlLoc);
                                 return(
-                                    <div style={{boxShadow: "-1px -1px 100px 1px gray", borderRadius: "3px"}}>
+                                    <div style={{boxShadow: "0px 0px 2px 1px gray", borderRadius: "3px"}}>
                                         <text style={{fontFamily: 'Nanum Gothic Coding', fontSize: "1rem"}}>{obj.dtlLoc}</text>
                                     </div>
                                 );
@@ -450,7 +451,7 @@ const BuildingDetailInfo = (props) => {
                                         arv = (obj.arvlMsg2).split('후')[0];
                                     }
                                    return(
-                                    <div className="row" style={{textAlign: "left"}}>
+                                    <div className="row" style={{textAlign: "left",}}>
                                         <div className="col-6" style={{padding: "0px", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden",}}>
                                             <text style={{}}><h8>{name[0]}</h8></text>
                                         </div>
