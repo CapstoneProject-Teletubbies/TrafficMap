@@ -49,7 +49,7 @@ const SideBar =({width=200, children, onCheck})=>{
 
 
     return(
-        <div className="sidebarmain">
+        <div className="sidebarmain" style={{zIndex: "3"}}>
             <div ref={side}  className="innersidbare" style={{ width: `${width}px`, height: "100px", top:"60%", right: "0px", transform: `translatex(${-xPosition}px)`, boxShadow: boxShadow}}>
                 <button  onClick={() => toggleMenu()}
                 className="sidebarbuttone" style={{left: "-120px", zIndex: "0"}} >
