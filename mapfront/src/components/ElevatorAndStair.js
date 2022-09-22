@@ -2,6 +2,8 @@ import React from 'react';
 import { useState, useEffect, useRef } from 'react';
 import { ListGroup } from 'react-bootstrap';
 
+import stair from "../images/stairs.png"
+
 const SideBar =({width=200, children, onCheck})=>{
     const [isOpen, setOpen] = useState(false);
     const [xPosition, setX] = useState(-width);
@@ -57,11 +59,12 @@ const SideBar =({width=200, children, onCheck})=>{
                     <div className='list-group' style={{}}>
 
                         <div className="row">
-                            <div className="" style={{marginTop: "12px"}}>
+                            <div className="" style={{marginTop: "12%",}}>
                                 <label for="chk">
                                     <input type="checkbox" id="chk" onChange={e => {onCheck(e.target.checked, e.target.value)}} style={{width: "35px", float: "left", marginTop: "10px", marginLeft: "10px"}}></input>
                                     <i class="circle"></i>
-                                    계단
+                                    <img src={stair} style={{width: "17px", height: "17px", top: "-2px", marginLeft: "5px", marginRight: "5px"}}></img>
+                                    <text style={{fontSize:"17px"}}>계단</text>
                                 </label>
                             </div>
                             {/* <div className="col-9" style={{alignSelf: "center", marginTop: "10px"}}>

@@ -57,3 +57,27 @@ img{
     width: 45px;
     height: 40px;
 }
+.navbutton{
+    box-shadow: 1px 1px 9px 1px #A6A6A6;
+}
+.navbutton:active{
+    box-shadow: 0px 0px 1px 1px gray;
+}
+.targetbutton{
+    box-shadow: 1px 1px 7px 1px gray;
+}
+.targetbutton:active{
+    box-shadow: 0px 0px 1px 1px gray;
+}
+.plusbutton{
+    box-shadow: 1px 1px 9px #A6A6A6;
+}
+.plusbutton:active{
+    box-shadow: inset 0px 0px 9px 1px gray;
+}
+.minusbutton{
+    box-shadow: 1px 1px 9px #A6A6A6;
+}
+.minusbutton:active{
+    box-shadow: inset 0px 0px 9px 1px gray;
+}
