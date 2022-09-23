@@ -48,6 +48,21 @@ const BuildingDetailInfo = (props) => {
 
     SwiperCore.use([Navigation, Pagination]);
 
+    var element = document.getElementById("arrowrefresh");
+
+    if(element){
+        
+        element.addEventListener("click", function(e){
+
+        element.classList.remove("bounce");
+
+        console.log(element.offsetWidth);
+
+        element.classList.add("bounce");
+
+        }, false);
+    }
+
   const swiperParams = {
     // navigation: {nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev',},
     // slidesPerView: 1,
@@ -183,6 +198,7 @@ const BuildingDetailInfo = (props) => {
 
     const searchsubwaytime = () => {        //새로고침 눌렀을때 지하철 실시간 정보 받아옴
 
+
         const subwayinfo = axios.create({
             baseURL: baseurl
         })
@@ -304,6 +320,8 @@ const BuildingDetailInfo = (props) => {
             
         }
     };
+
+    
     useEffect(()=>{
         
         window.addEventListener('touchstart', handleCloseInfo);
@@ -431,7 +449,7 @@ const BuildingDetailInfo = (props) => {
                                     {iselevator && <img src={elevator} style={{width: "24px", height: "24px", marginRight: "7px", float: "left"}}></img>}
                                     
                                     <button id='arrowbutton' onClick={searchsubwaytime} style={{backgroundColor: "white", border: "none", padding: "0px", width: "26px", height: "26px", float: "right"}}>
-                                        <img id='arrowrefresh' src={arrowsrefresh} style={{width: "26px", height: "26px", padding: "0px", left : "-1px", top: "-2px"}}></img>
+                                        <img id='arrowrefresh' src={arrowsrefresh} style={{padding: "0px", left : "-1px", top: "-2px"}}></img>
                                     </button>
                                     <div style={{top: "-2px"}}>
                                     <i class="bi bi-map" onClick={openMadal} style={{float: "right", paddingRight: "10px", fontSize: "20px", height: "24px"}}></i></div>
