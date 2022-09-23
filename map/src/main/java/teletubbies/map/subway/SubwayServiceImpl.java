@@ -169,8 +169,13 @@ public class SubwayServiceImpl implements SubwayService {
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 한글깨짐 방지
 
         SubwayNumDto subwayNumDto = new SubwayNumDto();
-        subwayNumDto = callSubwayNum().get(subwayName);
-
+        try {
+            subwayNumDto = callSubwayNum().get(subwayName);
+        }
+        catch(Exception e){
+            System.out.println("검색 안됨: "+subwayName);
+            return null;
+        }
 
         int lnCd = Integer.parseInt(subwayNumDto.getLN_CD());
         int stinCd = Integer.parseInt(subwayNumDto.getSTIN_CD());
@@ -232,7 +237,13 @@ public class SubwayServiceImpl implements SubwayService {
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 한글깨짐 방지
 
         SubwayNumDto subwayNumDto = new SubwayNumDto();
-        subwayNumDto = callSubwayNum().get(subwayName);
+        try {
+            subwayNumDto = callSubwayNum().get(subwayName);
+        }
+        catch(Exception e){
+            System.out.println("검색 안됨: "+subwayName);
+            return null;
+        }
 
         String lnCd = subwayNumDto.getLN_CD();
         String stinCd = subwayNumDto.getSTIN_CD();
