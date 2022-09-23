@@ -43,7 +43,7 @@ function FindWay(props){
     const mylocation = location.state.mylocation;
 
     const handleSuccess = (pos) => {                //현재 내 위치 받아오기
-        console.log("내위치 받아옴");
+        console.log("@@//////////////내위치 받아옴//////////////@@@");
         const {latitude, longitude } = pos.coords;
 
         if(!startPlace){
@@ -130,7 +130,6 @@ function FindWay(props){
     }
 
     useEffect(()=>{
-        navigator.geolocation.watchPosition(handleSuccess);
         console.log("////////////////////////////////////////");
         if(location.state.mystartlocation){
             console.log(location.state.mystartlocation);
@@ -178,6 +177,7 @@ function FindWay(props){
             }  
             // if(location.state.startBuilding && location.state.endBuilding){
             if(startPlace && endPlace){
+                navigator.geolocation.getCurrentPosition(handleSuccess);
                 var startlat, startlng, endlat, endlng;
                 const besseltm = "+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 +y_0=500000 +ellps=bessel +units=m +no_defs +towgs84=-115.80,474.99,674.11,1.16,-2.31,-1.63,6.43"
                 const wgs84 = "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees" 
@@ -229,20 +229,26 @@ function FindWay(props){
         openMadal();
     }
 
+    
+  useEffect(()=>{
+    navigator.geolocation.watchPosition(handleSuccess);
+
+  }, [])
+
     useEffect(()=>{
         var startLat, startLng;
         var endLat, endLng;
         var middleLat, middleLng;
         var posx, posy;
-        var lat, lng;
         const besseltm = "+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 +y_0=500000 +ellps=bessel +units=m +no_defs +towgs84=-115.80,474.99,674.11,1.16,-2.31,-1.63,6.43"
         const wgs84 = "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees" 
 
-        navigator.geolocation.watchPosition(handleSuccess);
+        navigator.geolocation.getCurrentPosition(handleSuccess);
+
         if(findLocation){
             console.log("있다!");
-            lat = findLocation.latitude;
-            lng = findLocation.longitude;
+            var lat = findLocation.latitude;
+            var lng = findLocation.longitude;
         }
         
         if(both){
@@ -322,6 +328,10 @@ function FindWay(props){
                         iconSize : new Tmapv2.Size(24, 38),
                         map : map
                 });
+
+                if(marker_myl){
+                    marker_myl.setMap(null);
+                } 
 
                 var marker_myl = new Tmapv2.Marker({
                     position : new Tmapv2.LatLng(${startLat}, ${startLng}),
@@ -479,9 +489,11 @@ function FindWay(props){
             if(marker_myl){
                 marker_myl.setMap(null);
             } 
+            console.log("@@@@@@@@@@@@마이랫 테스으@@@@@@@@@@");
+            console.log(${lat});
 
             var marker_myl = new Tmapv2.Marker({
-                position : new Tmapv2.LatLng(${mylat}, ${mylon}),
+                position : new Tmapv2.LatLng(${lat}, ${lng}),
                 icon: "${mymarker}",
                 iconSize: new Tmapv2.Size(40, 40), 
                 map: map
@@ -491,7 +503,7 @@ function FindWay(props){
         script.type = "text/javascript";
         script.async = "async";
         document.head.appendChild(script);
-    }, [mylat, both]);
+    }, [handleSuccess, both, findLocation]);
 
 
     return(
