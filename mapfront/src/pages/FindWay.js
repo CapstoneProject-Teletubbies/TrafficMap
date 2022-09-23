@@ -478,10 +478,8 @@ function FindWay(props){
                 resultdrawArr.push(polyline_);
             }
 
-            if(${both}){    
-                console.log("@@@@@@@@@@@@아니 씨발@!@@@@@@@@@@@@@@");   
+            if(${both}){      
                 if(!checki){
-                    console.log("@@@@@@@@@@@@@@@@이닛맵@@@@@@@@@@@@@");
                     map = initTmap(); 
                 } 
             }       
@@ -489,8 +487,6 @@ function FindWay(props){
             if(marker_myl){
                 marker_myl.setMap(null);
             } 
-            console.log("@@@@@@@@@@@@마이랫 테스으@@@@@@@@@@");
-            console.log(${lat});
 
             var marker_myl = new Tmapv2.Marker({
                 position : new Tmapv2.LatLng(${lat}, ${lng}),
