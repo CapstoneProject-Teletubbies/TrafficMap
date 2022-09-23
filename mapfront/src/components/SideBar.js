@@ -7,7 +7,7 @@ import right from "../images/turnright.png";
 import left from "../images/turnleft.png";
 
 
-const SideBar =({width=350, children, totalDistance, totalTime})=>{
+const SideBar =({width=330, children, totalDistance, totalTime})=>{
     const [isOpen, setOpen] = useState(false);
     const [xPosition, setX] = useState(width);
     const [boxShadow, setBoxShadow] = useState();
