@@ -319,7 +319,18 @@ function ResultSearch() {
           //searchmarker();
           console.log("Init false");
         }
-        createmarker();  
+        
+        var mymarker;
+        if(mymarker){
+          mymarker.setMap(null);
+        }
+        loc = new Tmapv2.LatLng(${lat}, ${lng});
+        mymarker = new Tmapv2.Marker({
+          position: loc,
+          icon: "${mylocation}",
+          iconSize : new Tmapv2.Size(40, 40),
+          map: locationmap
+        }) 
 
         if(locationmap && ${zoomin}){
           locationmap.zoomIn();

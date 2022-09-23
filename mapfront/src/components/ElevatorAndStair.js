@@ -4,7 +4,7 @@ import { ListGroup } from 'react-bootstrap';
 
 import stair from "../images/stairs.png"
 
-const SideBar =({width=200, children, onCheck})=>{
+const SideBar =({width=180, children, onCheck})=>{
     const [isOpen, setOpen] = useState(false);
     const [xPosition, setX] = useState(-width);
     const [boxShadow, setBoxShadow] = useState();

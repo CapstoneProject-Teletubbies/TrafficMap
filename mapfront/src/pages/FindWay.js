@@ -19,6 +19,8 @@ const baseurl = 'http://localhost:9000/'         //베이스 !!!!!!!!!!!!!!!!!!!
 
 function FindWay(props){
     const [findLocation, setFindLocation] = useState();
+    const [mylat, setMyLat] = useState();
+    const [mylon, setMyLon] = useState();
     const [startplaceholder, setStartPlaceHolder] = useState('출발지 입력');
     const [endplaceholder, setEndPlaceHolder] = useState('도착지 입력');
 
@@ -52,15 +54,14 @@ function FindWay(props){
             console.log(startPlace);
             console.log(findLocation);
         }
+        setMyLat(latitude);
+        setMyLon(longitude);
 
         setFindLocation({
           latitude, longitude
         })
     };
 
-    useEffect(()=>{
-        navigator.geolocation.watchPosition(handleSuccess);
-    })
 
     const [modalOpen, setModalOpen] = useState(false);
 
@@ -237,6 +238,7 @@ function FindWay(props){
         const besseltm = "+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 +y_0=500000 +ellps=bessel +units=m +no_defs +towgs84=-115.80,474.99,674.11,1.16,-2.31,-1.63,6.43"
         const wgs84 = "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees" 
 
+        navigator.geolocation.watchPosition(handleSuccess);
         if(findLocation){
             console.log("있다!");
             lat = findLocation.latitude;
@@ -466,31 +468,30 @@ function FindWay(props){
                 resultdrawArr.push(polyline_);
             }
 
-            if(${both}){       
+            if(${both}){    
+                console.log("@@@@@@@@@@@@아니 씨발@!@@@@@@@@@@@@@@");   
                 if(!checki){
                     console.log("@@@@@@@@@@@@@@@@이닛맵@@@@@@@@@@@@@");
                     map = initTmap(); 
                 } 
-                if(marker_myl){
-                    marker_myl.setMap(null);
-                } 
+            }       
+ 
+            if(marker_myl){
+                marker_myl.setMap(null);
+            } 
 
-                var marker_myl = new Tmapv2.Marker({
-                    position : new Tmapv2.LatLng(${lat}, ${lng}),
-                    icon: "${mymarker}",
-                    iconSize: new Tmapv2.Size(40, 40), 
-                    map: map
-                });
-            }
-
-            
-            
+            var marker_myl = new Tmapv2.Marker({
+                position : new Tmapv2.LatLng(${mylat}, ${mylon}),
+                icon: "${mymarker}",
+                iconSize: new Tmapv2.Size(40, 40), 
+                map: map
+            });
  
         `;
         script.type = "text/javascript";
         script.async = "async";
         document.head.appendChild(script);
-    }, [both, handleSuccess, findLocation]);
+    }, [mylat, both]);
 
 
     return(
