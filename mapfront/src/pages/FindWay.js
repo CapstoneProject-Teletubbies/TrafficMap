@@ -329,17 +329,6 @@ function FindWay(props){
                         map : map
                 });
 
-                if(marker_myl){
-                    marker_myl.setMap(null);
-                } 
-
-                var marker_myl = new Tmapv2.Marker({
-                    position : new Tmapv2.LatLng(${startLat}, ${startLng}),
-                    icon: "${mymarker}",
-                    iconSize: new Tmapv2.Size(40, 40), 
-                    map: map
-                });
-
                 
                 var polyline4;
                 
