@@ -71,8 +71,9 @@ public class BusServiceImpl implements BusService {
         //xml 형식을 json 형식으로 변환
         JSONObject response = XML.toJSONObject(result.getBody());
 
-        if (response.NULL.equals(response.get("ServiceResult"))) { //아마 호출실패
+        if ((!response.has("ServiceResult"))) { //아마 호출실패
             findBusStopByBusStopName(name); //다시불러
+            return null;
         }
 
         JSONObject ServiceResult = response.getJSONObject("ServiceResult"); // ServiceResult의 value들

@@ -210,9 +210,9 @@ public class FindServiceImpl implements FindService {
 
             org.json.JSONObject object = XML.toJSONObject(responseResult.get(i));
 
-            if (object.NULL.equals(object.get("response"))) { //호출 실패하면(아마 null일듯)
+            if (!object.has("response")) { //호출 실패하면(아마 null일듯)
                 findElevatorByAPI(ele); // 함수 다시 불러
-//                return null;
+                return null;
             }
             org.json.JSONObject response = (org.json.JSONObject) object.get("response");
             org.json.JSONObject body = (org.json.JSONObject) response.get("body");
