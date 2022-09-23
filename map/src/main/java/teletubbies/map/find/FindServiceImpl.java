@@ -2,8 +2,6 @@ package teletubbies.map.find;
 
 import lombok.SneakyThrows;
 import org.json.XML;
-//import org.json.simple.JSONObject;
-//import org.json.simple.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.simple.parser.JSONParser;
@@ -83,8 +81,8 @@ public class FindServiceImpl implements FindService {
         if (result.getBody() != null) {
             //받아온 JSON 데이터 가공
             //json parser
-            JSONParser parser = new JSONParser();
-            JSONObject object = (JSONObject) parser.parse(result.getBody());
+//            JSONParser parser = new JSONParser();
+            JSONObject object = new JSONObject(result.getBody());
             //searchPoiInfo의 value들
             JSONObject searchPoiInfo = (JSONObject) object.get("searchPoiInfo");
             //pois의 value들
@@ -211,11 +209,12 @@ public class FindServiceImpl implements FindService {
         for (int i = 0; i < ele.size(); i++) {
 
             org.json.JSONObject object = XML.toJSONObject(responseResult.get(i));
-            org.json.JSONObject response = (org.json.JSONObject) object.get("response");
-            if (response == null) { //호출 실패하면(아마 null일듯)
+
+            if (object.NULL.equals(object.get("response"))) { //호출 실패하면(아마 null일듯)
                 findElevatorByAPI(ele); // 함수 다시 불러
 //                return null;
             }
+            org.json.JSONObject response = (org.json.JSONObject) object.get("response");
             org.json.JSONObject body = (org.json.JSONObject) response.get("body");
             //System.out.println(body);
             if (!(body.get("items").equals(""))) { // 엘리베이터가 없으면 body":{"items":"","numOfRows":,"pageNo":,"totalCount":} 이런식으로 반환
@@ -402,8 +401,8 @@ public class FindServiceImpl implements FindService {
 
         if(result.getBody() != null) {
             //json parser
-            JSONParser parser = new JSONParser();
-            JSONObject object = (JSONObject) parser.parse(result.getBody());
+//            JSONParser parser = new JSONParser();
+            JSONObject object = new JSONObject(result.getBody());
 
             JSONArray features = (JSONArray) object.get("features");
 
@@ -483,8 +482,7 @@ public class FindServiceImpl implements FindService {
         //response
         ResponseEntity<String> result = restTemplate.exchange(uri.toUri(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
 
-        JSONParser parser = new JSONParser();
-        JSONObject object = (JSONObject) parser.parse(result.getBody());
+        JSONObject object = new JSONObject(result.getBody());
         JSONObject addressInfo = (JSONObject) object.get("addressInfo");
 
         return addressInfo.get("fullAddress").toString();
