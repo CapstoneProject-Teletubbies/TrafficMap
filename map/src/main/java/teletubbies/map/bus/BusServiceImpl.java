@@ -30,7 +30,7 @@ public class BusServiceImpl implements BusService {
     //버스 URL 설정
     @Value("${BUS_URL}")
     private String bus_url; // 정류소명으로 정류소(ID) 검색
-     @Value("${BUSLOCATION_URL}")
+    @Value("${BUSLOCATION_URL}")
     private String busLocation_url;
     @Value("${BUSID_URL}")
     private String busId_url;
@@ -70,11 +70,12 @@ public class BusServiceImpl implements BusService {
 
         //xml 형식을 json 형식으로 변환
         JSONObject response = XML.toJSONObject(result.getBody());
-        JSONObject ServiceResult = response.getJSONObject("ServiceResult"); // ServiceResult의 value들
-        if(ServiceResult == null) { //아마 호출실패
+
+        if (response.NULL.equals(response.get("ServiceResult"))) { //아마 호출실패
             findBusStopByBusStopName(name); //다시불러
-//            return null;
         }
+
+        JSONObject ServiceResult = response.getJSONObject("ServiceResult"); // ServiceResult의 value들
         JSONObject msgHeader = ServiceResult.getJSONObject("msgHeader"); //msgHeader의 value들
 
         if(msgHeader.get("resultCode").equals(0)) { // 결과가 있을 경우
@@ -258,6 +259,7 @@ public class BusServiceImpl implements BusService {
                 .queryParam("pageNo", 1)
                 .build(true);
 
+
         ResponseEntity<String> result = restTemplate.exchange(uri.toUri(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
 
         JSONObject response = XML.toJSONObject(result.getBody()); //xml 형식을 json 형식으로 변환
@@ -287,6 +289,7 @@ public class BusServiceImpl implements BusService {
             String ORIGIN_BSTOPNM = itemList.getString("ORIGIN_BSTOPNM"); // 기점 정류소명
             Integer DEST_BSTOPID = itemList.getInt("DEST_BSTOPID"); // 종점 정류소ID
             String DEST_BSTOPNM = itemList.getString("DEST_BSTOPNM"); // 종점 정류소명
+
 
             busRouteDetailDto.setROUTEID(ROUTEID);
             busRouteDetailDto.setROUTENO(ROUTENO);
@@ -421,7 +424,7 @@ public class BusServiceImpl implements BusService {
         JSONObject ServiceResult = response.getJSONObject("ServiceResult"); //ServiceResult의 value들
         JSONObject msgHeader = ServiceResult.getJSONObject("msgHeader"); //msgBody의 value들
         Integer totalCount = msgHeader.getInt("totalCount");; //msgBody의 value들
-        
+
         if (msgHeader.get("resultCode").equals(0)) { // 결과가 있다면
             JSONObject msgBody = ServiceResult.getJSONObject("msgBody"); //msgBody의 value들
 
@@ -478,7 +481,7 @@ public class BusServiceImpl implements BusService {
             }
 
             else { // itemList가 JSONObject 라면 (1개)
-            JSONObject itemList = msgBody.getJSONObject("itemList");
+                JSONObject itemList = msgBody.getJSONObject("itemList");
                 List<BusInfoDto> dtos = new ArrayList<>();
                 BusInfoDto busInfoDto = new BusInfoDto();
 
