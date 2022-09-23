@@ -182,9 +182,6 @@ const BuildingDetailInfo = (props) => {
     }
 
     const searchsubwaytime = () => {        //새로고침 눌렀을때 지하철 실시간 정보 받아옴
-        var d = document.getElementById('arrowrefresh');
-        d.style.animationPlayState='running';
-        d.style.animationIterationCount='1';
 
         const subwayinfo = axios.create({
             baseURL: baseurl
@@ -308,6 +305,7 @@ const BuildingDetailInfo = (props) => {
         }
     };
     useEffect(()=>{
+        
         window.addEventListener('touchstart', handleCloseInfo);
         return()=>{
             window.removeEventListener('touchstart', handleCloseInfo);
@@ -372,7 +370,7 @@ const BuildingDetailInfo = (props) => {
             //     };
             // })}
         }
-    }, [props])
+    }, [props, buildingDetailInfo, subway])
 
     if(subwayUp){
        

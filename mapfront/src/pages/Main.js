@@ -265,70 +265,70 @@ function Main() {
         testmap.setCenter(setmylocation);
       }
 
-      var markers;
-      if(testmap && !markers){
-      $.ajax({                //계단 받아옴
-        method: "POST",
-        url: "http://localhost:9000/api/find/stair",
-        async: false,
-        data: {
+    //   var markers;
+    //   if(testmap && !markers){
+    //   $.ajax({                //계단 받아옴
+    //     method: "POST",
+    //     url: "http://localhost:9000/api/find/stair",
+    //     async: false,
+    //     data: {
 
-        },
-        success: function(res){
-          console.log(res);
-          if(markers){
-            console.log("마커 지워야해");
-            console.log(markers);
-            for(var i = 0; i < markers.length; i++){
-              markers[i].setMap(null);
-            }
-            markers = [];
-          }
-          markers = [];
+    //     },
+    //     success: function(res){
+    //       console.log(res);
+    //       if(markers){
+    //         console.log("마커 지워야해");
+    //         console.log(markers);
+    //         for(var i = 0; i < markers.length; i++){
+    //           markers[i].setMap(null);
+    //         }
+    //         markers = [];
+    //       }
+    //       markers = [];
           
-          for(var i = 0; i < res.length; i++){
-            console.log("마커생성");
-            var lat = res[i].startlatitude;
-            var lng = res[i].startlongitude;
+    //       for(var i = 0; i < res.length; i++){
+    //         console.log("마커생성");
+    //         var lat = res[i].startlatitude;
+    //         var lng = res[i].startlongitude;
 
-            var markerone = new Tmapv2.Marker({
-              position: new Tmapv2.LatLng(lat, lng),
-              icon: "${stairs}",
-              iconSize: new Tmapv2.Size(15, 15),
-              //map: testmap
-            });
+    //         var markerone = new Tmapv2.Marker({
+    //           position: new Tmapv2.LatLng(lat, lng),
+    //           icon: "${stairs}",
+    //           iconSize: new Tmapv2.Size(15, 15),
+    //           //map: testmap
+    //         });
             
-            markers.push(markerone);
-          }
-        },
-        error: function(err){
-          console.log("계단 못받아옴");
-        }
-      })
-    }else{
-      if(${checked}){
-        for(var i = 0; i < markers.length; i++){
-          markers[i].setMap(testmap);
-        }
-        markerCluster = new Tmapv2.extension.MarkerCluster({
-          markers: markers,
-          // icons: "${stairs}",
-          map: testmap
-        });
-      }else if(markers && !${checked}){
-        if(markerCluster){
-          markerCluster.destroy();
-        }
-        for(var i = 0; i < markers.length; i++){
-          markers[i].setMap(null);
-        }
-      }
-      console.log(markers);
+    //         markers.push(markerone);
+    //       }
+    //     },
+    //     error: function(err){
+    //       console.log("계단 못받아옴");
+    //     }
+    //   })
+    // }else{
+    //   if(${checked}){
+    //     for(var i = 0; i < markers.length; i++){
+    //       markers[i].setMap(testmap);
+    //     }
+    //     markerCluster = new Tmapv2.extension.MarkerCluster({
+    //       markers: markers,
+    //       // icons: "${stairs}",
+    //       map: testmap
+    //     });
+    //   }else if(markers && !${checked}){
+    //     if(markerCluster){
+    //       markerCluster.destroy();
+    //     }
+    //     for(var i = 0; i < markers.length; i++){
+    //       markers[i].setMap(null);
+    //     }
+    //   }
+    //   console.log(markers);
       
-      console.log(marker);
-      console.log(marker.getOffset());
+    //   console.log(marker);
+    //   console.log(marker.getOffset());
 
-    }
+    // }
    `;
     script.type = "text/javascript";
     script.async = "async";
