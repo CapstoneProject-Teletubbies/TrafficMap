@@ -286,37 +286,66 @@ public class FindServiceImpl implements FindService {
 
         //response
         ResponseEntity<String> result = restTemplate.exchange(uri.toUri(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
+//        System.out.println("result = " + result.getBody());
 
+//        JSONParser parser = new JSONParser();
+        JSONObject object = new JSONObject(result.getBody());
 
-
-
-        if (result.getBody() != null) {
-            //json parser
-            JSONParser parser = new JSONParser();
-            JSONObject object = (JSONObject) parser.parse(result.getBody());
-
+        if (object.has("error")){
+            findStairs();
+            System.out.println("again");
+            return null;
+        }
+        else if(object.has("features")) {
+            System.out.println(" 여기");
             JSONArray features = (JSONArray) object.get("features");
 
             List<StairDto> dtos = new ArrayList<>(); //리스트에 담을 dtos 선언
             int j = 0;
             //배열 크기만큼 반복
-            for (int i = 0; i < features.size(); i++) {
+            for (int i = 0; i < features.length(); i++) {
                 StairDto stairDto = new StairDto();
                 object = (JSONObject) features.get(i);
 
                 JSONObject attributes = (JSONObject) object.get("attributes");
 
                 //이제 필요한 애들 받아오기
-                Long objectid = (Long) attributes.get("objectid"); //id
-                String ctprvnnm = (String) attributes.get("ctprvnnm"); //인천광역시
-                String signgunm = (String) attributes.get("signgunm"); //ㅇㅇ구
-                String signgucode = (String) attributes.get("signgucode"); //  우편번호
-                String rdnmadr = (String) attributes.get("rdnmadr"); // 도로명주소
-                String lnmadr = (String) attributes.get("lnmadr"); // 지명주소
-                Double startlatitude = (Double) attributes.get("startlatitude"); // 시작위도
-                Double startlongitude = (Double) attributes.get("startlongitude"); // 시작경도
-                Double endlatitude = (Double) attributes.get("endlatitude"); //끝위도
-                Double endlongitude = (Double) attributes.get("endlongitude"); //끝경도
+                Integer objectid = (Integer) attributes.get("objectid"); //id
+                String ctprvnnm = attributes.getString("ctprvnnm"); //인천광역시
+                String signgunm = attributes.getString("signgunm"); //ㅇㅇ구
+                String signgucode = attributes.getString("signgucode"); //  우편번호
+                if(JSONObject.NULL.equals(attributes.get("rdnmadr"))) {
+                    stairDto.setRdnmadr(null);
+                }
+                else if(!JSONObject.NULL.equals(attributes.get("rdnmadr"))) {
+                    String rdnmadr = (String) attributes.get("rdnmadr"); // 도로명주소
+                    stairDto.setRdnmadr(rdnmadr);
+
+                    Pattern str_a = Pattern.compile("아파트");
+                    if (rdnmadr == null) {
+                        dtos.add(j, stairDto);
+                        j += 1;
+                    } else {
+                        Matcher matcher = str_a.matcher(rdnmadr);
+                        if (!matcher.find()) {
+                            //System.out.println(rdnmadr);
+                            dtos.add(j, stairDto);
+                            j += 1;
+                        }
+                    }
+                }
+                if (JSONObject.NULL.equals(attributes.get("lnmadr"))) {
+                    stairDto.setLnmadr(null);
+                }
+                else if(!JSONObject.NULL.equals(attributes.get("rdnmadr"))) {
+                    String lnmadr = attributes.getString("lnmadr"); // 지명주소
+                    stairDto.setLnmadr(lnmadr);
+                }
+
+                BigDecimal startlatitude = (BigDecimal) attributes.get("startlatitude"); // 시작위도
+                BigDecimal startlongitude = (BigDecimal) attributes.get("startlongitude"); // 시작경도
+                BigDecimal endlatitude = (BigDecimal) attributes.get("endlatitude"); //끝위도
+                BigDecimal endlongitude = (BigDecimal) attributes.get("endlongitude"); //끝경도
 
 
                 //일단 테스트로 이제 가공한 데이터를 stairDto에 저장
@@ -324,34 +353,31 @@ public class FindServiceImpl implements FindService {
                 stairDto.setCtprvnnm(ctprvnnm);
                 stairDto.setSigngucode(signgucode);
                 stairDto.setSigngunm(signgunm);
-                stairDto.setRdnmadr(rdnmadr);
-                stairDto.setLnmadr(lnmadr);
                 stairDto.setStartlatitude(startlatitude);
                 stairDto.setStartlongitude(startlongitude);
                 stairDto.setEndlatitude(endlatitude);
                 stairDto.setEndlongitude(endlongitude);
 
                 //System.out.println("오류나냐?:"+rdnmadr);
-                Pattern str_a = Pattern.compile("아파트");
-                if(rdnmadr==null){
-                    dtos.add(j, stairDto);
-                    j+=1;
-                }
-                else {
-                    Matcher matcher = str_a.matcher(rdnmadr);
-                    if (!matcher.find()) {
-                        //System.out.println(rdnmadr);
-                        dtos.add(j, stairDto);
-                        j += 1;
-                    }
-                }
+//                Pattern str_a = Pattern.compile("아파트");
+//                if (rdnmadr == null) {
+//                    dtos.add(j, stairDto);
+//                    j += 1;
+//                } else {
+//                    Matcher matcher = str_a.matcher(rdnmadr);
+//                    if (!matcher.find()) {
+//                        //System.out.println(rdnmadr);
+//                        dtos.add(j, stairDto);
+//                        j += 1;
+//                    }
+//                }
             }
 //            System.out.println(j);
             return dtos;
-        } else {
-            return null;
         }
+        return  null;
     }
+
 
     @SneakyThrows
     public List<ElevatorDto> findElevators() { // 엘리베이터 위도,경도(위치) 가져오는 api
