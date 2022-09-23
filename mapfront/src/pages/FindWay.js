@@ -468,14 +468,17 @@ function FindWay(props){
                 console.log("@@@@@@@@@@@@@@@@이닛맵@@@@@@@@@@@@@");
                 initTmap();   
             }
-            if(${lat}){
-                marker_myl = new Tmapv2.Marker({
-                    position : new Tmapv2.LatLng(${lat}, ${lng}),
-                    icon: "${mymarker}",
-                    iconSize: new Tmapv2.Size(40, 40), 
-                    map: map
-                });
+            var marker_myl;
+            if(marker_myl){
+                marker_myl.setMap(null);
             }
+            marker_myl = new Tmapv2.Marker({
+                position : new Tmapv2.LatLng(${lat}, ${lng}),
+                icon: "${mymarker}",
+                iconSize: new Tmapv2.Size(40, 40), 
+                map: map
+            });
+            
  
         `;
         script.type = "text/javascript";

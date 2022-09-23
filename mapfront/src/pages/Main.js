@@ -368,7 +368,7 @@ function Main() {
 
     </div>
     
-    <SideBar onCheck={onCheckedElement} >{LIST}{onCheckedElement}</SideBar>
+    {<SideBar onCheck={onCheckedElement} >{LIST}{onCheckedElement}</SideBar>}
     
     <div className="rightbarbutton">
       <div className="zoom">

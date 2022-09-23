@@ -206,7 +206,7 @@ const BuildingInfo = (props) => {
                 {iselevator && 
                 <img src={elevator} style={{width: "30px", height: "30px"}}></img>}         
             {fun &&
-                <button type="button" class="btn btn-outline-secondary btn-circle" onClick={handleButtonClick} style={{borderRadius: "50%", float: "right", width: "50%", height: "50%"}}>
+                <button type="button" class="btn btn-outline-secondary btn-circle" onClick={handleButtonClick} style={{borderRadius: "100%", float: "right", }}>
                 <i class="bi bi-map"></i></button>  
             }
             </div>

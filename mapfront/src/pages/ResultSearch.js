@@ -269,7 +269,11 @@ function ResultSearch() {
         }
 
         function createmarker(){  // 현재 위치 표시 마커 생성
-          var marker = new Tmapv2.Marker({
+          var marker
+          if(marker){
+            marker.setMap(null);
+          }
+          marker = new Tmapv2.Marker({
             position: new Tmapv2.LatLng(${lat}, ${lng}),
             icon: "${mylocation}",
             iconSize: new Tmapv2.Size(40, 40),
@@ -309,13 +313,13 @@ function ResultSearch() {
         if(!locationmap && ${lat} && ${plength}){     //지도생성, 마커생성
           var mylocation = {lat: ${lat}, lng: ${lng}};
           locationmap = initTmap(mylocation);
-          createmarker();  
           searchmarker();
         }
         else{
           //searchmarker();
           console.log("Init false");
         }
+        createmarker();  
 
         if(locationmap && ${zoomin}){
           locationmap.zoomIn();
@@ -331,7 +335,7 @@ function ResultSearch() {
     script.type = "text/javascript";
     script.async = "async";
     document.head.appendChild(script);
-  }, [handleSuccess]);
+  }, [handleSuccess, location]);
 
   useEffect(()=>{ //~방향인 애들 없애기
     console.log('setBuildingList');

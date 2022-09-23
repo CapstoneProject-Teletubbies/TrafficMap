@@ -234,14 +234,21 @@ function LocationMap() {
         if(!locationmap && ${lat} && ${blat}){
           var mylocation = {lat: ${blat}, lng: ${blng}};
           locationmap = initTmap(mylocation);
-          createmarker(${lat}, ${lng}, "${mylocation}", 40, 40);
-          createmarker(${blat}, ${blng}, "${icon}", 40, 60);  
+          // createmarker(${lat}, ${lng}, "${mylocation}", 40, 40);
+          createmarker(${blat}, ${blng}, "${icon}", 32 , 48);  
         }
-        else if(${refresh}){
-          
-        }else{
-          console.log("이미 지도 나와있어");
+
+        var mymarker;
+        if(mymarker){
+          mymarker.setMap(null);
         }
+        loc = new Tmapv2.LatLng(${lat}, ${lng});
+        mymarker = new Tmapv2.Marker({
+          position: loc,
+          icon: "${mylocation}",
+          iconSize : new Tmapv2.Size(40, 40),
+          map: locationmap
+        })
 
         if(locationmap && ${zoomin}){
           locationmap.zoomIn();
@@ -257,7 +264,7 @@ function LocationMap() {
     script.type = "text/javascript";
     script.async = "async";
     document.head.appendChild(script);
-  }, [handleSuccess]);
+  }, [handleSuccess, location]);
 
   return (
     <main style={{overflow: "hidden"}}>
