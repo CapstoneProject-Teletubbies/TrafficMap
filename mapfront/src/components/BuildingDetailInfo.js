@@ -3,6 +3,8 @@ import axios from "axios";
 import $ from 'jquery';
 import '../css/BuildingDetailInfo.css'
 import Modal from './Modal';
+import { Swiper, SwiperSlide } from "swiper/react";
+import SwiperCore, { Navigation, Pagination } from "swiper";
 import { Navigate, useNavigate } from "react-router-dom";
 import {useState, useEffect, useRef} from 'react';
 import Button from 'react-bootstrap/Button';
@@ -43,6 +45,24 @@ const BuildingDetailInfo = (props) => {
     const closeModal = () => {
         setModalOpen(false);
     }
+
+    SwiperCore.use([Navigation, Pagination]);
+
+  const swiperParams = {
+    // navigation: {nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev',},
+    // slidesPerView: 1,
+    scrollbar: {draggable: true},
+  }
+
+  const swiperStyle = {
+    position: "absolute",
+    width: "100%",
+    height: "20%",
+    backgroundColor: "white",
+    top: "-20%"
+    // width: "100%",
+    // height: "100%"
+  }
 
     const handlestartButton = () => {
         console.log("출발 버튼 클릭");
@@ -389,16 +409,21 @@ const BuildingDetailInfo = (props) => {
                     </Modal>
                 <footer>
                     {toiletLocation && isToiletClick && 
+                        <Swiper style={swiperStyle}>
                         <div ref={el} style={{position: "absolute", backgroundColor: "white", height: "20%", top: "-21%", right: "0px"}}>
+                            {/* <Swiper > */}
                             {toiletLocation.map((obj, index)=>{
                                 console.log(obj.dtlLoc);
                                 return(
+                                    <SwiperSlide>
                                     <div style={{boxShadow: "0px 0px 2px 1px gray", borderRadius: "3px"}}>
                                         <text style={{fontFamily: 'Nanum Gothic Coding', fontSize: "1rem"}}>{obj.dtlLoc}</text>
-                                    </div>
+                                    </div>  
+                                    </SwiperSlide>
                                 );
                             })}
-                        </div>}
+                            {/* </Swiper> */}
+                        </div></Swiper>}
                 <div id='Info' className="detailInfo" style={{height: "100%"}}>
                         <div id='headInfo' className="row" style={{position: "relative", paddingTop: "10px"}}>
                             <div className="col-8" style={{textAlign: "left", paddingLeft: "5%", paddingRight: "0px"}}>

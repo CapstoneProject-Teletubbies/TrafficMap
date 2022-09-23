@@ -93,6 +93,7 @@ const SearchBar = (props) => {
                 }
             });
         }).catch(function(error){
+            setShowPopup(false);
             console.log(`에러`);
         })
     }
@@ -105,6 +106,7 @@ const SearchBar = (props) => {
         .then(function(res){
             searchBuilding(res.data, props);
         }).catch(function(error){
+            setShowPopup(false);
             console.log('에러');
         })
     }
@@ -125,6 +127,7 @@ const SearchBar = (props) => {
                 }
             });
         }).catch(function(error){
+            setShowPopup(false);
             console.log('에러');
         })
     }
@@ -139,6 +142,7 @@ const SearchBar = (props) => {
             console.log('버스정류소');
             console.log(res.data);
         }).catch(function(error){
+            setShowPopup(false);
             console.log('에러');
         })
     }
