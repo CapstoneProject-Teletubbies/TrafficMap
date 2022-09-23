@@ -300,8 +300,6 @@ function Main() {
             
             markers.push(markerone);
           }
-
-        
         },
         error: function(err){
           console.log("계단 못받아옴");

@@ -269,11 +269,11 @@ function ResultSearch() {
         }
 
         function createmarker(){  // 현재 위치 표시 마커 생성
-          var marker
+          var marker;
           if(marker){
             marker.setMap(null);
           }
-          marker = new Tmapv2.Marker({
+          var marker = new Tmapv2.Marker({
             position: new Tmapv2.LatLng(${lat}, ${lng}),
             icon: "${mylocation}",
             iconSize: new Tmapv2.Size(40, 40),

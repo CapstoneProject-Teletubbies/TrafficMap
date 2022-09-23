@@ -129,6 +129,7 @@ function FindWay(props){
     }
 
     useEffect(()=>{
+        navigator.geolocation.watchPosition(handleSuccess);
         console.log("////////////////////////////////////////");
         if(location.state.mystartlocation){
             console.log(location.state.mystartlocation);
@@ -160,6 +161,8 @@ function FindWay(props){
     useEffect(()=>{
         console.log(location.state);
         setFindway(location.state);
+
+        
         
         if(location.state){
             if(location.state.startBuilding){
@@ -234,8 +237,6 @@ function FindWay(props){
         const besseltm = "+proj=tmerc +lat_0=38 +lon_0=127 +k=1 +x_0=200000 +y_0=500000 +ellps=bessel +units=m +no_defs +towgs84=-115.80,474.99,674.11,1.16,-2.31,-1.63,6.43"
         const wgs84 = "+title=WGS 84 (long/lat) +proj=longlat +ellps=WGS84 +datum=WGS84 +units=degrees" 
 
-        navigator.geolocation.watchPosition(handleSuccess);
-
         if(findLocation){
             console.log("있다!");
             lat = findLocation.latitude;
@@ -283,6 +284,8 @@ function FindWay(props){
             var totalMarkerArr = [];
             var drawInfoArr = [];
             var resultdrawArr = [];
+            var checki;
+            var marker_myl;
     
             function initTmap() {
                 map = new Tmapv2.Map("TMapApp", {
@@ -294,6 +297,13 @@ function FindWay(props){
                     zoom:13,
                 });
                 // 출발 마커
+                if(marker_s){
+                    marker_s.setMap(null);
+                }
+                if(marker_e){
+                    marker_e.setMap(null);
+                }
+
                 marker_s = new Tmapv2.Marker(
                     {
                         position : new Tmapv2.LatLng(${startLat}, ${startLng}),
@@ -311,9 +321,20 @@ function FindWay(props){
                         map : map
                 });
 
+                var marker_myl = new Tmapv2.Marker({
+                    position : new Tmapv2.LatLng(${startLat}, ${startLng}),
+                    icon: "${mymarker}",
+                    iconSize: new Tmapv2.Size(40, 40), 
+                    map: map
+                });
+
                 
+                var polyline4;
                 
-                
+                console.log(checki);
+                if(!checki){
+                console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+                checki = 10;
                 $.ajax({
                     method: "POST",
                     url : "https://apis.openapi.sk.com/tmap/routes/pedestrian?version=1&format=json&callback=result",
@@ -411,7 +432,7 @@ function FindWay(props){
 							}
 						}//for문 [E]
 						drawLine(drawInfoArr);
-                        var polyline4 = new Tmapv2.Polyline({
+                        polyline4 = new Tmapv2.Polyline({
                             path: drawInfoArr,
                             strokeColor: "#E00000", // 라인 색상
                             strokeWeight: 4, // 라인 두께
@@ -422,7 +443,7 @@ function FindWay(props){
                         console.log("에러임");
                     }
                 })
-        
+            }
 
                 return map;
             }
@@ -445,46 +466,31 @@ function FindWay(props){
                 resultdrawArr.push(polyline_);
             }
 
-            function createmarker(){
-                console.log(${lat});
-                console.log(${lng});
-                var marker_ml = new Tmapv2.Marker({
-                  position: new Tmapv2.LatLng(${lat}, ${lng}),
-                  icon: "${mymarker}",
-                  iconSize: new Tmapv2.Size(40, 40),       
-                  map: map
-                })
-                console.log(marker);
-                markers.push(marker);
-            }
-            function removeMarkers() {
-                for (var i = 0; i < markers.length; i++) {
-                  markers[i].setMap(null);
-                }
-                markers = [];
+            if(${both}){       
+                if(!checki){
+                    console.log("@@@@@@@@@@@@@@@@이닛맵@@@@@@@@@@@@@");
+                    map = initTmap(); 
+                } 
+                if(marker_myl){
+                    marker_myl.setMap(null);
+                } 
+
+                var marker_myl = new Tmapv2.Marker({
+                    position : new Tmapv2.LatLng(${lat}, ${lng}),
+                    icon: "${mymarker}",
+                    iconSize: new Tmapv2.Size(40, 40), 
+                    map: map
+                });
             }
 
-            if('${startPlace}' && '${endPlace}'){
-                console.log("@@@@@@@@@@@@@@@@이닛맵@@@@@@@@@@@@@");
-                initTmap();   
-            }
-            var marker_myl;
-            if(marker_myl){
-                marker_myl.setMap(null);
-            }
-            marker_myl = new Tmapv2.Marker({
-                position : new Tmapv2.LatLng(${lat}, ${lng}),
-                icon: "${mymarker}",
-                iconSize: new Tmapv2.Size(40, 40), 
-                map: map
-            });
+            
             
  
         `;
         script.type = "text/javascript";
         script.async = "async";
         document.head.appendChild(script);
-    }, [both]);
+    }, [both, handleSuccess, findLocation]);
 
 
     return(
