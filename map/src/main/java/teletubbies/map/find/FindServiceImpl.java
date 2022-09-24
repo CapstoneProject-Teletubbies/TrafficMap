@@ -275,6 +275,7 @@ public class FindServiceImpl implements FindService {
 
         String encodedPath = URLEncoder.encode("인천시_이동약자연결시설_18종1", "UTF-8");
         //URI 생성
+
         UriComponents uri = UriComponentsBuilder
                 .fromUriString(stair_url)
                 .path("/" + encodedPath + "/FeatureServer/12/query")
@@ -290,6 +291,20 @@ public class FindServiceImpl implements FindService {
 
         JSONParser parser = new JSONParser();
         JSONObject object = (JSONObject)parser.parse(result.getBody());
+
+        if(result.getBody()==null){
+            for(int k=0;k<5;k++){
+                result = restTemplate.exchange(uri.toUri(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
+//        System.out.println("result = " + result.getBody());
+
+                parser = new JSONParser();
+                object = (JSONObject)parser.parse(result.getBody());
+                if(result.getBody() != null){
+                    break;
+                }
+            }
+        }
+
 
 //        if (object.has("error")){
 //            findStairs();
