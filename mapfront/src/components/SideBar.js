@@ -9,7 +9,7 @@ import point from "../images/placeholder.png";
 // import styled from "styled-components";
 
 
-const SideBar =({width=330, children, totalDistance, totalTime})=>{
+const SideBar =({width=330, children, totalDistance, totalTime, start, end})=>{
     const [isOpen, setOpen] = useState(false);
     const [xPosition, setX] = useState(width);
     const [boxShadow, setBoxShadow] = useState();
@@ -17,8 +17,6 @@ const SideBar =({width=330, children, totalDistance, totalTime})=>{
     // const [img, setImg] = useState();
 
     
-
-
     const [distance, setDistance] = useState();
     const [time, setTime] = useState();
     var Img;
@@ -63,6 +61,8 @@ const SideBar =({width=330, children, totalDistance, totalTime})=>{
     //     `;
 
     useEffect(()=>{
+        console.log(start);
+        console.log(end);
         window.addEventListener('click', handleClose);
         return () => {
             window.removeEventListener('click', handleClose);
@@ -102,14 +102,18 @@ const SideBar =({width=330, children, totalDistance, totalTime})=>{
                 도보 경로
                 </button>
                 <div style={{width: "100%", height: "10%", top: "-70px", textAlign: "left", }}>
-                    출발지 도착지
-                    <div style={{position: "relative",textAlign: "left", marginLeft: "15px", top: "35%"}}>       
+                    <div style={{top: "-10px"}}>
+                    <text>출발지: {start.name}</text> <br></br>
+                    <i class="bi bi-arrow-down-up"></i> <br></br>
+                    <text>도착지: {end.name}</text>
+                    </div>
+                    <div style={{position: "relative",textAlign: "left", marginLeft: "15px"}}>       
                     <text style={{fontSize: "20px", fontWeight: "1000"}}> {time} </text>
                     <div class="vr" style={{fontWeight: "100"}}></div>
                     <text style={{fontSize: "18px", fontWeight: "600"}}>  {distance}</text>
                     </div>
                 </div>
-                <div className="sidebarcontent" style={{position: "relative", height: "85%", overflowY: "scroll", top: "-70px"}}>
+                <div className="sidebarcontent" style={{position: "relative", height: "85%", overflowY: "scroll", top: "-55px"}}>
                     <div className='list-group' style={{overflowY: "scroll"}}>
                     {children && children.map((obj, index)=>{
                         var Img;

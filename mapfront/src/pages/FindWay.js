@@ -520,7 +520,7 @@ function FindWay(props){
               }}>
                 
             </div>
-            <SideBar totalDistance={totalDistance} totalTime={totalTime}>{routeDetail}</SideBar>
+            <SideBar totalDistance={totalDistance} totalTime={totalTime} start={startPlace} end={endPlace}>{routeDetail}</SideBar>
             </body>}
             <UrlModal open={modalOpen} close={closeModal} connect={urlModal}>  
             </UrlModal>
