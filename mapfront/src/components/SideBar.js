@@ -5,6 +5,8 @@ import traffic from "../images/trafficlight.png";
 import walk from "../images/walkp.png";
 import right from "../images/turnright.png";
 import left from "../images/turnleft.png";
+import point from "../images/placeholder.png";
+// import styled from "styled-components";
 
 
 const SideBar =({width=330, children, totalDistance, totalTime})=>{
@@ -13,6 +15,9 @@ const SideBar =({width=330, children, totalDistance, totalTime})=>{
     const [boxShadow, setBoxShadow] = useState();
     const side = useRef();
     // const [img, setImg] = useState();
+
+    
+
 
     const [distance, setDistance] = useState();
     const [time, setTime] = useState();
@@ -39,6 +44,23 @@ const SideBar =({width=330, children, totalDistance, totalTime})=>{
             await setOpen(false);
         }
     }
+
+    
+    // const Nav = styled.nav`
+    //     dispaly: flex;
+    //     overflow: auto;
+    //     height: 45px;
+    //     &::-webkit-scrollbar{
+    //         width: 8px;
+    //         height: 8px;
+    //         border-radius: 6px;
+    //         background: rgba(255,255,255,0.4);
+    //     }
+    //     &::-webkit-scrollbar-thumb {
+    //         background: rgba(0,0,0, 0.3);
+    //         border-radius: 6px;
+    //     }
+    //     `;
 
     useEffect(()=>{
         window.addEventListener('click', handleClose);
@@ -76,10 +98,11 @@ const SideBar =({width=330, children, totalDistance, totalTime})=>{
             
             <div ref={side}  className="innersidbar" style={{ width: `${width}px`, height: window.innerHeight,  transform: `translatex(${-xPosition}px)`, backgroundColor: "yellowgreen", boxShadow: boxShadow}}>
                 <button  onClick={() => toggleMenu()}
-                className="sidebarbutton" style={{backgroundColor:"yellowgreen"}}>
+                className="sidebarbutton" style={{backgroundColor:"yellowgreen", fontSize: "smaller"}}>
                 도보 경로
                 </button>
                 <div style={{width: "100%", height: "10%", top: "-70px", textAlign: "left", }}>
+                    출발지 도착지
                     <div style={{position: "relative",textAlign: "left", marginLeft: "15px", top: "35%"}}>       
                     <text style={{fontSize: "20px", fontWeight: "1000"}}> {time} </text>
                     <div class="vr" style={{fontWeight: "100"}}></div>
@@ -91,27 +114,24 @@ const SideBar =({width=330, children, totalDistance, totalTime})=>{
                     {children && children.map((obj, index)=>{
                         var Img;
                         if (obj.includes("횡단보도")){
-                            // setImg(traffic);
                             Img=traffic;
                             
                         }
                         else if (obj.includes("우회전")){
-                            // setImg(right);
                             Img=right;
                         }
                         else if (obj.includes("좌회전")){
-                            // setImg(left);
                             Img=left;
                         }
-                        else{
-                            // setImg(walk);
-                            Img=walk; 
+                        else if (obj.includes("도착")){
+                            Img=point;
                         }
-
-                        
+                        else{
+                            Img=walk; 
+                        }               
                         return(
                             <li className='list-group-item'>
-                                <img src={Img} style={{width:"30px", height: "30px" }}/>{obj}
+                                <img src={Img} style={{float:"left",width:"23px", height: "25px", marginRight:"10px"}}/>{obj}
                             </li>
                             
                         );
