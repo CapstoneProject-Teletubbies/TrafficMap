@@ -12,8 +12,8 @@ public class StairDto { // 계단
     private String signgucode; // 우편번호
     private String rdnmadr; // 도로명주소
     private String lnmadr; // 지명주소
-    private BigDecimal startlatitude; // 시작위도
-    private BigDecimal startlongitude; // 시작경도
-    private BigDecimal endlatitude; // 끝위도
-    private BigDecimal endlongitude; //끝경도
+    private Double startlatitude; // 시작위도
+    private Double startlongitude; // 시작경도
+    private Double endlatitude; // 끝위도
+    private Double endlongitude; //끝경도
 }

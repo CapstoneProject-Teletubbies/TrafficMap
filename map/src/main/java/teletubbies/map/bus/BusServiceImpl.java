@@ -70,13 +70,12 @@ public class BusServiceImpl implements BusService {
 
         //xml 형식을 json 형식으로 변환
         JSONObject response = XML.toJSONObject(result.getBody());
-
-        if ((!response.has("ServiceResult"))) { //아마 호출실패
-            findBusStopByBusStopName(name); //다시불러
+        JSONObject ServiceResult = response.getJSONObject("ServiceResult"); // ServiceResult의 value들
+        if(ServiceResult == null) { //아마 호출실패
+//            findBusStopByBusStopName(name); //다시불러
             return null;
         }
 
-        JSONObject ServiceResult = response.getJSONObject("ServiceResult"); // ServiceResult의 value들
         JSONObject msgHeader = ServiceResult.getJSONObject("msgHeader"); //msgHeader의 value들
 
         if(msgHeader.get("resultCode").equals(0)) { // 결과가 있을 경우
