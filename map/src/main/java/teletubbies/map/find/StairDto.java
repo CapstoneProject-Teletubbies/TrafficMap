@@ -6,7 +6,7 @@ import java.math.BigDecimal;
 
 @Data
 public class StairDto { // 계단
-    private Integer objectid; // id
+    private Long objectid; // id
     private String ctprvnnm; // 인천광역시
     private String signgunm; // ㅇㅇ구
     private String signgucode; // 우편번호

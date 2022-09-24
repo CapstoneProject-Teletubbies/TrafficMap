@@ -311,7 +311,7 @@ public class FindServiceImpl implements FindService {
                 JSONObject attributes = (JSONObject) object.get("attributes");
 
                 //이제 필요한 애들 받아오기
-                Integer objectid = (Integer) attributes.get("objectid"); //id
+                Long objectid = (Long) attributes.get("objectid"); //id
                 String ctprvnnm = (String)attributes.get("ctprvnnm"); //인천광역시
                 String signgunm = (String)attributes.get("signgunm"); //ㅇㅇ구
                 String signgucode = (String)attributes.get("signgucode"); //  우편번호
