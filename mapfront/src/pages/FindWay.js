@@ -8,10 +8,12 @@ import '../css/FindWay.css'
 import UrlModal from '../components/UrlModal';
 import SearchBar from '../components/SearchBar';
 import SideBar from '../components/SideBar';
+import ElevatorAndStair from "../components/ElevatorAndStair";
 
 import walk from "../images/walkp.png";
 import bus from "../images/bus.png";
 import mymarker from "../images/mylocation.png";
+import stairs from "../images/stairs.png";
 
 
 const baseurl = 'http://localhost:9000/'         //베이스 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -37,6 +39,22 @@ function FindWay(props){
 
     const [mtest, setMTest] = useState(true);
 
+    const [checked, setChecked] = useState(false);
+
+    const onCheckedElement = (checked, item) => {
+      if(checked){
+        console.log("체크");
+        setChecked(true);
+      }else if(!checked){
+        console.log("체크 안돼있음");
+        setChecked(false);
+      }
+    };
+
+    const LIST = [
+        {id: 0, data: '엘리베이터', src: stairs, cid: "chk1"},
+        {id: 1, data: '계단', src: stairs, cid: "chk2"},
+      ];
 
     const location = useLocation();
 
@@ -287,13 +305,13 @@ function FindWay(props){
         const script = document.createElement("script");
         script.innerHTML = `
             var map;
-            var markers = [];
             var marker_s, marker_e, marker_p1, marker_p2;
             var totalMarkerArr = [];
             var drawInfoArr = [];
             var resultdrawArr = [];
             var checki;
             var marker_myl;
+            var markerCluster;
     
             function initTmap() {
                 map = new Tmapv2.Map("TMapApp", {
@@ -483,6 +501,68 @@ function FindWay(props){
                 iconSize: new Tmapv2.Size(40, 40), 
                 map: map
             });
+
+            var markers;
+            if(map && !markers){
+            $.ajax({                //계단 받아옴
+              method: "POST",
+              url: "http://localhost:9000/api/find/stair",
+              async: false,
+              data: {
+      
+              },
+              success: function(res){
+                console.log(res);
+                if(markers){
+                  console.log("마커 지워야해");
+                  console.log(markers);
+                  for(var i = 0; i < markers.length; i++){
+                    markers[i].setMap(null);
+                  }
+                  markers = [];
+                }
+                markers = [];
+                
+                for(var i = 0; i < res.length; i++){
+                  console.log("마커생성");
+                  var lat = res[i].startlatitude;
+                  var lng = res[i].startlongitude;
+      
+                  var markerone = new Tmapv2.Marker({
+                    position: new Tmapv2.LatLng(lat, lng),
+                    icon: "${stairs}",
+                    iconSize: new Tmapv2.Size(15, 15),
+                    //map: testmap
+                  });
+                  
+                  markers.push(markerone);
+                }
+              },
+              error: function(err){
+                console.log("계단 못받아옴");
+              }
+            })
+          }else{
+            if(${checked}){
+              for(var i = 0; i < markers.length; i++){
+                markers[i].setMap(map);
+              }
+              markerCluster = new Tmapv2.extension.MarkerCluster({
+                markers: markers,
+                // icons: "${stairs}",
+                map: map
+              });
+            }else if(markers && !${checked}){
+              if(markerCluster){
+                markerCluster.destroy();
+              }
+              for(var i = 0; i < markers.length; i++){
+                markers[i].setMap(null);
+              }
+            }
+            console.log(markers);
+      
+          }
  
         `;
         script.type = "text/javascript";
@@ -493,6 +573,9 @@ function FindWay(props){
 
     return(
         <div style={{position: "fixed", width: "100%", height: "100%", backgroundColor: "#D5D5D5"}}>
+
+            {<ElevatorAndStair onCheck={onCheckedElement}>{LIST}{onCheckedElement}</ElevatorAndStair>}
+
             <div className= "row align-items-center" id="findwayheader" style={{position: "relative", width: "100%", margin: "0px", display: "flex"
                 , backgroundColor: "white", boxShadow: "1px 1px 20px 1px gray", zIndex: "1"}}>
                 <div className='col-11' style={{position: "relative", textAlign: "-webkit-left"}}>
