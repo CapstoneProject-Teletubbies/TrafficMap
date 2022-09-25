@@ -148,20 +148,55 @@ public class FindServiceImpl implements FindService {
                     String firstBuildNo = (String) object.get("firstBuildNo"); //건물번호1
 
                     findDto.setName(name);
-                    findDto.setFullAddressRoad(fullAddressRoad);
+//                    findDto.setFullAddressRoad(fullAddressRoad);
                     findDto.setLatitude(Double.parseDouble(centerLat));
                     findDto.setLongitude(Double.parseDouble(centerLon));
                     findDto.setBizName(bizName);
                     findDto.setUpperBizName(upperBizName);
-                    findDto.setMiddleAddrName(middleAddrName);
-                    findDto.setRoadName(roadName);
-                    findDto.setFirstBuildNo(firstBuildNo);
+//                    findDto.setMiddleAddrName(middleAddrName);
+//                    findDto.setRoadName(roadName);
+//                    findDto.setFirstBuildNo(firstBuildNo);
 
+                    switch (name) {
+                        case "상명대학교 제1공학관":
+                        case "상명대학교 미래백년관":
+                        case "상명대학교 종합관":
+                        case "상명대학교 생활예술관":
+                        case "상명대학교 밀레니엄관":
+                            findDto.setFullAddressRoad("서울 종로구 홍지문2길 20");
+                            findDto.setMiddleAddrName("종로구");
+                            findDto.setRoadName("홍지문2길");
+                            findDto.setFirstBuildNo("20");
+                            findDto.setElevatorState("운행중");
+
+                            dtos.add(i, findDto);
+                            System.out.println("findDto = " + findDto);
+                            break;
+                        case "상명대학교 디자인대학":
+                            findDto.setFullAddressRoad("충남 천안시 동남구 상명대길 31");
+                            findDto.setMiddleAddrName("동남구");
+                            findDto.setRoadName("상명대길");
+                            findDto.setFirstBuildNo("31");
+                            findDto.setElevatorState("운행중");
+
+                            dtos.add(i, findDto);
+                            break;
+                        default:
+                            findDto.setFullAddressRoad(fullAddressRoad);
+                            findDto.setMiddleAddrName(middleAddrName);
+                            findDto.setRoadName(roadName);
+                            findDto.setFirstBuildNo(firstBuildNo);
+
+                            findDto.setElevatorState(elevatorResult.get(i));
+
+                            dtos.add(i, findDto);
+                            break;
+                    }
 //                String addr = middleAddrName + " " + roadName + " " + firstBuildNo;
 
-                    findDto.setElevatorState(elevatorResult.get(i));
-
-                    dtos.add(i, findDto);
+//                    findDto.setElevatorState(elevatorResult.get(i));
+//
+//                    dtos.add(i, findDto);
                 } else { //건물이 아니라 도로 같은거라서 [] 안에 비어있을 경우
                     String name = (String) object.get("name"); // 이름
                     String upperBizName = (String) object.get("upperBizName"); //업종명 대분류
