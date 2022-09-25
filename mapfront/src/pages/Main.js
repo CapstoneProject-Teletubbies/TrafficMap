@@ -225,14 +225,14 @@ function Main() {
       function onClick(e) {
           var result_mouse = e.latLng
           var resultDiv = document.getElementById("result_mouse");
-          resultDiv.innerHTML = result_mouse;
+          // resultDiv.innerHTML = result_mouse;
           console.log(result_mouse._lat);     
       }
 
       function onTouchstart(e) {
           var result = e.latLng
           var resultDiv = document.getElementById("result");
-          resultDiv.innerHTML = result;
+          // resultDiv.innerHTML = result;
       }
         
       if(!testmap && ${lat}){
