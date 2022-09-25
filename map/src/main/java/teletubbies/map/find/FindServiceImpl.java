@@ -162,7 +162,6 @@ public class FindServiceImpl implements FindService {
                         case "상명대학교 미래백년관":
                         case "상명대학교 종합관":
                         case "상명대학교 생활예술관":
-                        case "상명대학교 밀레니엄관":
                             findDto.setFullAddressRoad("서울 종로구 홍지문2길 20");
                             findDto.setMiddleAddrName("종로구");
                             findDto.setRoadName("홍지문2길");
