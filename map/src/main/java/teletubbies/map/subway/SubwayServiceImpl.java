@@ -177,8 +177,8 @@ public class SubwayServiceImpl implements SubwayService {
             return null;
         }
 
-        int lnCd = Integer.parseInt(subwayNumDto.getLN_CD());
-        int stinCd = Integer.parseInt(subwayNumDto.getSTIN_CD());
+        String lnCd = subwayNumDto.getLN_CD();
+        String stinCd = subwayNumDto.getSTIN_CD();
         String railOprIsttCd = subwayNumDto.getRAIL_OPR_ISTT_CD();
 
 
