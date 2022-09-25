@@ -327,7 +327,7 @@ public class FindServiceImpl implements FindService {
         JSONObject object = (JSONObject)parser.parse(result.getBody());
 
         if(result.getBody()==null){
-            for(int k=0;k<5;k++){
+            for(int k=0;k<10;k++){
                 result = restTemplate.exchange(uri.toUri(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
 //        System.out.println("result = " + result.getBody());
 
