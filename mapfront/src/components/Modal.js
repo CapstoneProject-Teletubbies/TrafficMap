@@ -17,6 +17,9 @@ const Modal = (props) => {
   console.log(props);
   console.log(Array.isArray(url));
 
+  console.log((window.innerHeight)*0.35);
+  var height = ((window.innerHeight)*0.35)*0.8;
+
   SwiperCore.use([Navigation, Pagination]);
 
   const swiperParams = {
@@ -63,9 +66,11 @@ const Modal = (props) => {
           </Swiper>
           }
           {!Array.isArray(url) && url &&
-          <div style={swiperStyle}>
-            <MapInteractionCSS minScale="1">
+          <div className="pr" style={{position: "relative", width: "100%", height: "100%", objectFit: "contain"}}>
+            <MapInteractionCSS minScale="1" style={{position: "relative", width: "100%", height: "100%"}}>
+              <div id="test" style={{position: "relative", width: "100%", height: height}}>
             <img src={url} style={{position: "relative", width: "100%", height: "100%", objectFit: "contain"}}></img>
+            </div>
             </MapInteractionCSS>
           </div>}
           {!url && 
