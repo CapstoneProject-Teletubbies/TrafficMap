@@ -107,7 +107,7 @@ const SideBar =({width=330, children, totalDistance, totalTime, start, end})=>{
                     <i class="bi bi-arrow-down-up" style={{position: "absolute", fontSize:"13px", right: "0px", marginRight: "13px", top: "35%"}}></i> <br></br>
                     <text style={{width: "100px", fontSize:"smaller", backgroundColor: "linen", top: "-10px", borderStyle: "none", borderWidth:"2px", borderRadius: "5px"}}>도착지: {end.name}</text>
                     </div>
-                    <div style={{position: "relative", textAlign: "center", marginLeft: "25px"}}>       
+                    <div style={{position: "relative", textAlign: "center",}}>       
                     <text style={{fontSize: "17px", fontWeight: "1000"}}> 소요시간: {time} </text>
                     <div class="vr" style={{fontWeight: "100"}}></div>
                     <text style={{fontSize: "13px", fontWeight: "600"}}> 이동거리: {distance}</text>

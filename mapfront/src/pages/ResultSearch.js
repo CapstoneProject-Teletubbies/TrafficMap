@@ -400,7 +400,7 @@ function ResultSearch() {
     </div>
     <div id="test1" style={{position: "fixed", top: "0px", zIndex: "10", zIndex: "0"}}>
     </div>
-    <div className="Infobar" ref={outsideRef} style={{position: "fixed", top: "0px", zIndex: "0"}}>
+    <div className="Infobar" ref={outsideRef} style={{position: "fixed", top: "0px", zIndex: "10"}}>
       
       {choosemarker && <BuildingDetailInfo props={buildingList[choosemarker]} findway={null} whole={{props: {mylocation: location, name: buildingList[choosemarker].name, obj: buildingList[choosemarker]}}} subway={null} mylocation={location}/>}
       {/* <BuildingDetailInfo props={building.state}/> */}
