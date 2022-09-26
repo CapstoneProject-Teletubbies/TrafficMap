@@ -249,8 +249,6 @@ public class SubwayServiceImpl implements SubwayService {
         String stinCd = subwayNumDto.getSTIN_CD();
         String railOprIsttCd = subwayNumDto.getRAIL_OPR_ISTT_CD();
 
-//        System.out.println("lnCd:"+lnCd+" stin:"+stinCd+" rail:"+railOprIsttCd);
-
         //URI 생성
         UriComponents uri = UriComponentsBuilder
                 .fromHttpUrl(toilet_url)
@@ -266,8 +264,6 @@ public class SubwayServiceImpl implements SubwayService {
         JSONParser parser = new JSONParser();
         JSONObject object = (JSONObject) parser.parse(result.getBody());
         JSONObject header = (JSONObject) object.get("header");
-
-//        System.out.println(object);
 
         if (header.get("resultCnt").toString().equals("0")) {  // 장애인화장실이 없는 역이면
             return null;
@@ -291,7 +287,6 @@ public class SubwayServiceImpl implements SubwayService {
                 toiletDto.setToltNum(toltNum);
 
                 dtos.add(i, toiletDto);
-
             }
             return dtos;
         }
@@ -316,7 +311,6 @@ public class SubwayServiceImpl implements SubwayService {
             value = Name[1];
             map.add(key, value);
         }
-
         return map;
     }
 
@@ -327,7 +321,6 @@ public class SubwayServiceImpl implements SubwayService {
         HttpHeaders headers = new HttpHeaders(); //헤더
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(StandardCharsets.UTF_8)); // 한글깨짐 방지
 
-//        String encodedName = URLEncoder.encode(name, "UTF-8");
         //URI 생성
         UriComponents uri = UriComponentsBuilder
                 .fromHttpUrl(suwaymap_url)
@@ -350,7 +343,6 @@ public class SubwayServiceImpl implements SubwayService {
 
             if (name.equals(getName)) { // 받은 역이름과 같으면
                 String url = array.get("STN_IMG_URL").toString();
-
                 return url; //url 반환
             }
             else { // 다르면
@@ -387,9 +379,6 @@ public class SubwayServiceImpl implements SubwayService {
 
             map.put(SubwayName2, subwayNumDto);
         }
-
         return map;
     }
-
-
 }

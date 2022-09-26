@@ -132,7 +132,6 @@ public class BusServiceImpl implements BusService {
                 return dtos;
             }
         }
-
         else { // 결과가 없을 경우 (itemList이 X)
             return null;
         }
@@ -158,7 +157,7 @@ public class BusServiceImpl implements BusService {
 
         JSONObject response = XML.toJSONObject(result.getBody()); // xml 형식을 json 형식으로 변환
         JSONObject ServiceResult = response.getJSONObject("ServiceResult"); //ServiceResult의 value들
-//        System.out.println("ServiceResult = " + ServiceResult);
+
         JSONObject msgHeader = ServiceResult.getJSONObject("msgHeader"); //msgHeader의 value들
         Integer totalCount = msgHeader.getInt("totalCount"); // 총 개수
 
@@ -476,7 +475,7 @@ public class BusServiceImpl implements BusService {
                     j += 1;
                 }
                 long end2 = System.currentTimeMillis();
-                System.out.println("버스 시간 : "+(end2-start2)/1000.0);
+//                System.out.println("버스 시간 : "+(end2-start2)/1000.0);
                 return dtos;
             }
 
@@ -681,9 +680,6 @@ public class BusServiceImpl implements BusService {
         }else{
             return str;
         }
-
         return result;
-
     }
-
 }

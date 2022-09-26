@@ -50,8 +50,8 @@ public class FindServiceImpl implements FindService {
     @SneakyThrows
     public List<FindDto> findAddressByTmapAPI(String FindName, double longitude, double latitude) { // 티맵 api (통합검색(명칭검색))
 
-        long start2 = System.currentTimeMillis();
-        long start0 = System.currentTimeMillis();
+//        long start2 = System.currentTimeMillis();
+//        long start0 = System.currentTimeMillis();
         DefaultUriBuilderFactory factory = new DefaultUriBuilderFactory(tmap_url);
         factory.setEncodingMode(DefaultUriBuilderFactory.EncodingMode.VALUES_ONLY);
 
@@ -73,10 +73,9 @@ public class FindServiceImpl implements FindService {
 
                 .retrieve() //response 불러옴
                 .toEntity(String.class)
-//                .bodyToMono(String.class);
                 .block();
-        long end2 = System.currentTimeMillis();
-        System.out.println("용의자 시간 : " + (end2 - start2) / 1000.0);
+//        long end2 = System.currentTimeMillis();
+//        System.out.println("용의자 시간 : " + (end2 - start2) / 1000.0);
 
         if (result.getBody() != null) {
             //받아온 JSON 데이터 가공
@@ -91,12 +90,9 @@ public class FindServiceImpl implements FindService {
             JSONArray poiArr = (JSONArray) pois.get("poi");
 
             List<FindDto> dtos = new ArrayList<>(); //리스트에 담을 dtos 선언
-
             List<ElevatorOrderDto> ele = new ArrayList<>();
 
-
             for (int i = 0; i < poiArr.size(); i++) {
-
                 ElevatorOrderDto elevatorOrderDto = new ElevatorOrderDto();
                 FindDto findDto = new FindDto();
                 object = (JSONObject) poiArr.get(i);
@@ -118,10 +114,10 @@ public class FindServiceImpl implements FindService {
             }
 
             Map<Integer, String> elevatorResult = new HashMap<>();
-            long start1 = System.currentTimeMillis();
+//            long start1 = System.currentTimeMillis();
             elevatorResult = findElevatorByAPI(ele);
-            long end1 = System.currentTimeMillis();
-            System.out.println("엘레베이터만 걸리는 시간 : " + (end1 - start1) / 1000.0);
+//            long end1 = System.currentTimeMillis();
+//            System.out.println("엘레베이터만 걸리는 시간 : " + (end1 - start1) / 1000.0);
 
             //다시 poi의 value를 받아온 배열을 개수만큼 담기 (검색했을 때 출력하는 리스트 최대 10개)
             for (int i = 0; i < poiArr.size(); i++) {
@@ -169,7 +165,7 @@ public class FindServiceImpl implements FindService {
                             findDto.setElevatorState("운행중");
 
                             dtos.add(i, findDto);
-                            System.out.println("findDto = " + findDto);
+
                             break;
                         case "상명대학교 디자인대학":
                             findDto.setFullAddressRoad("충남 천안시 동남구 상명대길 31");
@@ -192,9 +188,7 @@ public class FindServiceImpl implements FindService {
                             break;
                     }
 //                String addr = middleAddrName + " " + roadName + " " + firstBuildNo;
-
 //                    findDto.setElevatorState(elevatorResult.get(i));
-//
 //                    dtos.add(i, findDto);
                 } else { //건물이 아니라 도로 같은거라서 [] 안에 비어있을 경우
                     String name = (String) object.get("name"); // 이름
@@ -209,14 +203,10 @@ public class FindServiceImpl implements FindService {
 
                     dtos.add(i, findDto);
                 }
-
             }
-
-            long end0 = System.currentTimeMillis();
-            System.out.println("총 시간 : " + (end0 - start0) / 1000.0);
-//            System.out.println("dtos = " + dtos);
+//            long end0 = System.currentTimeMillis();
+//            System.out.println("총 시간 : " + (end0 - start0) / 1000.0);
             return dtos;
-
         } else {
             return null;
         }
@@ -226,16 +216,9 @@ public class FindServiceImpl implements FindService {
     @SneakyThrows
     public Map<Integer, String> findElevatorByAPI(List<ElevatorOrderDto> ele) {
 
-        long start = System.currentTimeMillis();
-
+//        long start = System.currentTimeMillis();
         List<String> responseResult = fetchElevator(ele).collectSortedList(Comparator.reverseOrder()).block();
-
-//        for (int i=0; i<ele.size();i++) {
-//            System.out.println(responseResult.get(i));
-//        }
-        long end = System.currentTimeMillis();
-
-        //List<String> result = new ArrayList<>();
+//        long end = System.currentTimeMillis();
 
         Map<Integer, String> result = new HashMap<Integer, String>();
         Map<String, String> map = new HashMap<>();
@@ -250,7 +233,7 @@ public class FindServiceImpl implements FindService {
             }
             org.json.JSONObject response = (org.json.JSONObject) object.get("response");
             org.json.JSONObject body = (org.json.JSONObject) response.get("body");
-            //System.out.println(body);
+
             if (!(body.get("items").equals(""))) { // 엘리베이터가 없으면 body":{"items":"","numOfRows":,"pageNo":,"totalCount":} 이런식으로 반환
                 org.json.JSONObject items = (org.json.JSONObject) body.get("items");
                 //item value들
@@ -259,44 +242,30 @@ public class FindServiceImpl implements FindService {
                 String elvtrSttsNm = (String) item.get("elvtrSttsNm");
                 //return elvtrSttsNm;
                 String addr = (String) item.get("address1");
-                //String encodedAddr = URLEncoder.encode(addr,"UTF-8");
 
                 String[] t = addr.split(" ");
                 List<String> str_list = new ArrayList<String>(Arrays.asList(t));
 
-                //System.out.println(str_list);
                 str_list.remove(0);
                 String s = str_list.get(0);
-                //System.out.println(s);
-                //System.out.println(s.length()-1);
                 String r = String.valueOf((s.charAt(s.length() - 1)));
 
-                /*if(r.equals("시") | r.equals("군")){
-                    str_list.remove(0);
-                }*/
-
                 String result_str = String.join(" ", str_list);
-                //System.out.println(result_str);
 
                 map.put(result_str, elvtrSttsNm);
             }
         }
 
-        //System.out.println(map);
-        //System.out.println(ele);
-
         for (int i = 0; i < ele.size(); i++) {
             String decodedAddr = URLDecoder.decode(ele.get(i).getAddress());
             String elevator = map.get(decodedAddr);
-            //System.out.println(decodedAddr);
+
             if (elevator == null) {
                 result.put(ele.get(i).getOrder(), "x");
             } else {
                 result.put(ele.get(i).getOrder(), elevator);
             }
-
         }
-
         return result;
     }
 
@@ -321,7 +290,6 @@ public class FindServiceImpl implements FindService {
 
         //response
         ResponseEntity<String> result = restTemplate.exchange(uri.toUri(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
-//        System.out.println("result = " + result.getBody());
 
         JSONParser parser = new JSONParser();
         JSONObject object = (JSONObject)parser.parse(result.getBody());
@@ -329,7 +297,6 @@ public class FindServiceImpl implements FindService {
         if(result.getBody()==null){
             for(int k=0;k<10;k++){
                 result = restTemplate.exchange(uri.toUri(), HttpMethod.GET, new HttpEntity<String>(headers), String.class);
-//        System.out.println("result = " + result.getBody());
 
                 parser = new JSONParser();
                 object = (JSONObject)parser.parse(result.getBody());
@@ -339,14 +306,7 @@ public class FindServiceImpl implements FindService {
             }
         }
 
-
-//        if (object.has("error")){
-//            findStairs();
-//            System.out.println("again");
-//            return null;
-//        }
         if (result.getBody() != null) {
-            System.out.println(" 여기");
             JSONArray features = (JSONArray) object.get("features");
 
             List<StairDto> dtos = new ArrayList<>(); //리스트에 담을 dtos 선언
@@ -383,7 +343,6 @@ public class FindServiceImpl implements FindService {
                 stairDto.setEndlatitude(endlatitude);
                 stairDto.setEndlongitude(endlongitude);
 
-                //System.out.println("오류나냐?:"+rdnmadr);
                 Pattern str_a = Pattern.compile("아파트");
                 if (rdnmadr == null) {
                     dtos.add(j, stairDto);
@@ -391,13 +350,11 @@ public class FindServiceImpl implements FindService {
                 } else {
                     Matcher matcher = str_a.matcher(rdnmadr);
                     if (!matcher.find()) {
-                        //System.out.println(rdnmadr);
                         dtos.add(j, stairDto);
                         j += 1;
                     }
                 }
             }
-//            System.out.println(j);
             return dtos;
         }
         return  null;
@@ -474,7 +431,6 @@ public class FindServiceImpl implements FindService {
                         .queryParam("numOfRows",1) // 1개만 출력
                         .queryParam("pageNo",1).build())
                 .retrieve().bodyToMono(String.class);
-
     }
 
     public ParallelFlux<String> fetchElevator(List<ElevatorOrderDto> adds) throws Exception{
@@ -483,9 +439,7 @@ public class FindServiceImpl implements FindService {
                 //.sort((obj1,obj2)-> obj1.getOrder().compareTo(obj2.getOrder()))
                 .parallel()
                 .runOn(Schedulers.parallel())
-                .flatMap(this::getEle)
-                ;
-
+                .flatMap(this::getEle);
         return result;
     }
 
@@ -512,6 +466,5 @@ public class FindServiceImpl implements FindService {
         JSONObject addressInfo = (JSONObject) object.get("addressInfo");
 
         return addressInfo.get("fullAddress").toString();
-
     }
 }
