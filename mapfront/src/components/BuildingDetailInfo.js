@@ -145,8 +145,8 @@ const BuildingDetailInfo = (props) => {
             case '신정역': name = '신정역(은행정)'; break;
             case '오목교역': name = '오목교역(목동운동장앞)'; break;
             case '충정로역' : name = '충정로역(경기대입구)'; break;
-            case '광화문역(' : name = '광화문역(세종문화회관)'; break;
-            case '종로3가역' : name = '종로3가역(탑골공원)'; break;
+            case '광화문역' : name = '광화문역(세종문화회관)'; break;
+            case '종로3가역' : if(line[0]==5){name = '종로3가역(탑골공원)'}else{name=subname}; break;
             case '군자역': name = '군자(능동)'; break;
             case '아차산역': name ='아차산역(어린이대공원후문)'; break;
             case '광나루역': name = '광나루역(장신대)'; break;
@@ -185,8 +185,16 @@ const BuildingDetailInfo = (props) => {
             console.log("지하철 입체지도 정보 못받아옴");
         })
         }else{
+            var line;
+            
+            if(line[0] == '지하철경의중앙선'){
+                line = '경의중앙선';
+            }else{
+                line = line[0]
+            }
             console.log(name);
-        subwaymap2.post('api/subway/photo2', null, {params: {line: line[0], name: name}})
+            console.log(line);
+        subwaymap2.post('api/subway/photo2', null, {params: {line: line, name: name}})
         .then(function(res){
             console.log(res.data);
             Seturl(res.data);

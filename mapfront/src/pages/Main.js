@@ -202,6 +202,7 @@ function Main() {
         var testmap;
         var zoomIn;
         var marker, markerCluster;
+        var wheelmarker;
 
         function initTmap(pos) {
             var map = new Tmapv2.Map("TMapApp", {
@@ -263,6 +264,10 @@ function Main() {
       if(testmap && ${movelocation}){
         var setmylocation = new Tmapv2.LatLng(${lat}, ${lng});
         testmap.setCenter(setmylocation);
+      }
+
+      if(testmap && !wheelmarker){
+        
       }
 
       var markers;
