@@ -30,6 +30,7 @@ const BuildingDetailInfo = (props) => {
     const [iswheelchairlift, setIsWheelChairLift] = useState(false);
     const [isToilet, setIsToilet] = useState(false);
     const [iswheelchairliftClick, setIsWheelChairLiftClick] = useState(false);
+    const [wheelchairLocation, setWCLocation] = useState();
     const [isToiletClick, setIsToiletClick] = useState(false);
     const [toiletLocation, setToiletLocation] = useState([]);
 
@@ -284,6 +285,12 @@ const BuildingDetailInfo = (props) => {
         wheelchairlift.post('/api/subway/wheelchair', null, {params: {subwayName: subwayname}})
         .then(function(res){
             console.log(res.data);
+            if(res.data){
+                setIsWheelChairLift(true);
+                setWCLocation(res.data);
+            }else{
+                setIsWheelChairLift(false);
+            }
         }).catch(function(err){
             console.log("휠체어리프트 정보 못받아옴");
         })
@@ -316,6 +323,13 @@ const BuildingDetailInfo = (props) => {
             setIsToiletClick(true);
         }
     };
+    const handleWLButton = () => {
+        if(iswheelchairliftClick){
+            setIsWheelChairLiftClick(false);
+        }else{
+            setIsWheelChairLiftClick(true);
+        }
+    }
     const handleCloseInfo = (e) => {
         if(el.current){
             console.log(el);
@@ -448,12 +462,29 @@ const BuildingDetailInfo = (props) => {
                             })}
                             {/* </Swiper> */}
                         </div></Swiper>}
+                        {wheelchairLocation && iswheelchairliftClick && 
+                        <Swiper style={swiperStyle}>
+                        <div style={{position: "absolute", backgroundColor: "white", height: "20%", top: "-21%", right: "0px"}}>
+                            {/* <Swiper > */}
+                            {wheelchairLocation.map((obj, index)=>{
+                                console.log(obj.dtlLoc);
+                                return(
+                                    <SwiperSlide>
+                                    <div style={{boxShadow: "0px 0px 2px 1px gray", borderRadius: "3px"}}>
+                                        <text style={{fontFamily: 'Nanum Gothic Coding', fontSize: "1rem"}}>{obj.dtlLoc}</text>
+                                    </div>  
+                                    </SwiperSlide>
+                                );
+                            })}
+                            {/* </Swiper> */}
+                        </div></Swiper>}
                 <div id='Info' className="detailInfo" style={{height: "100%"}}>
                         <div id='headInfo' className="row" style={{position: "relative", paddingTop: "10px"}}>
-                            <div className="col-8" style={{textAlign: "left", paddingLeft: "5%", paddingRight: "0px"}}>
+                            <div className="col-7" style={{textAlign: "left", paddingLeft: "5%", paddingRight: "0px", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden",}}>
                                 <b>{buildingDetailInfo.name}</b> {buildingDetailInfo.bizname} 
-                            </div><div className="col-4" style={{paddingLeft: "0px"}}>
+                            </div><div className="col-5" style={{paddingLeft: "0px"}}>
                                 <div id="subwaymapbutton" className="" style={{paddingRight: "5%"}}>
+                                    
                                     {iselevator && <img src={elevator} style={{width: "24px", height: "24px", marginRight: "7px", float: "left"}}></img>}
                                     
                                     <button id='arrowbutton' onClick={searchsubwaytime} style={{backgroundColor: "white", border: "none", padding: "0px", width: "26px", height: "26px", float: "right"}}>
@@ -462,6 +493,7 @@ const BuildingDetailInfo = (props) => {
                                     <div style={{top: "-2px"}}>
                                     <i class="bi bi-map" onClick={openMadal} style={{float: "right", paddingRight: "10px", fontSize: "20px", height: "24px"}}></i></div>
                                     {isToilet && <img id="toileticon" src={toileticon} onClick={handleWCButton} style={{width: "25px", height: "25px", top: "-3px", marginRight: "4px",}}></img>}
+                                    {iswheelchairlift && <img src={lift} onClick={handleWLButton} style={{width: "25px", height: "25px", top: "-2px", marginRight: "4px"}}></img>}
                                 </div>
                             </div>  
                         </div>
@@ -570,6 +602,7 @@ const BuildingDetailInfo = (props) => {
                 <div style={{padding: "2%", height: "100%"}}>
                         <div style={{width: "100%", textAlign: "-webkit-left"}}>
                             <b>{buildingDetailInfo.name}</b> {buildingDetailInfo.upperBizName} {iselevator && <img src={elevator} style={{width: "25px", height: "25px", top: "-3px"}}></img>}
+                            {iswheelchairlift && <img src={lift} style={{width: "25px", height: "25px", top: "-3px"}}></img>}
                             <b>{buildingDetailInfo.bstopnm}</b>
                         </div>
                         <div style={{textAlign: "-webkit-left"}}>
