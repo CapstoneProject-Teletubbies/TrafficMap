@@ -3,8 +3,9 @@ import { useState, useEffect, useRef } from 'react';
 import { ListGroup } from 'react-bootstrap';
 
 import stair from "../images/stairs.png"
+import charging from "../images/charging_station_icon.png"
 
-const SideBar =({width=200, children, onCheck})=>{
+const SideBar =({width=200, children, onCheck, onCheckWheel})=>{
     const [isOpen, setOpen] = useState(false);
     const [xPosition, setX] = useState(-width);
     const [boxShadow, setBoxShadow] = useState();
@@ -59,7 +60,7 @@ const SideBar =({width=200, children, onCheck})=>{
                     <div className='list-group' style={{}}>
 
                         <div className="row">
-                            <div className="" style={{marginTop: "12%",}}>
+                            <div className="" style={{marginTop: "7%",}}>
                                 <label for="chk">
                                     <input type="checkbox" id="chk" onChange={e => {onCheck(e.target.checked, e.target.value)}} style={{width: "35px", float: "left", marginTop: "10px", marginLeft: "10px"}}></input>
                                     <i class="circle"></i>
@@ -67,10 +68,16 @@ const SideBar =({width=200, children, onCheck})=>{
                                     <text style={{fontSize:"17px"}}>계단</text>
                                 </label>
                             </div>
-                            {/* <div className="col-9" style={{alignSelf: "center", marginTop: "10px"}}>
-                                <img src={obj.src} style={{width: "20px", height: "20px"}}></img>
-                                {obj.data}
-                            </div> */}
+                        </div>
+                        <div className="row">
+                            <div className="" style={{marginTop: "1%",}}>
+                                <label for="chk1">
+                                    <input type="checkbox" id="chk1" onChange={e => {onCheckWheel(e.target.checked, e.target.value)}} style={{width: "35px", float: "left", marginTop: "10px", marginLeft: "10px"}}></input>
+                                    <i class="circle1"></i>
+                                    <img src={charging} style={{width: "26px", height: "26px", top: "-2px", marginLeft: "5px", marginRight: "5px"}}></img>
+                                    <text style={{fontSize:"17px"}}>휠체어 급속충전기</text>
+                                </label>
+                            </div>
                         </div>
 
                     </div>  

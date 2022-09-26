@@ -43,6 +43,7 @@ function FindWay(props){
     const [checked, setChecked] = useState(false);
 
     const [check, setCheck] = useState(false);
+    const [wheelchecked, setWheelChecked] = useState(false);
 
     const onCheckedElement = (checked, item) => {
       if(checked){
@@ -52,6 +53,15 @@ function FindWay(props){
         console.log("체크 안돼있음");
         setChecked(false);
       }
+    };
+    const onCheckedWheel = (wheelchecked, item) => {
+        if(wheelchecked){
+          console.log("휠체어~체크");
+          setWheelChecked(true);
+        }else if(!wheelchecked){
+          console.log("휠체어 노체크~");
+          setWheelChecked(false);
+        }
     };
 
     const LIST = [
@@ -316,8 +326,6 @@ function FindWay(props){
             var marker_myl;
             var markerCluster;
 
-            var wheelmarkers;
-
             var latlon;
 
             if(!latlon){
@@ -362,7 +370,7 @@ function FindWay(props){
                 var polyline4;
                 
                 console.log(checki);
-                if(${check}){
+                if(!checki){
                     console.log("그거 시작임@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
                     checki = 10;
                     ${setCheck(true)};
@@ -499,7 +507,9 @@ function FindWay(props){
 
             if(${both}){  
                 console.log("both!@@@@!@!@!@!@!@!@!@!@!@!@!@!@");   
-                map = initTmap(); 
+                if(!checki){
+                    map = initTmap();
+                } 
 
             }       
  
@@ -575,20 +585,36 @@ function FindWay(props){
             console.log(markers);
       
           }
-        //////////////////////////////////////////////////////////////////////////////////////////////
-        var wheelmarker;
-        if(map && !wheelmarkers && latlon){
+          //////////////////////////////////////////////////////////////////////////////////////////////
+          var wheelmarker;
+          var wheelmarkers;
+          if(map && !wheelmarkers && latlon){
+            wheelmarkers = [];
             for(var i = 0; i < 26; i++){
-            wheelmarker = new Tmapv2.Marker({
-            position: new Tmapv2.LatLng(latlon[i].lat, latlon[i].lon),
-            icon: "${charging}",
-            iconSize: new Tmapv2.Size(15, 15),
-            map: map
-          });
-        }
-        }
-
-        //////////////////////////////////////////////////////////////////////////////////////////////
+              wheelmarker = new Tmapv2.Marker({
+                position: new Tmapv2.LatLng(latlon[i].lat, latlon[i].lon),
+                icon: "${charging}",
+                iconSize: new Tmapv2.Size(15, 15),
+                // map: map
+              });
+    
+              wheelmarkers.push(wheelmarker);
+            }
+          }
+    
+          if(wheelmarkers && ${wheelchecked}){
+            console.log("@@@@@@@@@빵ㄱ구뿡!!!!!!!!!!!@@@@@@@@@@");
+            console.log(wheelmarkers);
+            for(var i = 0; i < wheelmarkers.length; i++){
+              wheelmarkers[i].setMap(map);
+            }
+          }else if(wheelmarkers && !${wheelchecked}){
+            console.log("샹!!!!!");
+            for(var i = 0; i < wheelmarkers.length; i++){
+              wheelmarkers[i].setMap(null);
+            }
+          }
+          //////////////////////////////////////////////////////////////////////////////////////////////
  
         `;
         script.type = "text/javascript";
@@ -600,7 +626,7 @@ function FindWay(props){
     return(
         <div style={{position: "fixed", width: "100%", height: "100%", backgroundColor: "#D5D5D5", zIndex: "0"}}>
 
-            {<ElevatorAndStair onCheck={onCheckedElement}>{LIST}{onCheckedElement}</ElevatorAndStair>}
+            {<ElevatorAndStair onCheck={onCheckedElement} onCheckWheel={onCheckedWheel}>{LIST}{onCheckedElement}</ElevatorAndStair>}
 
             <div className= "row align-items-center" id="findwayheader" style={{position: "relative", width: "100%", margin: "0px", display: "flex"
                 , backgroundColor: "white", boxShadow: "1px 1px 20px 1px gray", zIndex: "3"}}>

@@ -34,6 +34,7 @@ function Main() {
 
     const [checkedList, setCheckedList] = useState([]);
     const [checked, setChecked] = useState(false);
+    const [wheelchecked, setWheelChecked] = useState(false);
 
     const onCheckedElement = (checked, item) => {
       if(checked){
@@ -46,6 +47,16 @@ function Main() {
         setChecked(false);
       }
     };
+
+    const onCheckedWheel = (wheelchecked, item) => {
+      if(wheelchecked){
+        console.log("휠체어~체크");
+        setWheelChecked(true);
+      }else if(!wheelchecked){
+        console.log("휠체어 노체크~");
+        setWheelChecked(false);
+      }
+    }
 
     const onRemove = item => {
       setCheckedList(checkedList.filter(el => el !== item));
@@ -203,7 +214,6 @@ function Main() {
         var testmap;
         var zoomIn;
         var marker, markerCluster;
-        var wheelmarkers;
 
         var latlon;
 
@@ -283,14 +293,31 @@ function Main() {
 
       //////////////////////////////////////////////////////////////////////////////////////////////
       var wheelmarker;
+      var wheelmarkers;
       if(testmap && !wheelmarkers && latlon){
+        wheelmarkers = [];
         for(var i = 0; i < 26; i++){
           wheelmarker = new Tmapv2.Marker({
             position: new Tmapv2.LatLng(latlon[i].lat, latlon[i].lon),
             icon: "${charging}",
             iconSize: new Tmapv2.Size(15, 15),
-            map: testmap
+            // map: testmap
           });
+
+          wheelmarkers.push(wheelmarker);
+        }
+      }
+
+      if(wheelmarkers && ${wheelchecked}){
+        console.log("@@@@@@@@@빵ㄱ구뿡!!!!!!!!!!!@@@@@@@@@@");
+        console.log(wheelmarkers);
+        for(var i = 0; i < wheelmarkers.length; i++){
+          wheelmarkers[i].setMap(testmap);
+        }
+      }else if(wheelmarkers && !${wheelchecked}){
+        console.log("샹!!!!!");
+        for(var i = 0; i < wheelmarkers.length; i++){
+          wheelmarkers[i].setMap(null);
         }
       }
 
@@ -397,7 +424,7 @@ function Main() {
 
     </div>
     
-    {<SideBar onCheck={onCheckedElement} >{LIST}{onCheckedElement}</SideBar>}
+    {<SideBar onCheck={onCheckedElement} onCheckWheel={onCheckedWheel} >{LIST}{onCheckedElement}</SideBar>}
     
     <div className="rightbarbutton">
       <div className="zoom">
