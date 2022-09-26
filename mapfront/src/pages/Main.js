@@ -309,13 +309,10 @@ function Main() {
       }
 
       if(wheelmarkers && ${wheelchecked}){
-        console.log("@@@@@@@@@빵ㄱ구뿡!!!!!!!!!!!@@@@@@@@@@");
-        console.log(wheelmarkers);
         for(var i = 0; i < wheelmarkers.length; i++){
           wheelmarkers[i].setMap(testmap);
         }
       }else if(wheelmarkers && !${wheelchecked}){
-        console.log("샹!!!!!");
         for(var i = 0; i < wheelmarkers.length; i++){
           wheelmarkers[i].setMap(null);
         }
@@ -333,10 +330,7 @@ function Main() {
 
         },
         success: function(res){
-          console.log(res);
           if(markers){
-            console.log("마커 지워야해");
-            console.log(markers);
             for(var i = 0; i < markers.length; i++){
               markers[i].setMap(null);
             }

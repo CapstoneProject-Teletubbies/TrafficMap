@@ -47,19 +47,15 @@ function FindWay(props){
 
     const onCheckedElement = (checked, item) => {
       if(checked){
-        console.log("체크");
         setChecked(true);
       }else if(!checked){
-        console.log("체크 안돼있음");
         setChecked(false);
       }
     };
     const onCheckedWheel = (wheelchecked, item) => {
         if(wheelchecked){
-          console.log("휠체어~체크");
           setWheelChecked(true);
         }else if(!wheelchecked){
-          console.log("휠체어 노체크~");
           setWheelChecked(false);
         }
     };
@@ -74,14 +70,11 @@ function FindWay(props){
     const mylocation = location.state.mylocation;
 
     const handleSuccess = (pos) => {                //현재 내 위치 받아오기
-        console.log("@@//////////////내위치 받아옴//////////////@@@");
         const {latitude, longitude } = pos.coords;
 
         if(!startPlace){
-            console.log("스타트 플레이스 없음");
             reverseGeocoding(latitude, longitude);
         }else{
-            console.log("스타ㅡㅌ플레이스가 있냐?");
             console.log(startPlace);
             console.log(findLocation);
         }
@@ -127,7 +120,6 @@ function FindWay(props){
             startX : startlng, startY : startlat, endX : endlng, endY : endlat, startName : "출발지", endName : "도착지", option : '0'
         }}).then(function(res){
             setRoute(res.data);
-            console.log("@@@@@@@@@@@@@@@@@@@길찾기 실행했다!@@@@@@@@@@@@@@@@@");
         }).catch(function(err){
             console.log("길찾기 실패");
         })
@@ -161,7 +153,6 @@ function FindWay(props){
     }
 
     useEffect(()=>{
-        console.log("////////////////////////////////////////");
         if(location.state.mystartlocation){
             console.log(location.state.mystartlocation);
             setStartPlaceHolder(location.state.mystartlocation);
@@ -603,13 +594,10 @@ function FindWay(props){
           }
     
           if(wheelmarkers && ${wheelchecked}){
-            console.log("@@@@@@@@@빵ㄱ구뿡!!!!!!!!!!!@@@@@@@@@@");
-            console.log(wheelmarkers);
             for(var i = 0; i < wheelmarkers.length; i++){
               wheelmarkers[i].setMap(map);
             }
           }else if(wheelmarkers && !${wheelchecked}){
-            console.log("샹!!!!!");
             for(var i = 0; i < wheelmarkers.length; i++){
               wheelmarkers[i].setMap(null);
             }
@@ -626,7 +614,7 @@ function FindWay(props){
     return(
         <div style={{position: "fixed", width: "100%", height: "100%", backgroundColor: "#D5D5D5", zIndex: "0"}}>
 
-            {<ElevatorAndStair onCheck={onCheckedElement} onCheckWheel={onCheckedWheel}>{LIST}{onCheckedElement}</ElevatorAndStair>}
+            {both && <ElevatorAndStair onCheck={onCheckedElement} onCheckWheel={onCheckedWheel}>{LIST}{onCheckedElement}</ElevatorAndStair>}
 
             <div className= "row align-items-center" id="findwayheader" style={{position: "relative", width: "100%", margin: "0px", display: "flex"
                 , backgroundColor: "white", boxShadow: "1px 1px 20px 1px gray", zIndex: "3"}}>
