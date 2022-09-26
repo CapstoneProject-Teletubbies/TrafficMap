@@ -102,18 +102,18 @@ const SideBar =({width=330, children, totalDistance, totalTime, start, end})=>{
                 도보 경로
                 </button>
                 <div style={{width: "100%", height: "10%", top: "-70px", textAlign: "left", }}>
-                    <div style={{top: "-10px"}}>
-                    <text>출발지: {start.name}</text> <br></br>
-                    <i class="bi bi-arrow-down-up"></i> <br></br>
-                    <text>도착지: {end.name}</text>
+                    <div style={{backgroundColor: "floralwhite", top: "-10px", borderStyle: "none", borderWidth:"2px", borderRadius: "10px", marginRight:"13px", marginLeft:"13px"}}>
+                    <text style={{width: "100px", fontSize:"smaller", backgroundColor: "linen", top: "-10px", borderStyle: "none", borderWidth:"2px", borderRadius: "5px"}}>출발지: {start.name}</text> <br></br>
+                    <i class="bi bi-arrow-down-up" style={{fontSize:"13px", float: "right", marginRight: "13px"}}></i> <br></br>
+                    <text style={{width: "100px", fontSize:"smaller", backgroundColor: "linen", top: "-10px", borderStyle: "none", borderWidth:"2px", borderRadius: "5px"}}>도착지: {end.name}</text>
                     </div>
-                    <div style={{position: "relative",textAlign: "left", marginLeft: "15px"}}>       
-                    <text style={{fontSize: "20px", fontWeight: "1000"}}> {time} </text>
+                    <div style={{position: "relative", textAlign: "center", marginLeft: "25px"}}>       
+                    <text style={{fontSize: "17px", fontWeight: "1000"}}> 소요시간: {time} </text>
                     <div class="vr" style={{fontWeight: "100"}}></div>
-                    <text style={{fontSize: "18px", fontWeight: "600"}}>  {distance}</text>
+                    <text style={{fontSize: "13px", fontWeight: "600"}}> 이동거리: {distance}</text>
                     </div>
                 </div>
-                <div className="sidebarcontent" style={{position: "relative", height: "85%", overflowY: "scroll", top: "-55px"}}>
+                <div className="sidebarcontent" style={{position: "relative", height: "85%", overflowY: "scroll", top: "-30px"}}>
                     <div className='list-group' style={{overflowY: "scroll"}}>
                     {children && children.map((obj, index)=>{
                         var Img;
