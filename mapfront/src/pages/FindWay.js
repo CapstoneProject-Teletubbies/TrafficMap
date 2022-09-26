@@ -41,6 +41,8 @@ function FindWay(props){
 
     const [checked, setChecked] = useState(false);
 
+    const [check, setCheck] = useState(false);
+
     const onCheckedElement = (checked, item) => {
       if(checked){
         console.log("체크");
@@ -322,13 +324,6 @@ function FindWay(props){
                     zoomControl: false,
                     zoom:13,
                 });
-                // 출발 마커
-                if(marker_s){
-                    marker_s.setMap(null);
-                }
-                if(marker_e){
-                    marker_e.setMap(null);
-                }
 
                 marker_s = new Tmapv2.Marker(
                     {
@@ -346,15 +341,15 @@ function FindWay(props){
                         iconSize : new Tmapv2.Size(24, 38),
                         map : map
                 });
-
-                
+               
                 var polyline4;
                 
                 console.log(checki);
-                if(!checki){
-                console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-                checki = 10;
-                $.ajax({
+                if(${check}){
+                    console.log("그거 시작임@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+                    checki = 10;
+                    ${setCheck(true)};
+                    $.ajax({
                     method: "POST",
                     url : "https://apis.openapi.sk.com/tmap/routes/pedestrian?version=1&format=json&callback=result",
                     async: false,
@@ -485,10 +480,10 @@ function FindWay(props){
                 resultdrawArr.push(polyline_);
             }
 
-            if(${both}){      
-                if(!checki){
-                    map = initTmap(); 
-                } 
+            if(${both}){  
+                console.log("both!@@@@!@!@!@!@!@!@!@!@!@!@!@!@");   
+                map = initTmap(); 
+
             }       
  
             if(marker_myl){
@@ -572,12 +567,12 @@ function FindWay(props){
 
 
     return(
-        <div style={{position: "fixed", width: "100%", height: "100%", backgroundColor: "#D5D5D5"}}>
+        <div style={{position: "fixed", width: "100%", height: "100%", backgroundColor: "#D5D5D5", zIndex: "0"}}>
 
             {<ElevatorAndStair onCheck={onCheckedElement}>{LIST}{onCheckedElement}</ElevatorAndStair>}
 
             <div className= "row align-items-center" id="findwayheader" style={{position: "relative", width: "100%", margin: "0px", display: "flex"
-                , backgroundColor: "white", boxShadow: "1px 1px 20px 1px gray", zIndex: "1"}}>
+                , backgroundColor: "white", boxShadow: "1px 1px 20px 1px gray", zIndex: "3"}}>
                 <div className='col-11' style={{position: "relative", textAlign: "-webkit-left"}}>
                     <SearchBar style={{border: "1px solid gray", borderRadius: "6px", margin: "5px", marginTop: "12px", width: "100%", }} color="black" placeholder={startplaceholder} location={mylocation} src={'/find-search'} id={'start'} endPlace={endPlace}></SearchBar>
                     <SearchBar style={{border: "1px solid gray", borderRadius: "6px", margin: "5px", marginBottom: "12px",  width: "100%", }} placeholder={endplaceholder} location={mylocation} src={'/find-search'} id={'end'} startPlace={startPlace}></SearchBar>

@@ -94,7 +94,7 @@ const SideBar =({width=330, children, totalDistance, totalTime, start, end})=>{
     }, [children])
 
     return(
-        <div className="sidebarmain">
+        <div className="sidebarmain" style={{zIndex: "3"}}>
             
             <div ref={side}  className="innersidbar" style={{ width: `${width}px`, height: window.innerHeight,  transform: `translatex(${-xPosition}px)`, backgroundColor: "yellowgreen", boxShadow: boxShadow}}>
                 <button  onClick={() => toggleMenu()}
@@ -104,7 +104,7 @@ const SideBar =({width=330, children, totalDistance, totalTime, start, end})=>{
                 <div style={{width: "100%", height: "10%", top: "-70px", textAlign: "left", }}>
                     <div style={{backgroundColor: "floralwhite", top: "-10px", borderStyle: "none", borderWidth:"2px", borderRadius: "10px", marginRight:"13px", marginLeft:"13px"}}>
                     <text style={{width: "100px", fontSize:"smaller", backgroundColor: "linen", top: "-10px", borderStyle: "none", borderWidth:"2px", borderRadius: "5px"}}>출발지: {start.name}</text> <br></br>
-                    <i class="bi bi-arrow-down-up" style={{fontSize:"13px", float: "right", marginRight: "13px"}}></i> <br></br>
+                    <i class="bi bi-arrow-down-up" style={{position: "absolute", fontSize:"13px", right: "0px", marginRight: "13px", top: "35%"}}></i> <br></br>
                     <text style={{width: "100px", fontSize:"smaller", backgroundColor: "linen", top: "-10px", borderStyle: "none", borderWidth:"2px", borderRadius: "5px"}}>도착지: {end.name}</text>
                     </div>
                     <div style={{position: "relative", textAlign: "center", marginLeft: "25px"}}>       

@@ -50,12 +50,12 @@ const SideBar =({width=200, children, onCheck})=>{
 
     return(
         <div className="sidebarmain" style={{zIndex: "3"}}>
-            <div ref={side}  className="innersidbare" style={{ width: `${width}px`, height: "100px", top:"60%", right: "0px", transform: `translatex(${-xPosition}px)`, boxShadow: boxShadow}}>
+            <div ref={side}  className="innersidbare" style={{ width: `${width}px`, height: "100px", top:"60%", right: "0px", transform: `translatex(${-xPosition}px)`, boxShadow: boxShadow, zIndex: "3"}}>
                 <button  onClick={() => toggleMenu()}
                 className="sidebarbuttone" style={{left: "-120px", zIndex: "0"}} >
                 <i class={chevron} style={{border: ""}}></i>
                 </button>
-                <div className="" style={{position: "relative", top: "-95px", height: "100%", zIndex: "10"}}>
+                <div className="" style={{position: "relative", top: "-95px", height: "100%", zIndex: "3"}}>
                     <div className='list-group' style={{}}>
 
                         <div className="row">

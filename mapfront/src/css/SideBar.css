@@ -13,7 +13,7 @@
     transition: 0.4s ease;
     color: #202020;
     height: 100%;
-    z-index: 99;
+    z-index: 10;
   }
   .sidebarbutton {
     position: relative;
@@ -21,7 +21,7 @@
     top: 70%;
     width: 40px;
     height: 100px;
-    z-index: 99;
+    z-index: 10;
     transition: 0.8s ease;
     border: none;
     box-shadow: 1px 0px 5px 1px gray;
@@ -51,7 +51,7 @@
     transition: 0.4s ease;
     color: #202020;
     height: 100%;
-    z-index: 99;
+    z-index: 10;
   }
   .sidebarbuttone {
     position: relative;
@@ -62,7 +62,7 @@
     top: 0px;
     width: 40px;
     height: 100px;
-    z-index: 99;
+    z-index: 10;
     transition: 0.8s ease;
     border-radius: 5px 0px 0px 5px;
     overflow: hidden;
@@ -93,5 +93,5 @@
   #chk{ position: absolute; left: -999em; }
 
   .img{
-    z-index: 100;
+    z-index: 20;
   }
