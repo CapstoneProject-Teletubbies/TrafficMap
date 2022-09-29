@@ -525,6 +525,34 @@ class MapApplicationTests {
 	}
 
 	@Test
+	void call() throws Exception{
+		File doc = new File("C:\\Users\\alicx\\Desktop\\Map\\TrafficMap\\map\\src\\test\\java\\teletubbies\\map\\stair.txt");
+
+		BufferedReader obj = new BufferedReader(new InputStreamReader(new FileInputStream(doc), "utf-8"));
+		String[] Name;
+		String str;
+		String name=null;
+		String lat=null;
+		String longt = null;
+
+
+		MultiValueMap<String,String> map = new LinkedMultiValueMap<String,String>();
+		while((str=obj.readLine())!=null){
+			Name = str.split("\\t");
+			name = Name[0];
+			lat= Name[1];
+			longt = Name[2];
+
+		}
+		System.out.println(name+lat+longt);
+		System.out.println(map.get("1호선 부평"));
+
+
+
+		}
+
+
+	@Test
 	void gwalho(){
 		String str = "종로3가(어쩌구)";
 

@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.util.DefaultUriBuilderFactory;
@@ -19,6 +21,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.publisher.ParallelFlux;
 import reactor.core.scheduler.Schedulers;
 
+import java.io.*;
 import java.math.BigDecimal;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -270,6 +273,60 @@ public class FindServiceImpl implements FindService {
     }
 
     //계단 api
+
+
+    public List<StairDto> findStairs() throws IOException {
+
+        File doc = new File(new File("./src/main/resources/stair.txt").getCanonicalPath());
+
+        BufferedReader obj = new BufferedReader(new InputStreamReader(new FileInputStream(doc), "utf-8"));
+        String[] Name;
+        String str;
+        String name;
+        String lati;
+        String longt;
+
+        int j = 0;
+
+        List<StairDto> dtos = new ArrayList<>();
+
+        while ((str = obj.readLine()) != null) {
+            Name = str.split("\\t");
+            name = Name[0];
+            lati = Name[1];
+            longt = Name[2];
+
+            StairDto stairDto = new StairDto();
+
+
+            //일단 테스트로 이제 가공한 데이터를 stairDto에 저장
+
+            stairDto.setRdnmadr(name);
+            stairDto.setStartlatitude(Double.valueOf(lati));
+            stairDto.setStartlongitude(Double.valueOf(longt));
+
+
+            Pattern str_a = Pattern.compile("아파트");
+            if (name == null) {
+                dtos.add(j, stairDto);
+                j += 1;
+            } else {
+                Matcher matcher = str_a.matcher(name);
+                if (!matcher.find()) {
+                    dtos.add(j, stairDto);
+                    j += 1;
+                }
+            }
+
+        }
+
+        return dtos;
+
+    }
+
+
+    //계단 api 이전
+    /*
     @SneakyThrows
     public List<StairDto> findStairs() {
         RestTemplate restTemplate = new RestTemplate();
@@ -360,7 +417,7 @@ public class FindServiceImpl implements FindService {
         return  null;
     }
 
-
+*/
     @SneakyThrows
     public List<ElevatorDto> findElevators() { // 엘리베이터 위도,경도(위치) 가져오는 api
         RestTemplate restTemplate = new RestTemplate();
