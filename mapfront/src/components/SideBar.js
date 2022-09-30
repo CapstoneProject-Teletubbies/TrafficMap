@@ -113,7 +113,7 @@ const SideBar =({width=330, children, totalDistance, totalTime, start, end})=>{
                     <text style={{fontSize: "13px", fontWeight: "600"}}> 이동거리: {distance}</text>
                     </div>
                 </div>
-                <div className="sidebarcontent" style={{position: "relative", height: "85%", overflowY: "scroll", top: "-30px"}}>
+                <div className="sidebarcontent" style={{position: "relative", height: "80%", overflowY: "scroll", top: "-30px"}}>
                     <div className='list-group' style={{overflowY: "scroll"}}>
                     {children && children.map((obj, index)=>{
                         var Img;

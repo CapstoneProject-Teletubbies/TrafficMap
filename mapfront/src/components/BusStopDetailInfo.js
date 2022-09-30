@@ -227,12 +227,12 @@ const BusStopDetailInfo = (props)=>{
                             <div style={{position: "relative", width: "30%", height: "4%", top: "5px", backgroundColor: "#D5D5D5", borderRadius: "6px",}}>
 
                             </div>
-                            <div style={{position: "relative", width:"100%"}}>
+                            <div style={{position: "relative", width:"100%", height: "100%"}}>
                                 <div style={{fontSize: "1.2rem", float: "left", padding: "9px"}}>
                                     {bustop.bstopnm} <br></br>
                                     <div style={{fontSize: "1.0rem", float: "left", paddingLeft: "2px"}}>{dist}</div>
                                 </div>
-                                <div className="" style={{position: "relative", width: "170px", float: "right", right: "0px", marginTop: "13%"}}>
+                                <div className="" style={{position: "absolute", width: "170px", float: "right", right: "0px", bottom: "15px"}}>
                                     <button id="button1" onTouchEnd={handleStartButton} type="button" class="btn btn-outline-primary btn-sm col-5" style={{borderRadius: "20px", height: "35px", marginLeft: "8px"}}>출발</button>
                                     <button id="button2" onTouchEnd={handleEndButton} type="button" class="btn btn-primary btn-sm col-5" style={{borderRadius: "20px", height: "35px", marginLeft: "8px"}}>도착</button>
                                 </div>
