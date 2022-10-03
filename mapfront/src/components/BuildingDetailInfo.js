@@ -599,7 +599,7 @@ const BuildingDetailInfo = (props) => {
         }else{
             return(
                 <footer style={{boxShadow: "1px 1px 10px 1px gray", }}>
-                <div style={{padding: "2%", height: "100%"}}>
+                <div style={{padding: "2%", paddingTop: "10px", height: "100%"}}>
                         <div style={{width: "100%", textAlign: "-webkit-left"}}>
                             <b>{buildingDetailInfo.name}</b> {buildingDetailInfo.upperBizName} {iselevator && <img src={elevator} style={{width: "25px", height: "25px", top: "-3px"}}></img>}
                             {iswheelchairlift && <img src={lift} style={{width: "25px", height: "25px", top: "-3px"}}></img>}

@@ -9,6 +9,8 @@ import loading from '../images/loading.gif';
 // import Modal from 'react-modal';
 import {button} from 'react-bootstrap';
 
+import $ from 'jquery';
+
 const baseurl = 'http://localhost:9000/'         //베이스 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
@@ -30,6 +32,20 @@ const SearchBar = (props) => {
     // };
     
 
+    $("#sin").bind('keydown', function(e){
+        if(e.keyCode === 13){
+            e.preventDefault();
+            setShowPopup(true);
+            // if(src == '/search' && (searchValue.includes('번 버스') || searchValue.includes('번버스'))){            
+            //     searchOnlyBus();
+            // }
+            // else{
+            //     searchBusStop();
+            // }
+            $("#sin").blur();
+        }
+    })
+
     const location = useLocation();
 
     const handleValue = (e) => {        //검색어 입력받는 부분
@@ -39,8 +55,7 @@ const SearchBar = (props) => {
     const handleKeyPress = (e) => { //enter키 추적용 -> 검색 결과창으로 이동시킴
         if(e.key === 'Enter'){
             setShowPopup(e.target.value);
-            if(src == '/search' && (searchValue.includes('번 버스') || searchValue.includes('번버스'))){
-                
+            if(src == '/search' && (searchValue.includes('번 버스') || searchValue.includes('번버스'))){            
                 searchOnlyBus();
             }
             else{
@@ -151,7 +166,7 @@ const SearchBar = (props) => {
 
     return(
         <>       
-            <input className="gg" type="text" style={props.style} 
+            <input id="sin" className="gg" type="text" style={props.style} 
             placeholder={props.placeholder} value={value} 
             onChange={handleValue}
             onKeyDown={handleKeyPress}
