@@ -46,6 +46,8 @@ function FindWay(props){
     const [check, setCheck] = useState(false);
     const [wheelchecked, setWheelChecked] = useState(false);
 
+    const [sideWidth, setSideWidth] = useState();
+
     const onCheckedElement = (checked, item) => {
       if(checked){
         setChecked(true);
@@ -165,6 +167,8 @@ function FindWay(props){
 
 
     useEffect(()=>{
+        setSideWidth((window.innerWidth)*0.85);
+
         console.log(route);
         var i = 0;
         if(route){
@@ -194,7 +198,8 @@ function FindWay(props){
                 setStartPlaceHolder(location.state.startBuilding.name);  //출발지 이름
             }
             if(location.state.endBuilding){    
-                console.log("도착지 정보 왔어요");
+                var ep = endPlace;
+                console.log(ep);
                 setEndPlace(location.state.endBuilding);              //도착지 정보
                 setEndPlaceHolder(location.state.endBuilding.name);   //도착지 이름
             }  
@@ -676,7 +681,7 @@ function FindWay(props){
         script.type = "text/javascript";
         script.async = "async";
         document.head.appendChild(script);
-    }, [handleSuccess, both, findLocation]);
+    }, [handleSuccess, both, findLocation, startPlace, endPlace]);
 
 
     return(
@@ -711,7 +716,7 @@ function FindWay(props){
               }}>
                 
             </div>
-            <SideBar totalDistance={totalDistance} totalTime={totalTime} start={startPlace} end={endPlace}>{routeDetail}</SideBar>
+            <SideBar width={sideWidth} totalDistance={totalDistance} totalTime={totalTime} start={startPlace} end={endPlace}>{routeDetail}</SideBar>
             </body>}
             <UrlModal open={modalOpen} close={closeModal} connect={urlModal}>  
             </UrlModal>

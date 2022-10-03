@@ -9,7 +9,7 @@ import point from "../images/placeholder.png";
 // import styled from "styled-components";
 
 
-const SideBar =({width=330, children, totalDistance, totalTime, start, end})=>{
+const SideBar =({width, children, totalDistance, totalTime, start, end})=>{
     const [isOpen, setOpen] = useState(false);
     const [xPosition, setX] = useState(width);
     const [boxShadow, setBoxShadow] = useState();
@@ -61,8 +61,7 @@ const SideBar =({width=330, children, totalDistance, totalTime, start, end})=>{
     //     `;
 
     useEffect(()=>{
-        console.log(start);
-        console.log(end);
+        console.log(width);
         window.addEventListener('click', handleClose);
         return () => {
             window.removeEventListener('click', handleClose);
@@ -98,14 +97,14 @@ const SideBar =({width=330, children, totalDistance, totalTime, start, end})=>{
             
             <div ref={side}  className="innersidbar" style={{ width: `${width}px`, height: window.innerHeight,  transform: `translatex(${-xPosition}px)`, backgroundColor: "yellowgreen", boxShadow: boxShadow}}>
                 <button  onClick={() => toggleMenu()}
-                className="sidebarbutton" style={{backgroundColor:"yellowgreen", fontSize: "smaller"}}>
+                className="sidebarbutton" style={{backgroundColor:"yellowgreen", fontSize: "smaller", right: "-40px"}}>
                 도보 경로
                 </button>
-                <div style={{width: "100%", height: "10%", top: "-70px", textAlign: "left", }}>
-                    <div style={{backgroundColor: "floralwhite", top: "-10px", borderStyle: "none", borderWidth:"2px", borderRadius: "10px", marginRight:"13px", marginLeft:"13px"}}>
-                    <text style={{width: "100px", fontSize:"smaller", backgroundColor: "linen", top: "-10px", borderStyle: "none", borderWidth:"2px", borderRadius: "5px"}}>출발지: {start.name}</text> <br></br>
+                <div style={{position: "relative", width: "100%", height: "15%",  textAlign: "left", marginTop: "10px"}}>
+                    <div style={{backgroundColor: "floralwhite", borderStyle: "none", borderWidth:"2px", borderRadius: "10px", marginRight:"13px", marginLeft:"13px"}}>
+                    <text style={{width: "100px", fontSize:"smaller", backgroundColor: "linen", borderStyle: "none", borderWidth:"2px", borderRadius: "5px"}}>출발지: {start.name}</text> <br></br>
                     <i class="bi bi-arrow-down-up" style={{position: "absolute", fontSize:"13px", right: "0px", marginRight: "13px", top: "35%"}}></i> <br></br>
-                    <text style={{width: "100px", fontSize:"smaller", backgroundColor: "linen", top: "-10px", borderStyle: "none", borderWidth:"2px", borderRadius: "5px"}}>도착지: {end.name}</text>
+                    <text style={{width: "100px", fontSize:"smaller", backgroundColor: "linen", borderStyle: "none", borderWidth:"2px", borderRadius: "5px"}}>도착지: {end.name}</text>
                     </div>
                     <div style={{position: "relative", textAlign: "center",}}>       
                     <text style={{fontSize: "17px", fontWeight: "1000"}}> 소요시간: {time} </text>
@@ -113,7 +112,7 @@ const SideBar =({width=330, children, totalDistance, totalTime, start, end})=>{
                     <text style={{fontSize: "13px", fontWeight: "600"}}> 이동거리: {distance}</text>
                     </div>
                 </div>
-                <div className="sidebarcontent" style={{position: "relative", height: "80%", overflowY: "scroll", top: "-30px"}}>
+                <div className="sidebarcontent" style={{position: "relative", height: "85%", overflowY: "scroll", bottom: "10px"}}>
                     <div className='list-group' style={{overflowY: "scroll"}}>
                     {children && children.map((obj, index)=>{
                         var Img;

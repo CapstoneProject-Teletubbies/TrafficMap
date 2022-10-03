@@ -149,6 +149,7 @@ const BuildingInfo = (props) => {
                     endBuilding: end,
                 }
             });
+            window.location.href = "/find-way";
         }
     }
     };

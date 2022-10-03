@@ -32,19 +32,20 @@ const SearchBar = (props) => {
     // };
     
 
-    $("#sin").bind('keydown', function(e){
-        if(e.keyCode === 13){
-            e.preventDefault();
-            setShowPopup(true);
-            // if(src == '/search' && (searchValue.includes('번 버스') || searchValue.includes('번버스'))){            
-            //     searchOnlyBus();
-            // }
-            // else{
-            //     searchBusStop();
-            // }
-            $("#sin").blur();
-        }
-    })
+    // $("#sin").bind('keydown', function(e){
+    //     if(e.keyCode === 13){
+    //         console.log("enter@@@@@@@@@@@@@@@@");
+    //         e.preventDefault();
+    //         setShowPopup(true);
+    //         // if(src == '/search' && (searchValue.includes('번 버스') || searchValue.includes('번버스'))){            
+    //         //     searchOnlyBus();
+    //         // }
+    //         // else{
+    //         //     searchBusStop();
+    //         // }
+    //         $("#sin").blur();
+    //     }
+    // })
 
     const location = useLocation();
 
@@ -54,6 +55,7 @@ const SearchBar = (props) => {
     }
     const handleKeyPress = (e) => { //enter키 추적용 -> 검색 결과창으로 이동시킴
         if(e.key === 'Enter'){
+            $("#sin").blur();
             setShowPopup(e.target.value);
             if(src == '/search' && (searchValue.includes('번 버스') || searchValue.includes('번버스'))){            
                 searchOnlyBus();
