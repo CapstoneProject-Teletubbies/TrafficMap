@@ -21,6 +21,7 @@ import eletrue from "../images/placeholder_ee.png"
 import elefalse from "../images/placeholder_ex.png"
 
 import charging from "../images/charging_station_icon.png"
+import elevator from "../images/elevator.png";
 
 import { render } from '@testing-library/react';
 
@@ -205,6 +206,7 @@ function ResultSearch() {
         var zoomIn;
 
         var wheelmarkers;
+        var elevatormks;
 
         var latlon;
 
@@ -244,6 +246,7 @@ function ResultSearch() {
             map.addListener("touchstart", onTouchstart); // 모바일에서 지도 터치
             map.addListener("touchend", onTouchend); // 모바일에서 지도 터치 end
             map.addListener("drag", onDrag); // 모바일에서 지도 드래그 ing
+            map.addListener("zoom_changed", onZoomChanged);
             
             //map.zoomIn();
             //map["zoomIn"]();
@@ -337,6 +340,21 @@ function ResultSearch() {
           element.innerHTML = 'true';         
         }
 
+        function onZoomChanged(e) {
+          if(elevatormks){
+            console.log(locationmap.getZoom());
+            if(locationmap.getZoom()>15){
+              for(var i = 0; i < elevatormks.length; i++){
+                elevatormks[i].setMap(locationmap);
+              }
+            }else{
+              for(var i = 0; i < elevatormks.length; i++){
+                elevatormks[i].setMap(null);
+              }
+            }
+          }
+        }
+
         if(!locationmap && ${lat} && ${plength}){     //지도생성, 마커생성
           var mylocation = {lat: ${lat}, lng: ${lng}};
           locationmap = initTmap(mylocation);
@@ -370,6 +388,38 @@ function ResultSearch() {
             map: locationmap
           });
         }
+      }
+
+      if(locationmap && !elevatormks){        //엘레베이터 받아옴
+        $.ajax({
+          method: "POST",
+          url: "http://localhost:9000/api/find/incheonElevator",
+          async: false,
+          data: {
+
+          },
+          success: function(res){
+            console.log(res);
+
+            elevatormks = [];
+            for(var i = 0; i < res.length; i++){
+              var lat = res[i].latitude;
+              var lng = res[i].longitude;
+
+              var markerevt = new Tmapv2.Marker({
+                position: new Tmapv2.LatLng(lat, lng),
+                icon: "${elevator}",
+                iconSize: new Tmapv2.Size(15, 15),
+                // map: locationmap
+              });
+              elevatormks.push(markerevt);
+            }
+          },
+          error: function(err){
+            console.log("엘리베이터 못받아옴");
+          }
+        })
+        
       }
 
       //////////////////////////////////////////////////////////////////////////////////////////////
