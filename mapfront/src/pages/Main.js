@@ -214,6 +214,7 @@ function Main() {
         var testmap;
         var zoomIn;
         var marker, markerCluster;
+        var elevatormks;
 
         var latlon;
 
@@ -249,13 +250,13 @@ function Main() {
             });
             map.addListener("click", onClick); //웹에서 지도 클릭
             map.addListener("touchstart", onTouchstart); // 모바일에서 지도 터치
+            map.addListener("zoom_changed", onZoomChanged);
     
             //map.zoomIn();
             //map["zoomIn"]();
         
             return map;
       }
-
 
       function onClick(e) {
           var result_mouse = e.latLng
@@ -270,6 +271,21 @@ function Main() {
           // resultDiv.innerHTML = result;
       }
         
+      function onZoomChanged(e) {
+        if(elevatormks){
+          console.log(testmap.getZoom());
+          if(testmap.getZoom()>15){
+            for(var i = 0; i < elevatormks.length; i++){
+              elevatormks[i].setMap(testmap);
+            }
+          }else{
+            for(var i = 0; i < elevatormks.length; i++){
+              elevatormks[i].setMap(null);
+            }
+          }
+        }
+      }
+
       if(!testmap && ${lat}){
         var mylocation = {lat: ${lat}, lng: ${lng}};
         testmap = initTmap(mylocation); 
@@ -333,6 +349,38 @@ function Main() {
     }
 
       //////////////////////////////////////////////////////////////////////////////////////////////
+
+      if(testmap && !elevatormks){        //엘레베이터 받아옴
+        $.ajax({
+          method: "POST",
+          url: "http://localhost:9000/api/find/incheonElevator",
+          async: false,
+          data: {
+
+          },
+          success: function(res){
+            console.log(res);
+
+            elevatormks = [];
+            for(var i = 0; i < res.length; i++){
+              var lat = res[i].latitude;
+              var lng = res[i].longitude;
+
+              var markerevt = new Tmapv2.Marker({
+                position: new Tmapv2.LatLng(lat, lng),
+                icon: "${elevator}",
+                iconSize: new Tmapv2.Size(15, 15),
+                // map: testmap
+              });
+              elevatormks.push(markerevt);
+            }
+          },
+          error: function(err){
+            console.log("엘리베이터 못받아옴");
+          }
+        })
+        
+      }
 
       var markers;
       if(testmap && !markers){
