@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -42,7 +43,8 @@ public class FindController {
 
     // 데이터 개수 167개
     @RequestMapping(value="/find/incheonElevator", method = {RequestMethod.POST})
-    public List<ElevatorDto> ElavatorsByAPI() { // 엘리베이터 위치 가져올 엘리베이터 api
+//    @GetMapping(value="/find/incheonElevator")
+    public List<ElevatorDto> ElavatorsByAPI() throws IOException { // 엘리베이터 위치 가져올 엘리베이터 api
         return findService.findElevators();
     }
 
