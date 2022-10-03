@@ -63,6 +63,10 @@ function LocationMap() {
       setLocationButton(true);
     }
 
+    const handleRefreshButton = () => {
+      console.log("새로고침");
+    }
+
     const handleSuccess = (pos) => {
       var buildinglatitude;
       var buildinglongitude

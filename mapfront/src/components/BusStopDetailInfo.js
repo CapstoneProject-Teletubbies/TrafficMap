@@ -8,6 +8,7 @@ import proj4 from 'proj4';
 import axios from 'axios';
 import BusInfo from '../components/BusInfo'
 import { TabContent } from 'react-bootstrap';
+import { isCompositeComponent } from 'react-dom/test-utils';
 
 const baseurl = 'http://localhost:9000/'
 
@@ -20,6 +21,9 @@ const BusStopDetailInfo = (props)=>{
     const [rbus, setRBus] = useState();
     const [dist, setDist] = useState();
     const [busnumlist, setBusNumList] = useState([]);
+
+    const [testBus, setTestBus] = useState([{}]);
+
     const [isset, SetIsSet] = useState(false);
 
     const [y, setY] = useState();
@@ -28,20 +32,52 @@ const BusStopDetailInfo = (props)=>{
 
     var bustopinfobar, rbuslist; 
 
-    const searchBusNum = (routeid) => {
+    const searchBusNum = (obj) => {
+        setBusNumList([]);
+        setTestBus([{}]);
         const busnum = axios.create({
             baseURL: baseurl
         })
-        busnum.post('api/bus/route/detail/', null, {params: {routeId: routeid}})
+        busnum.post('api/bus/route/detail/', null, {params: {routeId: obj.routeid}})
         .then(function(res){
+            console.log(res.data);
             setBusNumList(busnumlist => [...busnumlist, res.data[0]]);
+            setTestBus(testBus => [...testBus, {bus: obj, busnum: res.data[0]}]);
         }).catch(function(err){
             console.log("버스 routid로 정보 못받아옴");
         })
-    }
+    };
+
+    const searchbusstopinfo = (bstopid) => {
+        const busstopinfo = axios.create({
+            baseURL: baseurl
+        })
+        busstopinfo.post('/api/bus/busArrival', null, {params: {busStopId: bstopid}})
+        .then(function(res){
+            console.log(res.data);
+            setRBus(res.data);
+            var busarr = res.data;
+            if(busarr){
+                SetIsSet(true);
+                busarr.map((obj)=>{
+                    searchBusNum(obj);
+                })
+            }
+        }).catch(function(err){
+            console.log("버스정류장 버스 도착 정보 못받아옴");
+        })
+    };
     
     const ref = useRef(null);
 
+    const handleRefreshButton = () => {
+        console.log("새로고침");
+        console.log(props.obj.bstopid);
+        var bstopid = props.obj.bstopid;
+        searchbusstopinfo(bstopid);
+    }
+
+    console.log(testBus);
     
 
     // useEffect(()=>{                 //클릭 이벤트 임시 나중에 pc에서 onClick 이벤트 되는지 안되는지 확인 먼저
@@ -56,37 +92,39 @@ const BusStopDetailInfo = (props)=>{
     // }, 1000);
     // }, [])
 
-    useEffect(()=>{
-        console.log(props);
-        var busarr = props.bustop;
-        console.log(busarr);
-        console.log("useEffect");
-        if(busarr){
-        busarr.map((obj, index) => {
-            searchBusNum(obj.routeid);
-        });
-        SetIsSet(true);
-        }
+    useEffect(()=>{     //루트아이디로 버스 넘버 검색하는 거
+        // console.log(props);
+        // var busarr = props.bustop;
+        // console.log(busarr);
+        // console.log("useEffect");
+        // if(busarr){
+        // busarr.map((obj, index) => {
+        //     searchBusNum(obj);
+        // });
+        // SetIsSet(true);
+        // }
     }, [])
 
     useEffect(()=>{
+        console.log(props);
         setBustop(props.obj);
-        setRBus(props.bustop);
+        // setRBus(props.bustop);
+        handleRefreshButton();
         
         setTimeout((bustopinfobar = document.getElementById('bustopinfobar')), 100);
-        setTimeout(()=>{
-            $('#rbuslist').on('touchstart', function(e){
-                console.log(e.changedTouches[0].clientX);
-                console.log("먼가시작");
-            });
-            $('#rbuslist').on('touchmove', function(e){
-                console.log("먼가ing");
-            });
-            $('#rbuslist').on('touchend', function(e){
-                console.log("먼가끝");
-            });
-        }, 50);
-        var height = -(bustopinfobar.offsetHeight*0.9);
+        // setTimeout(()=>{
+        //     $('#rbuslist').on('touchstart', function(e){
+        //         console.log(e.changedTouches[0].clientX);
+        //         console.log("먼가시작");
+        //     });
+        //     $('#rbuslist').on('touchmove', function(e){
+        //         console.log("먼가ing");
+        //     });
+        //     $('#rbuslist').on('touchend', function(e){
+        //         console.log("먼가끝");
+        //     });
+        // }, 50);
+        var height = -(bustopinfobar.offsetHeight);
         setTop(height);
     }, [])
 
@@ -272,6 +310,7 @@ const BusStopDetailInfo = (props)=>{
                             <ol className="list-group" >
                             {rbus && isset && rbus.map((obj, index)=>{
                                 var test = busnumlist[index];
+                                console.log(testBus[index]);
                                 if(test){
                                     let time = parseInt(obj.arrivalestimatetime/60);
                                     var lowTP;
@@ -289,6 +328,9 @@ const BusStopDetailInfo = (props)=>{
                                     </div>
                                 );}})}
                             </ol>
+                            <div className="reload-bus"> {/*새로고침 버튼*/}
+                                <button type="button" id="reloadbutton" className="" onClick={handleRefreshButton}><i class="bi bi-arrow-repeat" style={{ fontSize: "30px",}}></i></button>
+                            </div>
                         </div> 
                         </Draggable>
                     </div>

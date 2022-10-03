@@ -31,7 +31,7 @@ const BuildingInfo = (props) => {
         }
     }, [])
 
-    const searchBusRoute = (detail) => {
+    const searchBusRoute = (detail) => {   
         const busroute = axios.create({
          baseURL: baseurl
         })
@@ -43,6 +43,7 @@ const BuildingInfo = (props) => {
                 busroute: res.data,
                 busrouteinfo: detail,
                 props: props.obj,
+                url: window.location.href,
             }
          })
         }).catch(function(err){

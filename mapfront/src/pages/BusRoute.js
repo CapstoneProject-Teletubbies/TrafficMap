@@ -32,11 +32,17 @@ function BusRoute(){
     const navigate = useNavigate();
 
     const handlebackButton = () => {
-        console.log("back");
-        navigate(-1);    
+        var url = location.state.url;
+        console.log("back");   
+        if(url == 'https://localhost:3002/location-map'){
+            navigate(-1);  
+        }else{
+            navigate(-1); 
+        }
     }
 
     useEffect(() => {                               //받아온 버스 정보 버스 노선 정보, 버스 실시간 위치 정보
+        console.log(location.state.url);
         setBusRoute(location.state.busroute);
         setBusInfo(location.state.props);
         var id = location.state.props.routetpcd;
