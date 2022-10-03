@@ -16,7 +16,7 @@ const UrlModal = (props) => {
           </header>
           <div style={{position: "relative", height: "80%"}}>
             <div style={{top: "10%"}}>
-                <text>도보 길찾기는 카카오맵 외부 url로 연결됩니다.</text>
+                <text>대중교통 길찾기는 카카오맵 외부 url로 연결됩니다.</text>
             </div>
             <div style={{position: "relative", top: "40%"}}>
                 <button onClick={connect} style={{borderRadius: "3px"}}>연결</button>

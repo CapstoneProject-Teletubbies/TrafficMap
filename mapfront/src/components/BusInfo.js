@@ -63,9 +63,6 @@ const BuildingInfo = (props) => {
             console.log("버스 노선 정보 못받아옴");
         })
      }
-
-     console.log(props);
-
     return(
         <li className="list-group-item" onClick={searchBusRouteInfo} style={{paddingLeft: "10px"}}>
             <div className="ms-2" style={{ textAlign: "left"}}>

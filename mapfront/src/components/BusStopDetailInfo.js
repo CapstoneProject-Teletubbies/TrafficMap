@@ -34,7 +34,6 @@ const BusStopDetailInfo = (props)=>{
         })
         busnum.post('api/bus/route/detail/', null, {params: {routeId: routeid}})
         .then(function(res){
-            console.log(res.data[0]);
             setBusNumList(busnumlist => [...busnumlist, res.data[0]]);
         }).catch(function(err){
             console.log("버스 routid로 정보 못받아옴");
@@ -163,56 +162,84 @@ const BusStopDetailInfo = (props)=>{
         })
     }
 
-    const test1 = (evt, data) => {
+    const test1 = (evt, data) => {  //드래그 시작
         setStartXY(data);
         // console.log("드래스 시작좌표" + data.y);
     }
-    const test2 = (evt, position) => {
+    const test2 = (evt, position) => {  //드래그 중
         const {x, y} = position;
         setY({x:0, y: y});
         // console.log("드래그중");
         // console.log(position.y);
 
     }
-    const test3 = (evt, data) => {
+    // const test3 = (evt, data) => {  //드래그 끝
+    //     var element = document.getElementById('bustopinfobar');
+    //     var element1 = document.getElementById('bustopinfo');
+    //     var bstoph = element1.offsetHeight;
+    //     console.log(data);
+    //     // console.log("드래그 끝났" + data.y);
+    //     var posy;
+    //     posy = startXY.y - data.y ;
+    //     if(posy > 0){               //위로 드래그
+    //         posy = data.lastY - data.y;
+    //         var height = (element.offsetHeight)*0.87 + data.lastY;
+    //         if(posy > 0){       //위로 드래그
+    //             $('#bustopinfo').stop(true).animate({bottom: height}, 300);
+    //             $('#rbuslist').stop(true).animate({bottom: element.offsetHeight-bstoph}, 300);
+    //             setTop(data.lastY);
+    //             setBottom(height);
+    //         } else{             //드래그 방향을 바꿨기 때문에 아래로 드래그
+    //             //반이상 넘어갔으면 그냥 위로 드래그 하자 아직 구현 x
+    //             $('#bustopinfo').stop(true).animate({bottom: data.lastY}, 300);
+    //             $('#rbuslist').stop(true).animate({bottom: -element.offsetHeight+bstoph}, 300);
+    //             setTop(data.lastY-(element.offsetHeight)*0.87);
+    //             setBottom(data.lastY);
+    //         }
+    //     }
+    //     else if(posy < 0){          //아래로 드래그
+    //         posy = data.lastY - data.y;
+    //         var height = (element.offsetHeight)*0.87 - data.lastY;
+    //         var heightup = (element.offsetHeight)*0.87 + data.lastY;
+    //         if(posy < 0){       //아래로 드래그
+    //             $('#bustopinfo').stop(true).animate({bottom: data.lastY}, 300);
+    //             $('#rbuslist').stop(true).animate({bottom: -element.offsetHeight+bstoph}, 300);
+    //             setTop(data.lastY-(element.offsetHeight)*0.87);
+    //             setBottom(data.lastY);
+    //         }else{              //드래그 방향을 바꿨기 때문에 위로 드래그
+    //             //반이상 넘어갔으면 그냥 아래로 드래그하자 아직 구현 x
+    //             $('#bustopinfo').stop(true).animate({bottom: heightup}, 300);
+    //             $('#rbuslist').stop(true).animate({bottom: element.offsetHeight-bstoph}, 300);
+    //             setTop(data.lastY);
+    //             setBottom(heightup);
+    //         }
+    //     }
+    // }
+
+    const test3 = (evt, data) => {  //드래그 끝
         var element = document.getElementById('bustopinfobar');
         var element1 = document.getElementById('bustopinfo');
         var bstoph = element1.offsetHeight;
+        console.log(data);
         // console.log("드래그 끝났" + data.y);
         var posy;
         posy = startXY.y - data.y ;
         if(posy > 0){               //위로 드래그
-            posy = data.lastY - data.y;
-            var height = (element.offsetHeight)*0.87 + data.lastY;
-            if(posy > 0){       //위로 드래그
-                $('#bustopinfo').stop(true).animate({bottom: height}, 300);
-                $('#rbuslist').stop(true).animate({bottom: element.offsetHeight-bstoph}, 300);
-                setTop(data.lastY);
-                setBottom(height);
-            } else{             //드래그 방향을 바꿨기 때문에 아래로 드래그
-                //반이상 넘어갔으면 그냥 위로 드래그 하자 아직 구현 x
-                $('#bustopinfo').stop(true).animate({bottom: data.lastY}, 300);
-                $('#rbuslist').stop(true).animate({bottom: -element.offsetHeight+bstoph}, 300);
-                setTop(data.lastY-(element.offsetHeight)*0.87);
-                setBottom(data.lastY);
-            }
+            var height = (element.offsetHeight)*0.87 + data.y;
+            $('#bustopinfo').stop(true).animate({bottom: height}, 300);
+            $('#rbuslist').stop(true).animate({bottom: element.offsetHeight-bstoph}, 300);
+            setTop(data.y);
+            setBottom(height);       
         }
         else if(posy < 0){          //아래로 드래그
-            posy = data.lastY - data.y;
-            var height = (element.offsetHeight)*0.87 - data.lastY;
-            var heightup = (element.offsetHeight)*0.87 + data.lastY;
-            if(posy < 0){       //아래로 드래그
-                $('#bustopinfo').stop(true).animate({bottom: data.lastY}, 300);
-                $('#rbuslist').stop(true).animate({bottom: -element.offsetHeight+bstoph}, 300);
-                setTop(data.lastY-(element.offsetHeight)*0.87);
-                setBottom(data.lastY);
-            }else{              //드래그 방향을 바꿨기 때문에 위로 드래그
-                //반이상 넘어갔으면 그냥 아래로 드래그하자 아직 구현 x
-                $('#bustopinfo').stop(true).animate({bottom: heightup}, 300);
-                $('#rbuslist').stop(true).animate({bottom: element.offsetHeight-bstoph}, 300);
-                setTop(data.lastY);
-                setBottom(heightup);
-            }
+            var height = (element.offsetHeight)*0.87 - data.y;
+            var heightup = (element.offsetHeight)*0.87 + data.y;
+
+            $('#bustopinfo').stop(true).animate({bottom: data.y}, 300);
+            $('#rbuslist').stop(true).animate({bottom: -element.offsetHeight+bstoph}, 300);
+            setTop(data.y-(element.offsetHeight)*0.87);
+            setBottom(data.y);
+
         }
     }
 
