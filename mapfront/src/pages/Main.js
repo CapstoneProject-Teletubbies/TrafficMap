@@ -20,7 +20,7 @@ import charging from "../images/charging_station_icon.png"
 
 import mylocation from "../images/mylocation.png";
 
-const baseurl = '203.237.169.237'         //베이스 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+const baseurl = 'http://localhost:9000/'         //베이스 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 function Main() {
     const [keyword, setKeyword] = useState();  //검색 받은 키워드
@@ -353,7 +353,7 @@ function Main() {
       if(testmap && !elevatormks){        //엘레베이터 받아옴
         $.ajax({
           method: "POST",
-          url: "203.237.169.237/api/find/incheonElevator",
+          url: "http://localhost:9000/api/find/incheonElevator",
           async: false,
           data: {
 
@@ -386,7 +386,7 @@ function Main() {
       if(testmap && !markers){
       $.ajax({                //계단 받아옴
         method: "POST",
-        url: "203.237.169.237/api/find/stair",
+        url: "http://localhost:9000/api/find/stair",
         async: false,
         data: {
 

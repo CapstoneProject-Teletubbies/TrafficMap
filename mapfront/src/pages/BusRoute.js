@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import refresh from "../images/refresh.png"
 import { ModalBody } from 'react-bootstrap';
 
-const baseurl = '203.237.169.237'
+const baseurl = 'http://localhost:9000/'
 
 function BusRoute(){
     const location = useLocation();

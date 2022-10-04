@@ -11,7 +11,7 @@ import {button} from 'react-bootstrap';
 
 import $ from 'jquery';
 
-const baseurl = '203.237.169.237'         //베이스 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+const baseurl = 'http://localhost:9000/'         //베이스 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 const SearchBar = (props) => {
