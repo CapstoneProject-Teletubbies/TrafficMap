@@ -311,7 +311,7 @@ function LocationMap() {
       if(locationmap && !elevatormks){        //엘레베이터 받아옴
         $.ajax({
           method: "POST",
-          url: "http://localhost:9000/api/find/incheonElevator",
+          url: "203.237.169.237/api/find/incheonElevator",
           async: false,
           data: {
 

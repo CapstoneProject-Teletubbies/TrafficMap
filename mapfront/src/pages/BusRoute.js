@@ -17,7 +17,7 @@ import { useNavigate } from "react-router-dom";
 import refresh from "../images/refresh.png"
 import { ModalBody } from 'react-bootstrap';
 
-const baseurl = 'http://localhost:9000/'
+const baseurl = '203.237.169.237'
 
 function BusRoute(){
     const location = useLocation();
@@ -34,7 +34,7 @@ function BusRoute(){
     const handlebackButton = () => {
         var url = location.state.url;
         console.log("back");   
-        if(url == 'https://localhost:3002/location-map'){
+        if(url == '203.237.169.237/location-map'){
             navigate(-1);  
         }else{
             navigate(-1); 

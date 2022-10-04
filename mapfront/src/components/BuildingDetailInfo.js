@@ -15,7 +15,7 @@ import lift from "../images/lift.png";
 import spinner from "../images/spinner.gif";
 
 
-const baseurl = 'http://localhost:9000/'         //베이스 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+const baseurl = '203.237.169.237'         //베이스 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 const BuildingDetailInfo = (props) => {
